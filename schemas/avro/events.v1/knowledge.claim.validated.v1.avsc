@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "KnowledgeClaimValidatedV1",
+  "namespace": "socioprophet.knowledge.events.v1",
+  "fields": [
+    { "name": "event_id", "type": "string" },
+    { "name": "occurred_at", "type": "string" },
+    { "name": "workspace_id", "type": ["null","string"], "default": null },
+    { "name": "claim_id", "type": "string" },
+    { "name": "status", "type": { "type": "enum", "name": "ValidationStatus", "symbols": ["validated","rejected","contested"] } },
+    { "name": "quorum_required", "type": "int", "default": 1 },
+    { "name": "validators", "type": { "type": "array", "items": "string" }, "default": [] },
+    { "name": "validated_at", "type": ["null","string"], "default": null },
+    { "name": "provenance_id", "type": ["null","string"], "default": null }
+  ]
+}
