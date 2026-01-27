@@ -44,7 +44,7 @@ We derive 32-byte IDs deterministically:
 
 Bindings:
 - Avro payload schemas: `schemas/avro/` (next)
-- JSON-LD contexts: `schemas/jsonld/contexts/` (next)
+- JSON-LD contexts: `schemas/jsonld/contexts/knowledge/context.jsonld`
 
 ## 4. SERVICE / METHOD naming (normative)
 - SERVICE: `knowledge.store.v0`
