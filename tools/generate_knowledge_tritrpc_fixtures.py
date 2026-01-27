@@ -7,6 +7,10 @@ from pathlib import Path
 from typing import List, Tuple
 
 import yaml
+import sys
+from pathlib import Path as _Path
+sys.path.insert(0, str(_Path(__file__).resolve().parent))
+from avro_path_a_payloads import payload_for_method
 from nacl.bindings import crypto_aead_xchacha20poly1305_ietf_encrypt
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -138,7 +142,7 @@ def main():
         for sfx in (req_sfx, rsp_sfx):
             method = f"{mn}{sfx}"
             full = f"{service}.{method}"
-            payload = ("KC|" + full).encode("utf-8")  # synthetic payload bytes (envelope compliance focus)
+            payload = payload_for_method(service, method)  # Avro Path-A payload bytes
             base = build_prefix_fields(schema_id, context_id, service, method, payload)
             nonce = nonce_for(i)
 
