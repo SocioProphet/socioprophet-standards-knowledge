@@ -51,10 +51,35 @@ MODE_B   = tritpack243_pack([0])
 FLAGS_B  = tritpack243_pack([2,0,0])  # aead=true, compress=false, trailing 0
 
 def parse_labels(md: str):
-    m1 = re.search(r"## Avro Path-A payload schema label\s*- Label: `([^`]+)`", md, re.S)
-    m2 = re.search(r"## JSON-LD context label\s*- Label: `([^`]+)`", md, re.S)
-    if not (m1 and m2): raise SystemExit("Could not parse labels from 031-schema-context-id-registry.md")
-    return m1.group(1), m2.group(1)
+    schema_label = None
+    context_label = None
+    mode = None
+
+    for ln in md.splitlines():
+        s = ln.strip()
+        if s.startswith("##") and "Avro Path-A payload schema label" in s:
+            mode = "schema"
+            continue
+        if s.startswith("##") and "JSON-LD context label" in s:
+            mode = "context"
+            continue
+
+        if mode in ("schema", "context") and "Label:" in s and "`" in s:
+            parts = s.split("`")
+            if len(parts) >= 3:
+                val = parts[1].strip()
+                if mode == "schema" and not schema_label:
+                    schema_label = val
+                if mode == "context" and not context_label:
+                    context_label = val
+
+        if schema_label and context_label:
+            break
+
+    if not schema_label or not context_label:
+        raise SystemExit("Could not parse labels from docs/standards/031-schema-context-id-registry.md")
+
+    return schema_label, context_label
 
 def nonce_for(i: int) -> bytes:
     return (b"\x05" * 20) + i.to_bytes(4, "big")  # 24B
