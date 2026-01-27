@@ -33,3 +33,14 @@ methods:
 notes:
   - This is a placeholder contract; we will align field-level headers/metadata and error codes to upstream triRPC standard next.
   - Payload schemas live under schemas/jsonschema/{core,relations}/.
+
+tritrpc_wire:
+  service: knowledge.store.v0
+  request_method_suffix: "_a.REQ"
+  response_method_suffix: "_a.RESP"
+  path: "A"
+  schema_label: "KNOWLEDGE_AVRO_v0"
+  schema_id_sha3_256_hex: "a95570c2921b16ac12a9c0306e97399c669d9debf68d442c2ccaadcad8b6a092"
+  context_label: "KNOWLEDGE_JSONLD_v0"
+  context_id_sha3_256_hex: "4aa071d983aed812efa04171781ac976562f88239e09aa17ad4769d3dfad1c69"
+
