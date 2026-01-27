@@ -1,0 +1,9 @@
+suite: knowledge_pack_verify
+version: v0
+workloads:
+  - id: knowledge.tritrpc.pack_verify.no_aux
+    description: "Generate + verify TriTRPC fixtures (no AUX vectors only) and report elapsed time."
+    iterations: 5
+  - id: knowledge.tritrpc.pack_verify.with_aux
+    description: "Generate + verify TriTRPC fixtures (includes .AUX vectors) and report elapsed time."
+    iterations: 5

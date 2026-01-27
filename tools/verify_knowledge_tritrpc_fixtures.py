@@ -12,7 +12,8 @@ from nacl.bindings import crypto_aead_xchacha20poly1305_ietf_encrypt
 ROOT = Path(__file__).resolve().parents[1]
 REG  = ROOT / "docs/standards/031-schema-context-id-registry.md"
 RPC  = ROOT / "rpc/knowledge.store.v0.yaml"
-FIX  = ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt"
+import os
+FIX  = Path(os.environ.get("KC_FIXTURE_OVERRIDE", str(ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt")))
 NON  = ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt.nonces"
 
 KEY = bytes(32)
