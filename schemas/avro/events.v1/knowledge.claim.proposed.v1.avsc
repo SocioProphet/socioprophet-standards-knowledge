@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "KnowledgeClaimProposedV1",
+  "namespace": "socioprophet.knowledge.events.v1",
+  "fields": [
+    { "name": "event_id", "type": "string" },
+    { "name": "occurred_at", "type": "string" },
+    { "name": "workspace_id", "type": ["null","string"], "default": null },
+    { "name": "claim_id", "type": "string" },
+    { "name": "claim_type", "type": { "type": "enum", "name": "ClaimType", "symbols": ["fact","hypothesis","definition","plan","requirement","risk","decision"] }, "default": "fact" },
+    { "name": "confidence", "type": "double", "default": 0.5 },
+    { "name": "actor_id", "type": ["null","string"], "default": null },
+    { "name": "actor_type", "type": ["null", { "type": "enum", "name": "ActorType2", "symbols": ["human","agent","service"] } ], "default": null },
+    { "name": "provenance_id", "type": ["null","string"], "default": null }
+  ]
+}
