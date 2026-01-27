@@ -11,3 +11,11 @@ MUST comply with (in the upstream repo):
 
 Compatibility statement:
 - Knowledge Context v0.1 targets Storage Standards v0.1+ at the pinned commit above.
+
+## RPC Transport Authority (TriTRPC)
+This repo uses **TriTRPC v1** as the canonical transport/envelope/encoding standard (aliases: triRPC, trirpc, triunerpc).
+
+- Repo: SocioProphet/tritrpc
+- Pinned commit (HEAD at time of update): 025907e49edfbb8c43f23e98d2f71a93a65cab6e
+
+MUST comply with TriTRPC v1 envelope framing, deterministic encoding, and fixtures as defined in that repo.
