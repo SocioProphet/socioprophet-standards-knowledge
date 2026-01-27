@@ -1,0 +1,9 @@
+suite: knowledge_workloads
+version: v0
+workloads:
+  - id: knowledge.lexical.search.smoke
+    description: 'Placeholder: BM25-style lexical search workload suite (to be specified)'
+  - id: knowledge.vector.knn.smoke
+    description: 'Placeholder: vector kNN retrieval workload suite (to be specified)'
+  - id: knowledge.graph.traversal.smoke
+    description: 'Placeholder: edge traversal workload suite (to be specified)'
