@@ -25,7 +25,7 @@ Field sequence (canonical):
 7. `SERVICE` UTF-8 bytes, length-prefixed
 8. `METHOD` UTF-8 bytes, length-prefixed
 9. `PAYLOAD` bytes, length-prefixed
-10. Optional `AUX` bytes, length-prefixed
+10. Optional `AUX` bytes, length-prefixed (AUX is optional; when present it is covered by AAD)
 11. Optional `AEAD_TAG` bytes (16 bytes), length-prefixed
 
 ## 2. AEAD rule (normative)
