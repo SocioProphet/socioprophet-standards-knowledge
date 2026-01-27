@@ -11,3 +11,8 @@ verify:
 	make hygiene
 	./.venv/bin/python tools/verify_knowledge_tritrpc_fixtures.py 2>/dev/null || python3 tools/verify_knowledge_tritrpc_fixtures.py
 
+.PHONY: roundtrip
+roundtrip:
+	make hygiene
+	./.venv/bin/python tools/verify_avro_path_a_roundtrip.py 2>/dev/null || python3 tools/verify_avro_path_a_roundtrip.py
+
