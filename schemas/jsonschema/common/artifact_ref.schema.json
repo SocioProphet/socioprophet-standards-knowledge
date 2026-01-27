@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/common/artifact_ref.schema.json",
+  "title": "ArtifactRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifact_id", "type"],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "type": { "type": "string", "description": "Type name (e.g., MarkdownDoc, ODT, DOCX, MicroPublicationBundle)." },
+    "content_hash": { "type": "string", "description": "Optional content address (recommended: blake3:<hex>)." },
+    "uri": { "type": "string", "description": "Optional location URI (file://, socioprophet://, http(s)://)." }
+  }
+}

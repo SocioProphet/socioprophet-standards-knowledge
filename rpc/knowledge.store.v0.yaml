@@ -1,0 +1,35 @@
+service: knowledge.store
+version: v0
+status: draft
+description: >
+  Knowledge Store service for canonical Knowledge Context artifacts (Note, Claim, Annotation, MeriotopographicEdge).
+  Must comply with triRPC interface requirements defined in the upstream storage standards repo.
+
+methods:
+  - name: UpsertNote
+    request: { type: Note }
+    response: { type: Ack }
+
+  - name: QueryNotes
+    request: { type: Query }
+    response: { type: NoteSet }
+
+  - name: UpsertClaim
+    request: { type: Claim }
+    response: { type: Ack }
+
+  - name: QueryClaims
+    request: { type: Query }
+    response: { type: ClaimSet }
+
+  - name: UpsertEdge
+    request: { type: MeriotopographicEdge }
+    response: { type: Ack }
+
+  - name: QueryEdges
+    request: { type: Query }
+    response: { type: EdgeSet }
+
+notes:
+  - This is a placeholder contract; we will align field-level headers/metadata and error codes to upstream triRPC standard next.
+  - Payload schemas live under schemas/jsonschema/{core,relations}/.

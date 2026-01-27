@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/common/provenance_ref.schema.json",
+  "title": "ProvenanceRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["prov_id"],
+  "properties": {
+    "prov_id": { "type": "string" },
+    "uri": { "type": "string" }
+  }
+}

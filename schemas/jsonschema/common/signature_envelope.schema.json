@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/common/signature_envelope.schema.json",
+  "title": "SignatureEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scheme", "signer", "signature"],
+  "properties": {
+    "scheme": { "type": "string", "description": "e.g., minisign, ed25519, cose_sign1-like, sigstore-like." },
+    "signer": { "type": "string", "description": "Key id / identity ref." },
+    "signature": { "type": "string", "description": "Signature bytes (base64 or armored)." },
+    "signed_at": { "type": "string", "format": "date-time" }
+  }
+}

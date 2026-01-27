@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/provenance_record.schema.json",
+  "title": "ProvenanceRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["prov_id", "occurred_at", "activity", "actor", "generated"],
+  "properties": {
+    "prov_id": { "type": "string" },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["activity_type"],
+      "properties": {
+        "activity_type": {
+          "type": "string",
+          "enum": ["create", "update", "extract", "transform", "index", "embed", "validate", "redact", "publish", "sign", "import", "export"]
+        },
+        "component_id": { "type": "string", "description": "e.g., zettlr.workspace/document.parse" },
+        "run_id": { "type": "string" },
+        "parameters": { "type": "object", "additionalProperties": true, "default": {} }
+      }
+    },
+    "actor": { "$ref": "socioprophet://schemas/knowledge/common/actor_ref.schema.json" },
+    "used": { "type": "array", "items": { "$ref": "socioprophet://schemas/knowledge/common/artifact_ref.schema.json" }, "default": [] },
+    "generated": { "type": "array", "items": { "$ref": "socioprophet://schemas/knowledge/common/artifact_ref.schema.json" } },
+    "relations_emitted": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "signatures": { "type": "array", "items": { "$ref": "socioprophet://schemas/knowledge/common/signature_envelope.schema.json" }, "default": [] }
+  }
+}
