@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/anchor.schema.json",
+  "title": "AnchorRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifact"],
+  "properties": {
+    "artifact": { "$ref": "socioprophet://schemas/knowledge/common/artifact_ref.schema.json" },
+    "selector": { "$ref": "socioprophet://schemas/knowledge/core/selector.schema.json" },
+    "stable_fragment": { "type": "string", "description": "Optional stable fragment id (heading slug, XML element id, etc.)." }
+  },
+  "anyOf": [
+    { "required": ["selector"] },
+    { "required": ["stable_fragment"] }
+  ]
+}

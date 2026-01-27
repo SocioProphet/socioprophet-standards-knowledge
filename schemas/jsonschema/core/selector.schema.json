@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/selector.schema.json",
+  "title": "Selector",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "char_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": { "start": { "type": "integer", "minimum": 0 }, "end": { "type": "integer", "minimum": 0 } }
+    },
+    "line_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": { "start": { "type": "integer", "minimum": 1 }, "end": { "type": "integer", "minimum": 1 } }
+    },
+    "byte_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": { "start": { "type": "integer", "minimum": 0 }, "end": { "type": "integer", "minimum": 0 } }
+    },
+    "xpath": { "type": "string", "description": "For XML/ODF/OpenXML selectors." },
+    "odf_path": { "type": "string", "description": "Optional ODF path-like selector." },
+    "openxml_path": { "type": "string", "description": "Optional OOXML path-like selector." }
+  }
+}

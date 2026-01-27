@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/annotation.schema.json",
+  "title": "Annotation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["annotation_id", "anchor", "kind", "created_at"],
+  "properties": {
+    "annotation_id": { "type": "string" },
+    "kind": { "type": "string", "enum": ["highlight", "comment", "tag", "link", "mask", "todo", "cite"] },
+    "anchor": { "$ref": "socioprophet://schemas/knowledge/core/anchor.schema.json" },
+    "payload": { "type": "object", "additionalProperties": true, "default": {} },
+    "created_by": { "$ref": "socioprophet://schemas/knowledge/common/actor_ref.schema.json" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "provenance": {
+      "type": "array",
+      "items": { "$ref": "socioprophet://schemas/knowledge/common/provenance_ref.schema.json" },
+      "default": []
+    }
+  }
+}

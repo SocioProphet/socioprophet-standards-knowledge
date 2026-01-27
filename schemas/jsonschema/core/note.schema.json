@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/note.schema.json",
+  "title": "Note",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["note_id", "title", "body", "created_at"],
+  "properties": {
+    "note_id": { "type": "string", "description": "Stable identifier (ULID or content-hash)." },
+    "title": { "type": "string", "minLength": 1 },
+    "body": { "type": "string" },
+    "format": { "type": "string", "enum": ["markdown", "plaintext", "latex", "html"], "default": "markdown" },
+    "tags": { "type": "array", "items": { "type": "string", "minLength": 1 }, "default": [] },
+    "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 }, "default": [] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifact": { "$ref": "socioprophet://schemas/knowledge/common/artifact_ref.schema.json" },
+        "anchor": { "$ref": "socioprophet://schemas/knowledge/core/anchor.schema.json" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "provenance": {
+      "type": "array",
+      "items": { "$ref": "socioprophet://schemas/knowledge/common/provenance_ref.schema.json" },
+      "default": []
+    }
+  }
+}
