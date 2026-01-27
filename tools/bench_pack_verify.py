@@ -3,6 +3,7 @@ from __future__ import annotations
 import time, statistics
 from pathlib import Path
 import subprocess, sys
+import os
 
 ROOT = Path(__file__).resolve().parents[1]
 
