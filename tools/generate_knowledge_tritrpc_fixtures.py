@@ -13,6 +13,7 @@ FIX  = ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt"
 NON  = ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt.nonces"
 
 KEY = bytes(32)  # 0x00 * 32
+AUX_BYTES = b"AUX|KC|v0"  # deterministic AUX bytes for AUX-present fixtures
 
 def tritpack243_pack(trits: List[int]) -> bytes:
     out = bytearray(); i = 0
@@ -107,7 +108,7 @@ def main():
         method_names = ["UpsertNote","QueryNotes","UpsertClaim","QueryClaims","UpsertEdge","QueryEdges"]
 
     FIX.parent.mkdir(parents=True, exist_ok=True)
-    lines = ["# Knowledge Context TriTRPC Path-A fixtures (AEAD on, key=00*32, AUX omitted)"]
+    lines = ["# Knowledge Context TriTRPC Path-A fixtures (AEAD on, key=00*32, AUX optional)"]
     nonces = []
     i = 1
 
@@ -117,11 +118,20 @@ def main():
             full = f"{service}.{method}"
             payload = ("KC|" + full).encode("utf-8")  # synthetic payload bytes
             base = build_base(service, method, payload, schema_id, context_id)
+            # AUX variant (REQ only): include AUX field in AAD
+            base_aux = base + len_prefix(AUX_BYTES) + AUX_BYTES if method.endswith(req_sfx) else None
             nonce = nonce_for(i)
             tag = crypto_aead_xchacha20poly1305_ietf_encrypt(b"", base, nonce, KEY)[-16:]
             frame = base + len_prefix(tag) + tag
             lines.append(f"{full} {frame.hex()}")
+            # emit AUX-present vector (REQ only)
+            if base_aux is not None:
+                tag2 = crypto_aead_xchacha20poly1305_ietf_encrypt(b"", base_aux, nonce, KEY)[-16:]
+                frame2 = base_aux + len_prefix(tag2) + tag2
+                lines.append(f"{full}.AUX {frame2.hex()}")
             nonces.append(f"{full} {nonce.hex()}")
+            if base_aux is not None:
+                nonces.append(f"{full}.AUX {nonce.hex()}")
             i += 1
 
     FIX.write_text("\n".join(lines) + "\n", encoding="utf-8")
