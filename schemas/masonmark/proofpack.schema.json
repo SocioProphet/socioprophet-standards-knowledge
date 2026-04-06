@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Masonmark proofpack",
+  "type": "object",
+  "required": ["proofpack_version", "proofpack_id", "schema_id", "logical_view", "request", "decision"],
+  "properties": {
+    "proofpack_version": {"type": "string"},
+    "proofpack_id": {"type": "string"},
+    "family_id": {"type": "string"},
+    "schema_id": {"type": "string"},
+    "event_type_id": {"type": "string"},
+    "logical_view": {"type": "string"},
+    "request": {"type": "object"},
+    "grounding": {"type": "object"},
+    "program_ir": {"type": ["object", "null"]},
+    "candidate_set": {"type": "object"},
+    "verifiers": {"type": "object"},
+    "execution": {"type": ["object", "null"]},
+    "provenance": {"type": "object"},
+    "decision": {"type": "object"}
+  },
+  "additionalProperties": false
+}
