@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Masonmark Stele envelope",
+  "type": "object",
+  "required": ["stele_id", "proofpack_id", "schema_id", "logical_view", "review_status"],
+  "properties": {
+    "stele_id": {"type": "string"},
+    "proofpack_id": {"type": "string"},
+    "schema_id": {"type": "string"},
+    "logical_view": {"type": "string"},
+    "review_status": {"enum": ["pending_review", "approved", "rejected"]},
+    "result_digest": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}
