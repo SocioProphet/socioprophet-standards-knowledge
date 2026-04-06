@@ -1,0 +1,78 @@
+{
+  "pack_version": "0.1",
+  "family_id": "grant_stewardship",
+  "generated_for": "Masonmark Knowledge Context pilot review",
+  "logical_contracts": [
+    {
+      "schema_id": "GS-AWD-001",
+      "logical_view": "gv.gs.award_reporting.v1",
+      "purpose": "bounded award reporting",
+      "approved_columns": [
+        {"name": "award_id", "type": "string", "role_id": "mm.role.gs.award"},
+        {"name": "program_name", "type": "string", "role_id": "mm.role.gs.program"},
+        {"name": "award_status", "type": "enum[active|closed|suspended]", "role_id": "mm.role.gs.status"},
+        {"name": "fiscal_year", "type": "int", "role_id": "mm.time.gs.fiscal_year"},
+        {"name": "award_date", "type": "date", "role_id": "mm.time.gs.award_date"},
+        {"name": "amount_awarded", "type": "decimal(18,2)", "role_id": "mm.role.gs.amount"},
+        {"name": "steward_org_id", "type": "string", "role_id": "mm.role.gs.steward_org"}
+      ],
+      "allowlisted_ops": ["FILTER", "COUNT", "SUM", "GROUP_BY", "ORDER_BY"],
+      "denylisted_ops": ["WRITE", "DELETE", "UPDATE", "INSERT", "CROSS_TENANT_JOIN", "RAW_EXPORT"]
+    },
+    {
+      "schema_id": "GS-AMD-002",
+      "logical_view": "gv.gs.amendment_delta.v1",
+      "purpose": "amendment governance deltas",
+      "approved_columns": [
+        {"name": "award_id", "type": "string", "role_id": "mm.role.gs.award"},
+        {"name": "amendment_id", "type": "string", "role_id": "mm.role.gs.amendment"},
+        {"name": "amendment_type", "type": "string", "role_id": "mm.role.gs.amendment_type"},
+        {"name": "delta_amount", "type": "decimal(18,2)", "role_id": "mm.role.gs.delta_amount"},
+        {"name": "fiscal_quarter", "type": "string", "role_id": "mm.time.gs.fiscal_quarter"},
+        {"name": "approval_status", "type": "string", "role_id": "mm.role.gs.approval_status"}
+      ],
+      "allowlisted_ops": ["FILTER", "PROJECT", "ORDER_BY"],
+      "denylisted_ops": ["WRITE", "DELETE", "UPDATE", "INSERT", "RAW_EXPORT"]
+    },
+    {
+      "schema_id": "GS-CLO-003",
+      "logical_view": "gv.gs.closeout_compliance.v1",
+      "purpose": "closeout compliance monitoring",
+      "approved_columns": [
+        {"name": "award_id", "type": "string", "role_id": "mm.role.gs.award"},
+        {"name": "program_name", "type": "string", "role_id": "mm.role.gs.program"},
+        {"name": "days_overdue", "type": "int", "role_id": "mm.role.gs.days_overdue"},
+        {"name": "blocker_code", "type": "string", "role_id": "mm.role.gs.blocker_code"},
+        {"name": "blocker_text", "type": "string", "role_id": "mm.role.gs.blocker_text"},
+        {"name": "closeout_state", "type": "string", "role_id": "mm.role.gs.closeout_state"}
+      ],
+      "allowlisted_ops": ["FILTER", "PROJECT", "ORDER_BY", "COUNT"],
+      "denylisted_ops": ["WRITE", "DELETE", "UPDATE", "INSERT", "RAW_EXPORT"]
+    }
+  ],
+  "id_blocks": {
+    "event_types": [
+      "mm.evt.gs.award_reporting.v1",
+      "mm.evt.gs.amendment_governance.v1",
+      "mm.evt.gs.closeout_compliance.v1"
+    ],
+    "roles": [
+      "mm.role.gs.award",
+      "mm.role.gs.program",
+      "mm.role.gs.status",
+      "mm.role.gs.amount",
+      "mm.role.gs.amendment",
+      "mm.role.gs.amendment_type",
+      "mm.role.gs.delta_amount",
+      "mm.role.gs.approval_status",
+      "mm.role.gs.days_overdue",
+      "mm.role.gs.blocker_code",
+      "mm.role.gs.blocker_text"
+    ],
+    "time": [
+      "mm.time.gs.fiscal_year",
+      "mm.time.gs.award_date",
+      "mm.time.gs.fiscal_quarter"
+    ]
+  }
+}
