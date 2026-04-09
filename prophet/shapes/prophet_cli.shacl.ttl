@@ -1,0 +1,22 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix prop: <https://socioprophet.github.io/ontogenesis/prophet#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+prop:CommandShape
+    a sh:NodeShape ;
+    sh:targetClass prop:Command ;
+    sh:property [ sh:path prop:verb ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path prop:targetsPlane ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path prop:emitsCarrier ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+prop:CarrierShape
+    a sh:NodeShape ;
+    sh:targetClass prop:Carrier ;
+    sh:property [ sh:path prop:signed ; sh:datatype xsd:boolean ; sh:minCount 1 ; sh:hasValue true ] ;
+    sh:property [ sh:path prop:schemaRef ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path prop:leafRef ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+prop:SystemAdoptionShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf prop:adoptsInto ;
+    sh:property [ sh:path prop:requiresGate ; sh:minCount 2 ] .
