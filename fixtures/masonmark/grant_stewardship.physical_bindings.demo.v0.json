@@ -1,0 +1,30 @@
+{
+  "environment": "demo_sqlite",
+  "current_fiscal_quarter": "Q2",
+  "bindings": {
+    "gv.gs.award_reporting.v1": {
+      "engine": "sqlite",
+      "database": "data/grant_stewardship_demo.sqlite",
+      "table": "gv_gs_award_reporting_v1",
+      "read_only_asserted": true,
+      "steward_owner": "demo_steward",
+      "notes": "Reference demo surface only"
+    },
+    "gv.gs.amendment_delta.v1": {
+      "engine": "sqlite",
+      "database": "data/grant_stewardship_demo.sqlite",
+      "table": "gv_gs_amendment_delta_v1",
+      "read_only_asserted": true,
+      "steward_owner": "demo_steward",
+      "notes": "Reference demo surface only"
+    },
+    "gv.gs.closeout_compliance.v1": {
+      "engine": "sqlite",
+      "database": "data/grant_stewardship_demo.sqlite",
+      "table": "gv_gs_closeout_compliance_v1",
+      "read_only_asserted": true,
+      "steward_owner": "demo_steward",
+      "notes": "Reference demo surface only"
+    }
+  }
+}

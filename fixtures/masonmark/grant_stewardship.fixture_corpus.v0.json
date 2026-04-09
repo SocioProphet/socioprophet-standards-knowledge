@@ -1,0 +1,99 @@
+{
+  "pack_version": "0.1",
+  "family_id": "grant_stewardship",
+  "fixtures": [
+    {
+      "fixture_id": "fx.gs.awd.pos.001",
+      "schema_id": "GS-AWD-001",
+      "class": "positive",
+      "utterance": "How many active grants were awarded in 2023 by program?",
+      "expected_decision": "promote",
+      "expected_view": "gv.gs.award_reporting.v1",
+      "expected_ops": ["FILTER", "COUNT", "GROUP_BY(program_name)"],
+      "assertions": ["must bind fiscal_year=2023", "must bind award_status=active", "must not introduce joins"]
+    },
+    {
+      "fixture_id": "fx.gs.awd.abs.001",
+      "schema_id": "GS-AWD-001",
+      "class": "abstain",
+      "utterance": "Show the large shaky grants before extension.",
+      "expected_decision": "abstain",
+      "abstain_reason": ["undefined_threshold", "unsupported_risk_term"],
+      "assertions": ["must not coerce large to hidden threshold", "must not invent shaky mapping"]
+    },
+    {
+      "fixture_id": "fx.gs.awd.rob.001",
+      "schema_id": "GS-AWD-001",
+      "class": "robustness",
+      "utterance": "Count active awards in FY2023 by program line.",
+      "expected_decision": "promote",
+      "expected_view": "gv.gs.award_reporting.v1",
+      "expected_ops": ["FILTER", "COUNT", "GROUP_BY(program_name)"],
+      "assertions": ["may use commonsense candidate expansion for program line", "must keep commonsense non-authoritative"]
+    },
+    {
+      "fixture_id": "fx.gs.amd.pos.001",
+      "schema_id": "GS-AMD-002",
+      "class": "positive",
+      "utterance": "List budget amendments from Q2 with their delta amount.",
+      "expected_decision": "promote",
+      "expected_view": "gv.gs.amendment_delta.v1",
+      "expected_ops": ["FILTER", "PROJECT", "ORDER_BY"],
+      "assertions": ["must bind fiscal_quarter=Q2", "must bind amendment_type=budget"]
+    },
+    {
+      "fixture_id": "fx.gs.amd.abs.001",
+      "schema_id": "GS-AMD-002",
+      "class": "abstain",
+      "utterance": "Show the suspicious amendment fixes we should probably ignore.",
+      "expected_decision": "abstain",
+      "abstain_reason": ["unsupported_subjective_modifier", "missing_governed_mapping"],
+      "assertions": ["must not map suspicious to approval_status without policy"]
+    },
+    {
+      "fixture_id": "fx.gs.amd.rob.001",
+      "schema_id": "GS-AMD-002",
+      "class": "robustness",
+      "utterance": "Show Q2 funding changes and budget amendments.",
+      "expected_decision": "promote",
+      "expected_view": "gv.gs.amendment_delta.v1",
+      "expected_ops": ["FILTER", "PROJECT", "ORDER_BY"],
+      "assertions": ["may expand funding changes to amendment candidates", "must preserve explicit provenance of that expansion"]
+    },
+    {
+      "fixture_id": "fx.gs.clo.pos.001",
+      "schema_id": "GS-CLO-003",
+      "class": "positive",
+      "utterance": "Which closeouts are overdue and blocked?",
+      "expected_decision": "promote",
+      "expected_view": "gv.gs.closeout_compliance.v1",
+      "expected_ops": ["FILTER", "PROJECT", "ORDER_BY"],
+      "assertions": ["must bind days_overdue > 0", "must project blocker fields"]
+    },
+    {
+      "fixture_id": "fx.gs.clo.abs.001",
+      "schema_id": "GS-CLO-003",
+      "class": "abstain",
+      "utterance": "Show the messy closeouts that feel dangerous.",
+      "expected_decision": "abstain",
+      "abstain_reason": ["unsupported_subjective_modifier", "missing_risk_policy_mapping"],
+      "assertions": ["must not invent danger semantics"]
+    },
+    {
+      "fixture_id": "fx.gs.clo.rob.001",
+      "schema_id": "GS-CLO-003",
+      "class": "robustness",
+      "utterance": "Which awards are past due on closeout?",
+      "expected_decision": "promote",
+      "expected_view": "gv.gs.closeout_compliance.v1",
+      "expected_ops": ["FILTER", "PROJECT", "ORDER_BY"],
+      "assertions": ["may normalize past due to overdue", "must tag normalization as defeasible support"]
+    }
+  ],
+  "acceptance_gate": {
+    "minimum_positive": 3,
+    "minimum_abstain": 3,
+    "minimum_robustness": 3,
+    "require_live_proofpack_before_scale_out": true
+  }
+}
