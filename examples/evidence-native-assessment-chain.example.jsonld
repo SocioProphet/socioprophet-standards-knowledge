@@ -1,0 +1,109 @@
+{
+  "@context": "../contexts/evidence-native-assessment.context.jsonld",
+  "@graph": [
+    {
+      "id": "urn:sp:evref_vendor_policy_001",
+      "type": "EvidenceRef",
+      "evidenceRefId": "evref_vendor_policy_001",
+      "sourceSystem": "google_drive",
+      "sourceUri": "https://docs.google.com/document/d/vendor-policy-example",
+      "digestAlg": "sha256",
+      "digestValue": "9f6c6a7b2f0b4d1f31d1f408dcbcebe7a6579d8f5cb0e00e4e90f9c9702b9d4a",
+      "locatorType": "page_span",
+      "localityClass": "tenant",
+      "confidentiality": "confidential"
+    },
+    {
+      "id": "urn:sp:claim_admin_accounts_reviewed_quarterly_001",
+      "type": "Claim",
+      "claimId": "claim_admin_accounts_reviewed_quarterly_001",
+      "subject": "vendor:acme-cloud",
+      "predicate": "admin_accounts_reviewed_quarterly",
+      "object": true,
+      "modality": "asserted",
+      "confidence": 0.93,
+      "normalizedText": "Administrative accounts are reviewed on a quarterly basis.",
+      "claimRef": "urn:sp:evref_vendor_policy_001"
+    },
+    {
+      "id": "urn:sp:ctrlreq_nist_ac_2_001",
+      "type": "ControlRequirement",
+      "controlRequirementId": "ctrlreq_nist_ac_2_001",
+      "frameworkId": "nist-800-53-rev5",
+      "frameworkVersion": "rev5",
+      "controlId": "AC-2",
+      "rowId": "ac-2-account-management",
+      "requiredProofClass": [
+        "policy_document",
+        "access_review_record",
+        "identity_system_export"
+      ],
+      "decisionPolicy": "require_approval"
+    },
+    {
+      "id": "urn:sp:conflict_access_review_evidence_missing_001",
+      "type": "ClaimConflict",
+      "conflictId": "conflict_access_review_evidence_missing_001",
+      "leftClaimRef": "urn:sp:claim_admin_accounts_reviewed_quarterly_001",
+      "controlRequirementRef": "urn:sp:ctrlreq_nist_ac_2_001",
+      "severity": "high",
+      "rationale": "Required runtime proof beyond the policy document is missing."
+    },
+    {
+      "id": "urn:sp:eval_nist_ac_2_001",
+      "type": "ControlCellEvaluation",
+      "evaluationId": "eval_nist_ac_2_001",
+      "controlRequirementRef": "urn:sp:ctrlreq_nist_ac_2_001",
+      "traceId": "trace_vendor_acme_assessment_001",
+      "rowId": "ac-2-account-management",
+      "status": "partial",
+      "decision": "require_approval",
+      "supportingEvidenceRef": "urn:sp:evref_vendor_policy_001",
+      "missingProofClass": [
+        "access_review_record",
+        "identity_system_export"
+      ],
+      "claimRef": "urn:sp:claim_admin_accounts_reviewed_quarterly_001",
+      "conflictRef": "urn:sp:conflict_access_review_evidence_missing_001"
+    },
+    {
+      "id": "urn:sp:finding_nist_ac_2_001",
+      "type": "Finding",
+      "findingId": "finding_nist_ac_2_001",
+      "evaluationRef": "urn:sp:eval_nist_ac_2_001",
+      "rowId": "ac-2-account-management",
+      "severity": "high",
+      "disposition": "open",
+      "remediationSummary": "Provide the access review record and identity export needed to substantiate the quarterly review claim.",
+      "closureCriterion": [
+        "Access review record attached",
+        "Identity export attached",
+        "Reassessment receipt shows upgraded status"
+      ]
+    },
+    {
+      "id": "urn:sp:receipt_vendor_acme_assessment_001",
+      "type": "AssessmentReceipt",
+      "receiptId": "receipt_vendor_acme_assessment_001",
+      "traceId": "trace_vendor_acme_assessment_001",
+      "subjectId": "vendor:acme-cloud",
+      "subjectKind": "vendor",
+      "frameworkId": "nist-800-53-rev5",
+      "frameworkVersion": "rev5",
+      "policyBundleId": "policy-bundle://vendor-assessment/nist-800-53-rev5",
+      "policyBundleVersion": "0.1.0",
+      "replayManifestRef": "replay://vendor-acme-assessment/001",
+      "replayable": true,
+      "sealedAt": "2026-04-09T10:05:00Z"
+    },
+    {
+      "id": "urn:sp:report_vendor_acme_assessment_001",
+      "type": "AssessmentReport",
+      "reportId": "report_vendor_acme_assessment_001",
+      "receiptRef": "urn:sp:receipt_vendor_acme_assessment_001",
+      "coveragePercent": 33.3,
+      "findingCount": 1,
+      "generatedAt": "2026-04-09T10:06:00Z"
+    }
+  ]
+}
