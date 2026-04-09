@@ -1,0 +1,14 @@
+{
+  "kind": "AcademyRoutingPayload",
+  "claimRef": "claim:bridge-closure:001",
+  "scopeRef": "scope:local-civic-demo",
+  "route": {
+    "academyContext": "AtlasCodex",
+    "lane": "canon-candidate",
+    "action": "materialize-candidate"
+  },
+  "summary": "Supported claim routed to Atlas Codex candidate lane",
+  "attachments": {
+    "receiptVerificationRef": "examples/slash_topic_receipt_verification.accept.example.json"
+  }
+}
