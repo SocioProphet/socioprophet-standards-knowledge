@@ -1,0 +1,28 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix bind: <https://socioprophet.github.io/ontogenesis/bind#> .
+
+<https://socioprophet.github.io/ontogenesis/bind>
+    a owl:Ontology ;
+    dct:title "Atomic Bindings Ontology" ;
+    dct:description "Lower-layer ontology for on-device bindings, ports, sockets, routes, and boundary interfaces." .
+
+bind:SystemdUnit a owl:Class .
+bind:DeviceNode a owl:Class .
+bind:SocketEndpoint a owl:Class .
+bind:Port a owl:Class .
+bind:Route a owl:Class .
+bind:BoundaryInterface a owl:Class .
+
+bind:portNumber a owl:DatatypeProperty ; rdfs:domain bind:Port ; rdfs:range xsd:integer .
+bind:protocol a owl:DatatypeProperty ; rdfs:domain bind:Port ; rdfs:range xsd:string .
+bind:devicePath a owl:DatatypeProperty ; rdfs:domain bind:DeviceNode ; rdfs:range xsd:string .
+bind:socketPath a owl:DatatypeProperty ; rdfs:domain bind:SocketEndpoint ; rdfs:range xsd:string .
+bind:host a owl:DatatypeProperty ; rdfs:domain bind:Route ; rdfs:range xsd:string .
+bind:path a owl:DatatypeProperty ; rdfs:domain bind:Route ; rdfs:range xsd:string .
+bind:tlsMode a owl:DatatypeProperty ; rdfs:domain bind:Route ; rdfs:range xsd:string .
+bind:ioClaim a owl:DatatypeProperty ; rdfs:range xsd:string .
+bind:servesPort a owl:ObjectProperty ; rdfs:domain bind:Route ; rdfs:range bind:Port .
+bind:boundaryAddress a owl:DatatypeProperty ; rdfs:range xsd:string .
