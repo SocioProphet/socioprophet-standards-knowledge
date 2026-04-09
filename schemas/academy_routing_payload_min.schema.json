@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AcademyRoutingPayloadMin",
+  "type": "object",
+  "required": ["kind", "claimRef", "scopeRef", "route"],
+  "properties": {
+    "kind": {"type": "string"},
+    "claimRef": {"type": "string"},
+    "scopeRef": {"type": "string"},
+    "route": {"type": "object"}
+  },
+  "additionalProperties": true
+}
