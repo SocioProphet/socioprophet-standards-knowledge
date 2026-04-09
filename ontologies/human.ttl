@@ -1,0 +1,20 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix human: <https://socioprophet.github.io/ontogenesis/human#> .
+
+<https://socioprophet.github.io/ontogenesis/human>
+    a owl:Ontology ;
+    dct:title "Human Ontology" ;
+    dct:description "Privacy-first human and phenotype surface." .
+
+human:Human a owl:Class .
+human:Person a owl:Class ; rdfs:subClassOf human:Human .
+human:Phenotype a owl:Class .
+
+human:hasPhenotype a owl:ObjectProperty ; rdfs:domain human:Human ; rdfs:range human:Phenotype .
+human:hasTraitValue a owl:DatatypeProperty ; rdfs:domain human:Phenotype ; rdfs:range xsd:string .
+human:traitValueAsCode a owl:ObjectProperty ; rdfs:domain human:Phenotype .
+human:consentGiven a owl:DatatypeProperty ; rdfs:domain human:Human ; rdfs:range xsd:boolean .
+human:hasSensitiveFlag a owl:DatatypeProperty ; rdfs:range xsd:boolean .
