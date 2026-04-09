@@ -1,0 +1,55 @@
+{
+  "@context": {
+    "sp": "https://schema.socioprophet.org/terms/",
+    "id": "@id",
+    "type": "@type",
+    "GeneralDescriptor": "sp:GeneralDescriptor",
+    "OrderDescriptor": "sp:OrderDescriptor",
+    "DocumentAsset": "sp:DocumentAsset",
+    "CodeAsset": "sp:CodeAsset",
+    "RunbookAsset": "sp:RunbookAsset",
+    "PromptAsset": "sp:PromptAsset",
+    "BundleAsset": "sp:BundleAsset",
+    "PolicyAsset": "sp:PolicyAsset",
+    "ConversationAsset": "sp:ConversationAsset",
+    "EvidenceArtifact": "sp:EvidenceArtifact",
+    "GraphTraversalAsset": "sp:GraphTraversalAsset",
+    "PublishedKnowledgeUnit": "sp:PublishedKnowledgeUnit",
+    "contentSpace": {
+      "@id": "sp:contentSpace",
+      "@type": "@id"
+    },
+    "domain": {
+      "@id": "sp:domain",
+      "@type": "@id"
+    },
+    "task": {
+      "@id": "sp:task",
+      "@type": "@id"
+    },
+    "owner": {
+      "@id": "sp:owner",
+      "@type": "@id"
+    },
+    "steward": {
+      "@id": "sp:steward",
+      "@type": "@id"
+    },
+    "policyRef": {
+      "@id": "sp:policyRef",
+      "@type": "@id"
+    },
+    "evidenceRef": {
+      "@id": "sp:evidenceRef",
+      "@type": "@id"
+    },
+    "derivedFrom": {
+      "@id": "sp:derivedFrom",
+      "@type": "@id"
+    },
+    "supersedes": {
+      "@id": "sp:supersedes",
+      "@type": "@id"
+    }
+  }
+}
