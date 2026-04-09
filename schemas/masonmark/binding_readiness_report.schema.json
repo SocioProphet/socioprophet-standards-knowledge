@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Masonmark binding readiness report",
+  "type": "object",
+  "required": ["environment", "generated_at_utc", "summary", "contracts"],
+  "properties": {
+    "environment": {"type": "string"},
+    "generated_at_utc": {"type": "string"},
+    "summary": {
+      "type": "object",
+      "required": ["contracts_total", "contracts_ready", "contracts_deferred", "contracts_failed"],
+      "properties": {
+        "contracts_total": {"type": "integer"},
+        "contracts_ready": {"type": "integer"},
+        "contracts_deferred": {"type": "integer"},
+        "contracts_failed": {"type": "integer"}
+      },
+      "additionalProperties": false
+    },
+    "contracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema_id", "logical_view", "status", "checks"],
+        "properties": {
+          "schema_id": {"type": "string"},
+          "logical_view": {"type": "string"},
+          "status": {"enum": ["ready", "deferred", "failed"]},
+          "checks": {"type": "array"},
+          "missing_columns": {"type": "array", "items": {"type": "string"}},
+          "unexpected_columns": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
