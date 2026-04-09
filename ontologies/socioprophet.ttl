@@ -1,0 +1,29 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sp: <https://socioprophet.github.io/ontogenesis/socioprophet#> .
+
+<https://socioprophet.github.io/ontogenesis/socioprophet>
+    a owl:Ontology ;
+    dct:title "SocioProphet Ontology" ;
+    dct:description "Runners, experiments, configs, models, datasets, metrics, and reports." .
+
+sp:Runner a owl:Class .
+sp:HFRunner a owl:Class ; rdfs:subClassOf sp:Runner .
+sp:ONNXRunner a owl:Class ; rdfs:subClassOf sp:Runner .
+sp:Experiment a owl:Class .
+sp:Config a owl:Class .
+sp:Dataset a owl:Class .
+sp:Model a owl:Class .
+sp:Metric a owl:Class .
+sp:Report a owl:Class .
+
+sp:hasRunner a owl:ObjectProperty ; rdfs:domain sp:Experiment ; rdfs:range sp:Runner .
+sp:usesConfig a owl:ObjectProperty ; rdfs:domain sp:Experiment ; rdfs:range sp:Config .
+sp:usesDataset a owl:ObjectProperty ; rdfs:domain sp:Experiment ; rdfs:range sp:Dataset .
+sp:usesModel a owl:ObjectProperty ; rdfs:domain sp:Experiment ; rdfs:range sp:Model .
+sp:reportsMetric a owl:ObjectProperty ; rdfs:domain sp:Experiment ; rdfs:range sp:Metric .
+sp:outputsArtifact a owl:ObjectProperty ; rdfs:domain sp:Experiment ; rdfs:range sp:Report .
+sp:keyMetric a owl:DatatypeProperty ; rdfs:range xsd:string .
+sp:value a owl:DatatypeProperty ; rdfs:domain sp:Metric ; rdfs:range xsd:decimal .
