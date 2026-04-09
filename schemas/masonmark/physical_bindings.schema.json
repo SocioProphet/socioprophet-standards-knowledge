@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Masonmark physical bindings",
+  "type": "object",
+  "required": ["environment", "bindings"],
+  "properties": {
+    "environment": {"type": "string"},
+    "current_fiscal_quarter": {"type": "string"},
+    "bindings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["engine"],
+        "properties": {
+          "engine": {"type": "string", "enum": ["sqlite", "postgres", "snowflake", "bigquery", "duckdb"]},
+          "database": {"type": ["string", "null"]},
+          "table": {"type": ["string", "null"]},
+          "catalog": {"type": ["string", "null"]},
+          "schema": {"type": ["string", "null"]},
+          "view": {"type": ["string", "null"]},
+          "read_only_asserted": {"type": "boolean"},
+          "steward_owner": {"type": ["string", "null"]},
+          "notes": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
