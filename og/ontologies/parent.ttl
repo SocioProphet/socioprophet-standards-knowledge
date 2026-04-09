@@ -1,0 +1,14 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+<https://socioprophet.github.io/ontogenesis/og/parent>
+    a owl:Ontology ;
+    dct:title "Ontogenesis Parent Registry (Core)" ;
+    dct:description "Canonical four-module core registry for Prophet CLI, Atomic Bindings, Human, and SocioProphet." ;
+    rdfs:comment "K8s, ITSM, Linux, and GitHub remain deferred add-in modules." ;
+    owl:imports
+        <../../prophet/ontologies/prophet_cli_ontology.ttl>,
+        <../../Lower/ontologies/bindings.ttl>,
+        <../../ontologies/human.ttl>,
+        <../../ontologies/socioprophet.ttl> .
