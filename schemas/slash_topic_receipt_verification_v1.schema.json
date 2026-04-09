@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/knowledge/slash_topic_receipt_verification_v1.schema.json",
+  "title": "SlashTopicReceiptVerification",
+  "type": "object",
+  "required": ["verified", "reason"],
+  "properties": {
+    "verified": {"type": "boolean"},
+    "reason": {"type": "string"},
+    "requiredWitnesses": {"type": "integer", "minimum": 0},
+    "observedWitnesses": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": true
+}
