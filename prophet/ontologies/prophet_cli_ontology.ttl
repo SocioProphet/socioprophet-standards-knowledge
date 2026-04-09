@@ -1,0 +1,48 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prop: <https://socioprophet.github.io/ontogenesis/prophet#> .
+
+<https://socioprophet.github.io/ontogenesis/prophet>
+    a owl:Ontology ;
+    dct:title "Prophet CLI Ontology" ;
+    dct:description "Canonical ontology for Prophet CLI planes, commands, carriers, gates, spaces, and dynamic capability surfaces." .
+
+prop:CLI a owl:Class .
+prop:Plane a owl:Class .
+prop:Command a owl:Class .
+prop:Carrier a owl:Class .
+prop:Gate a owl:Class .
+prop:Space a owl:Class .
+prop:CapabilityDescriptor a owl:Class .
+prop:ServiceDescriptor a owl:Class .
+
+prop:targetsPlane a owl:ObjectProperty ; rdfs:domain prop:Command ; rdfs:range prop:Plane .
+prop:emitsCarrier a owl:ObjectProperty ; rdfs:domain prop:Command ; rdfs:range prop:Carrier .
+prop:adoptsInto a owl:ObjectProperty ; rdfs:range prop:Space .
+prop:requiresGate a owl:ObjectProperty ; rdfs:range prop:Gate .
+prop:servedBy a owl:ObjectProperty .
+prop:verb a owl:DatatypeProperty ; rdfs:domain prop:Command ; rdfs:range xsd:string .
+prop:signed a owl:DatatypeProperty ; rdfs:domain prop:Carrier ; rdfs:range xsd:boolean .
+prop:schemaRef a owl:DatatypeProperty ; rdfs:domain prop:Carrier ; rdfs:range xsd:string .
+prop:leafRef a owl:DatatypeProperty ; rdfs:domain prop:Carrier ; rdfs:range xsd:string .
+prop:apiPath a owl:DatatypeProperty ; rdfs:domain prop:Command ; rdfs:range xsd:string .
+
+prop:Platform a prop:Plane ; rdfs:label "Platform" .
+prop:SourceOS a prop:Plane ; rdfs:label "SourceOS" .
+prop:Genesys a prop:Plane ; rdfs:label "Genesys" .
+prop:Inception a prop:Plane ; rdfs:label "Inception" .
+prop:Twin a prop:Plane ; rdfs:label "Twin" .
+prop:Mesh a prop:Plane ; rdfs:label "Mesh" .
+prop:Ontology a prop:Plane ; rdfs:label "Ontology" .
+prop:Viz a prop:Plane ; rdfs:label "Viz" .
+prop:FHIR a prop:Plane ; rdfs:label "FHIR" .
+prop:Tools a prop:Plane ; rdfs:label "Tools" .
+
+prop:System a prop:Space ; rdfs:label "System" .
+prop:User a prop:Space ; rdfs:label "User" .
+prop:InceptionSpace a prop:Space ; rdfs:label "Inception Space" .
+
+prop:G0 a prop:Gate ; rdfs:label "Genesis OK" .
+prop:G1 a prop:Gate ; rdfs:label "Inception Stable" .
