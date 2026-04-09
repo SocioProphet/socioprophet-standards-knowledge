@@ -35,12 +35,20 @@ def ensure_demo_sqlite(physical_bindings: dict[str, Any]) -> None:
         conn.close()
 
 
+def _safe_table_name(table: str) -> str:
+    import re
+    if not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', table):
+        raise ValueError(f"Invalid table name: {table!r}")
+    return table
+
+
 def sqlite_columns(binding: dict[str, Any]) -> list[str]:
     db = ROOT / binding['database'] if not Path(binding['database']).is_absolute() else Path(binding['database'])
+    table = _safe_table_name(binding['table'])
     conn = sqlite3.connect(db)
     try:
         cur = conn.cursor()
-        cur.execute(f"PRAGMA table_info({binding['table']})")
+        cur.execute(f"PRAGMA table_info({table})")
         return [r[1] for r in cur.fetchall()]
     finally:
         conn.close()
