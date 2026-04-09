@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Masonmark binding manifest",
+  "type": "object",
+  "required": ["pack_version", "family_id", "logical_contracts", "id_blocks"],
+  "properties": {
+    "pack_version": {"type": "string"},
+    "family_id": {"type": "string"},
+    "generated_for": {"type": "string"},
+    "logical_contracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["schema_id", "logical_view", "approved_columns", "allowlisted_ops", "denylisted_ops"],
+        "properties": {
+          "schema_id": {"type": "string"},
+          "logical_view": {"type": "string"},
+          "purpose": {"type": "string"},
+          "approved_columns": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "type", "role_id"],
+              "properties": {
+                "name": {"type": "string"},
+                "type": {"type": "string"},
+                "role_id": {"type": "string"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "allowlisted_ops": {"type": "array", "items": {"type": "string"}},
+          "denylisted_ops": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "id_blocks": {"type": "object"}
+  },
+  "additionalProperties": false
+}
