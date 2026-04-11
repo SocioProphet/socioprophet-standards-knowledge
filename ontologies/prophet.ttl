@@ -1,0 +1,9 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+<https://socioprophet.github.io/ontogenesis/ontologies/prophet>
+    a owl:Ontology ;
+    rdfs:label "Deprecated Prophet ontology shim" ;
+    dct:description "Temporary compatibility shim. Active references must migrate to prophet/ontologies/prophet_cli_ontology.ttl." ;
+    owl:imports <https://socioprophet.github.io/ontogenesis/prophet/ontologies/prophet_cli_ontology> .
