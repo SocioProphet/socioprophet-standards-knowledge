@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/knowledge/0.1.0/lifecycle-common.schema.json",
+  "$defs": {
+    "assetClass": {
+      "type": "string",
+      "enum": [
+        "DocumentAsset",
+        "CodeAsset",
+        "RunbookAsset",
+        "PromptAsset",
+        "BundleAsset",
+        "PolicyAsset",
+        "ConversationAsset",
+        "EvidenceArtifact",
+        "GraphTraversalAsset",
+        "PublishedKnowledgeUnit"
+      ]
+    },
+    "knowledgeState": {
+      "type": "string",
+      "enum": [
+        "ObservedLocal",
+        "Structured",
+        "PromotionCandidate",
+        "Validated",
+        "PublishedCanonical",
+        "Superseded",
+        "Rejected",
+        "SensitiveRestricted"
+      ]
+    },
+    "contentSpaceRef": {
+      "type": "string",
+      "pattern": "^content-space:"
+    },
+    "receiptId": {
+      "type": "string",
+      "pattern": "^urn:srcos:receipt:"
+    },
+    "utcTimestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
