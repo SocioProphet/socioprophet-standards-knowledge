@@ -1,0 +1,27 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prop: <https://socioprophet.github.io/ontogenesis/prophet#> .
+
+prop:CarrierSignedShape
+    a sh:NodeShape ;
+    sh:targetClass prop:Carrier ;
+    sh:property [
+        sh:path prop:signed ;
+        sh:datatype xsd:boolean ;
+        sh:hasValue true ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Carrier nodes used by mutating commands must be signed=true." ;
+    ] .
+
+prop:MutatingCommandShape
+    a sh:NodeShape ;
+    sh:targetClass prop:MutatingCommand ;
+    sh:property [
+        sh:path prop:emitsCarrier ;
+        sh:minCount 1 ;
+        sh:node prop:CarrierSignedShape ;
+        sh:message "Mutating commands must emit at least one signed carrier." ;
+    ] .
