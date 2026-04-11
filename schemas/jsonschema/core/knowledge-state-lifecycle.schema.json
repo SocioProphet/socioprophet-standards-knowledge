@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/knowledge/0.1.0/knowledge-state-lifecycle.schema.json",
+  "title": "Knowledge State Lifecycle v0.1",
+  "type": "object",
+  "required": [
+    "kind",
+    "subjectRef",
+    "objectType",
+    "state",
+    "issuedTimeUtc",
+    "scopeRef",
+    "provenanceRootRef"
+  ],
+  "properties": {
+    "kind": { "const": "KnowledgeStateLifecycle" },
+    "subjectRef": { "type": "string" },
+    "objectType": {
+      "$ref": "../common/lifecycle-common.schema.json#/$defs/assetClass"
+    },
+    "state": {
+      "$ref": "../common/lifecycle-common.schema.json#/$defs/knowledgeState"
+    },
+    "previousState": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/knowledgeState" },
+        { "type": "null" }
+      ]
+    },
+    "issuedTimeUtc": {
+      "$ref": "../common/lifecycle-common.schema.json#/$defs/utcTimestamp"
+    },
+    "scopeRef": { "type": "string" },
+    "contentSpaceRef": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/contentSpaceRef" },
+        { "type": "null" }
+      ]
+    },
+    "provenanceRootRef": { "type": "string" },
+    "validationReceiptId": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/receiptId" },
+        { "type": "null" }
+      ]
+    },
+    "promotionReceiptId": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/receiptId" },
+        { "type": "null" }
+      ]
+    },
+    "publicationReceiptId": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/receiptId" },
+        { "type": "null" }
+      ]
+    },
+    "contradictionRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
