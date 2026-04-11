@@ -5,5 +5,5 @@
 <https://socioprophet.github.io/ontogenesis/policy/shapes/master>
     a owl:Ontology ;
     rdfs:label "Ontogenesis master SHACL pack" ;
-    dct:description "Single authoritative SHACL entry surface for the current semantic core. Wave 2 imports the canonical Prophet CLI shape set; broader module imports are follow-on work." ;
-    owl:imports <https://socioprophet.github.io/ontogenesis/prophet/shapes/prophet_cli> .
+    dct:description "Single authoritative SHACL entry surface for the widened semantic core. Wave 4 points the master pack at the semantic_core import surface." ;
+    owl:imports <https://socioprophet.github.io/ontogenesis/policy/shapes/semantic_core> .
