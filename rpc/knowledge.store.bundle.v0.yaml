@@ -1,0 +1,49 @@
+service: knowledge.store
+version: v0
+status: draft
+kind: standards-bundle-manifest
+
+bundle:
+  description: >
+    Normalized package manifest for the Knowledge Context bundle. This file is additive and
+    clarifies the authoritative relationship between the Avro Path-A payload contract, JSON-LD
+    semantic overlay, JSON Schema authoring/validation surfaces, normative binding docs, and
+    transport fixtures.
+
+  path_a:
+    service: knowledge.store.v0
+    avro_protocol: schemas/avro/knowledge.store.v0/knowledge.store.v0.avpr
+    schema_label: KNOWLEDGE_AVRO_v0
+    schema_id_sha3_256_hex: a95570c2921b16ac12a9c0306e97399c669d9debf68d442c2ccaadcad8b6a092
+    request_method_suffix: "_a.REQ"
+    response_method_suffix: "_a.RESP"
+
+  semantic_overlay:
+    jsonld_context: schemas/jsonld/contexts/knowledge/context.jsonld
+    context_label: KNOWLEDGE_JSONLD_v0
+    context_id_sha3_256_hex: 4aa071d983aed812efa04171781ac976562f88239e09aa17ad4769d3dfad1c69
+
+  authoring_validation:
+    jsonschema:
+      common: schemas/jsonschema/common/
+      core: schemas/jsonschema/core/
+      relations: schemas/jsonschema/relations/
+
+  normative_docs:
+    tritrpc_binding: docs/standards/030-tritrpc-binding.md
+    schema_context_registry: docs/standards/031-schema-context-id-registry.md
+    fixtures_doc: docs/standards/032-tritrpc-knowledge-fixtures.md
+
+  fixtures:
+    vectors_hex: fixtures/knowledge_vectors_hex_pathA.txt
+    nonces_hex: fixtures/knowledge_vectors_hex_pathA.txt.nonces
+
+notes:
+  - >
+    This bundle manifest supplements rpc/knowledge.store.v0.yaml without changing the existing
+    service surface. It exists to make the package hierarchy explicit for tooling and downstream
+    standards-lock imports.
+  - >
+    MeriotopographicEdge.qualifiers are authoring-friendly object-like data at the JSON Schema
+    surface but compile to a deterministic array<KeyValue> payload shape at the Avro Path-A
+    surface. Keys MUST be sorted lexicographically and values MUST be encoded as RFC 8785 JCS bytes.
