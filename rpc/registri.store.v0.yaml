@@ -1,0 +1,62 @@
+service: registri.store
+version: v0
+status: draft
+kind: standards-bundle-manifest
+
+description: >
+  Entity Registri / Proof Fabric detailed standards package for canonical entity registry objects,
+  artifact manifests, higher-order relation records, and checkpoint manifests.
+
+methods:
+  - name: UpsertEntity
+    request: { type: Entity }
+    response: { type: Ack }
+  - name: QueryEntities
+    request: { type: Query }
+    response: { type: EntitySet }
+  - name: UpsertArtifactManifest
+    request: { type: ArtifactManifest }
+    response: { type: Ack }
+  - name: QueryArtifacts
+    request: { type: Query }
+    response: { type: ArtifactSet }
+  - name: UpsertRelation
+    request: { type: HyperedgeRecord }
+    response: { type: Ack }
+  - name: QueryRelations
+    request: { type: Query }
+    response: { type: RelationSet }
+  - name: UpsertCheckpoint
+    request: { type: CheckpointManifest }
+    response: { type: Ack }
+  - name: QueryCheckpoints
+    request: { type: Query }
+    response: { type: CheckpointSet }
+
+bundle:
+  path_a:
+    service: registri.store.v0
+    avro_protocol: schemas/avro/registri.store.v0/registri.store.v0.avpr
+    schema_label: REGISTRI_AVRO_v0
+    schema_id_sha3_256_hex: c6a09192f2d917badfa53415d8499f3edc67068c5974bf9a7be367306f7eb340
+    request_method_suffix: "_a.REQ"
+    response_method_suffix: "_a.RESP"
+
+  semantic_overlay:
+    jsonld_context: schemas/jsonld/contexts/registri/context.jsonld
+    context_label: REGISTRI_JSONLD_v0
+    context_id_sha3_256_hex: d9edf86e9b97bfeb5bbb4d8972e1c74b6e0de0bd1c172bc1c4093d11e61e0358
+
+  authoring_validation:
+    jsonschema:
+      core:
+        - schemas/jsonschema/core/entity.schema.json
+        - schemas/jsonschema/core/artifact_manifest.schema.json
+        - schemas/jsonschema/core/checkpoint_manifest.schema.json
+      relations:
+        - schemas/jsonschema/relations/hyperedge_record.schema.json
+
+notes:
+  - Graph interrogation remains behind upstream graph.store.v0.
+  - Lifecycle nuance should preferentially emit durable Avro event records instead of growing an unbounded bespoke RPC method surface.
+  - HyperedgeRecord is the higher-order relation object; lossless SPO projections MAY produce MeriotopographicEdge views in the existing Knowledge Context lane.
