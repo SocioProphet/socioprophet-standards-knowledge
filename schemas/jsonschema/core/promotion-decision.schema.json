@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/knowledge/0.1.0/promotion-decision.schema.json",
+  "title": "Promotion Decision v0.1",
+  "type": "object",
+  "required": [
+    "kind",
+    "candidateRef",
+    "assetClassBefore",
+    "assetClassAfter",
+    "decision",
+    "issuedTimeUtc",
+    "scopeRef"
+  ],
+  "properties": {
+    "kind": { "const": "PromotionDecision" },
+    "candidateRef": { "type": "string" },
+    "promotedObjectRef": {
+      "type": ["string", "null"]
+    },
+    "assetClassBefore": {
+      "$ref": "../common/lifecycle-common.schema.json#/$defs/assetClass"
+    },
+    "assetClassAfter": {
+      "$ref": "../common/lifecycle-common.schema.json#/$defs/assetClass"
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["approve", "reject", "restrict", "supersede"]
+    },
+    "issuedTimeUtc": {
+      "$ref": "../common/lifecycle-common.schema.json#/$defs/utcTimestamp"
+    },
+    "scopeRef": { "type": "string" },
+    "contentSpaceRef": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/contentSpaceRef" },
+        { "type": "null" }
+      ]
+    },
+    "validationReceiptId": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/receiptId" },
+        { "type": "null" }
+      ]
+    },
+    "promotionReceiptId": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/receiptId" },
+        { "type": "null" }
+      ]
+    },
+    "publicationReceiptId": {
+      "anyOf": [
+        { "$ref": "../common/lifecycle-common.schema.json#/$defs/receiptId" },
+        { "type": "null" }
+      ]
+    },
+    "duplicateCheckRef": {
+      "type": ["string", "null"]
+    },
+    "reviewSessionRef": {
+      "type": ["string", "null"]
+    },
+    "approverRef": {
+      "type": ["string", "null"]
+    },
+    "rationale": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}
