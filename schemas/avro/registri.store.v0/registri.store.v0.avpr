@@ -1,0 +1,153 @@
+{
+  "protocol": "registri_store_v0",
+  "namespace": "socioprophet.registri.v0",
+  "types": [
+    {
+      "type": "record",
+      "name": "KeyValue",
+      "fields": [
+        { "name": "key", "type": "string" },
+        { "name": "value_jcs", "type": "bytes", "default": "" }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ActorRef",
+      "fields": [
+        { "name": "actor_id", "type": "string" },
+        { "name": "actor_type", "type": { "type": "enum", "name": "ActorType", "symbols": ["human","agent","service"] } },
+        { "name": "display_name", "type": ["null","string"], "default": null }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EntityRef",
+      "fields": [
+        { "name": "entity_id", "type": "string" },
+        { "name": "entity_type", "type": "string" }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ArtifactManifest",
+      "fields": [
+        { "name": "artifact_id", "type": "string" },
+        { "name": "artifact_type", "type": "string" },
+        { "name": "content_hash", "type": ["null","string"], "default": null },
+        { "name": "storage_pointer", "type": ["null","string"], "default": null },
+        { "name": "custody_class", "type": ["null","string"], "default": null },
+        { "name": "derives_from", "type": { "type": "array", "items": "string" }, "default": [] }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Entity",
+      "fields": [
+        { "name": "entity_id", "type": "string" },
+        { "name": "entity_type", "type": "string" },
+        { "name": "display_name", "type": ["null","string"], "default": null },
+        { "name": "source_refs", "type": { "type": "array", "items": "string" }, "default": [] },
+        { "name": "provenance_refs", "type": { "type": "array", "items": "string" }, "default": [] }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ParticipantSlot",
+      "fields": [
+        { "name": "slot", "type": "string" },
+        { "name": "entity", "type": "EntityRef" },
+        { "name": "role_ref", "type": ["null","string"], "default": null },
+        { "name": "cardinality", "type": ["null","string"], "default": null }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "HyperedgeRecord",
+      "fields": [
+        { "name": "relation_id", "type": "string" },
+        { "name": "relation_type", "type": "string" },
+        { "name": "participants", "type": { "type": "array", "items": "ParticipantSlot" }, "default": [] },
+        { "name": "artifact_refs", "type": { "type": "array", "items": "string" }, "default": [] },
+        { "name": "support_refs", "type": { "type": "array", "items": "string" }, "default": [] },
+        { "name": "rebuttal_refs", "type": { "type": "array", "items": "string" }, "default": [] },
+        { "name": "qualifiers", "type": { "type": "array", "items": "KeyValue" }, "default": [] },
+        { "name": "asserted_by", "type": ["null","ActorRef"], "default": null },
+        { "name": "asserted_at", "type": ["null","string"], "default": null },
+        { "name": "review_state", "type": ["null","string"], "default": null },
+        { "name": "projection_refs", "type": { "type": "array", "items": "string" }, "default": [] }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "CheckpointManifest",
+      "fields": [
+        { "name": "checkpoint_id", "type": "string" },
+        { "name": "root_refs", "type": { "type": "array", "items": "string" }, "default": [] },
+        { "name": "replay_cursor", "type": ["null","string"], "default": null },
+        { "name": "atomspace_segment_refs", "type": { "type": "array", "items": "string" }, "default": [] },
+        { "name": "projection_state_refs", "type": { "type": "array", "items": "string" }, "default": [] }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Ack",
+      "fields": [
+        { "name": "ok", "type": "boolean", "default": true },
+        { "name": "message", "type": ["null","string"], "default": null },
+        { "name": "error_code", "type": ["null","string"], "default": null }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Query",
+      "fields": [
+        { "name": "query_id", "type": ["null","string"], "default": null },
+        { "name": "text", "type": ["null","string"], "default": null },
+        { "name": "limit", "type": "int", "default": 50 },
+        { "name": "cursor", "type": ["null","string"], "default": null }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EntitySet",
+      "fields": [
+        { "name": "entities", "type": { "type": "array", "items": "Entity" }, "default": [] },
+        { "name": "next_cursor", "type": ["null","string"], "default": null }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ArtifactSet",
+      "fields": [
+        { "name": "artifacts", "type": { "type": "array", "items": "ArtifactManifest" }, "default": [] },
+        { "name": "next_cursor", "type": ["null","string"], "default": null }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "RelationSet",
+      "fields": [
+        { "name": "relations", "type": { "type": "array", "items": "HyperedgeRecord" }, "default": [] },
+        { "name": "next_cursor", "type": ["null","string"], "default": null }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "CheckpointSet",
+      "fields": [
+        { "name": "checkpoints", "type": { "type": "array", "items": "CheckpointManifest" }, "default": [] },
+        { "name": "next_cursor", "type": ["null","string"], "default": null }
+      ]
+    }
+  ],
+  "messages": {
+    "UpsertEntity_a_REQ": { "request": [ { "name": "entity", "type": "Entity" } ], "response": "Ack" },
+    "QueryEntities_a_REQ": { "request": [ { "name": "query", "type": "Query" } ], "response": "EntitySet" },
+    "UpsertArtifactManifest_a_REQ": { "request": [ { "name": "artifact", "type": "ArtifactManifest" } ], "response": "Ack" },
+    "QueryArtifacts_a_REQ": { "request": [ { "name": "query", "type": "Query" } ], "response": "ArtifactSet" },
+    "UpsertRelation_a_REQ": { "request": [ { "name": "relation", "type": "HyperedgeRecord" } ], "response": "Ack" },
+    "QueryRelations_a_REQ": { "request": [ { "name": "query", "type": "Query" } ], "response": "RelationSet" },
+    "UpsertCheckpoint_a_REQ": { "request": [ { "name": "checkpoint", "type": "CheckpointManifest" } ], "response": "Ack" },
+    "QueryCheckpoints_a_REQ": { "request": [ { "name": "query", "type": "Query" } ], "response": "CheckpointSet" }
+  }
+}
