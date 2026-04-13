@@ -1,0 +1,93 @@
+service: knowledge.store
+version: v1
+status: draft
+description: >
+  Knowledge Store service for canonical Knowledge Context artifacts
+  (Note, Annotation, Claim, MeriotopographicEdge, ProvenanceRecord,
+  Entity, Passage, Mention, EmbeddingRef, EntityResolutionRecord).
+  This v1 surface extends the placeholder v0 contract without mutating
+  the frozen v0 labels.
+
+methods:
+  - name: UpsertNote
+    request: { type: Note }
+    response: { type: Ack }
+  - name: QueryNotes
+    request: { type: Query }
+    response: { type: NoteSet }
+
+  - name: UpsertAnnotation
+    request: { type: Annotation }
+    response: { type: Ack }
+  - name: QueryAnnotations
+    request: { type: Query }
+    response: { type: AnnotationSet }
+
+  - name: UpsertClaim
+    request: { type: Claim }
+    response: { type: Ack }
+  - name: QueryClaims
+    request: { type: Query }
+    response: { type: ClaimSet }
+
+  - name: UpsertEdge
+    request: { type: MeriotopographicEdge }
+    response: { type: Ack }
+  - name: QueryEdges
+    request: { type: Query }
+    response: { type: EdgeSet }
+
+  - name: UpsertProvenanceRecord
+    request: { type: ProvenanceRecord }
+    response: { type: Ack }
+  - name: QueryProvenanceRecords
+    request: { type: Query }
+    response: { type: ProvenanceRecordSet }
+
+  - name: UpsertEntity
+    request: { type: Entity }
+    response: { type: Ack }
+  - name: QueryEntities
+    request: { type: Query }
+    response: { type: EntitySet }
+
+  - name: UpsertPassage
+    request: { type: Passage }
+    response: { type: Ack }
+  - name: QueryPassages
+    request: { type: Query }
+    response: { type: PassageSet }
+
+  - name: UpsertMention
+    request: { type: Mention }
+    response: { type: Ack }
+  - name: QueryMentions
+    request: { type: Query }
+    response: { type: MentionSet }
+
+  - name: UpsertEmbeddingRef
+    request: { type: EmbeddingRef }
+    response: { type: Ack }
+  - name: QueryEmbeddings
+    request: { type: Query }
+    response: { type: EmbeddingRefSet }
+
+  - name: UpsertEntityResolutionRecord
+    request: { type: EntityResolutionRecord }
+    response: { type: Ack }
+  - name: QueryEntityResolutionRecords
+    request: { type: Query }
+    response: { type: EntityResolutionRecordSet }
+
+notes:
+  - v0 remains frozen as the initial placeholder contract.
+  - v1 is the first full store surface for text nodes, semantic links, provenance, and vector references.
+  - Label freeze and ID derivation updates must be recorded in docs/standards/031-schema-context-id-registry.md before activation.
+
+tritrpc_wire:
+  service: knowledge.store.v1
+  request_method_suffix: "_a.REQ"
+  response_method_suffix: "_a.RESP"
+  path: "A"
+  schema_label: "KNOWLEDGE_AVRO_v1"
+  context_label: "KNOWLEDGE_JSONLD_v1"
