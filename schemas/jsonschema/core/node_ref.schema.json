@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/node_ref.schema.json",
+  "title": "NodeRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["node_id", "node_kind"],
+  "properties": {
+    "node_id": { "type": "string" },
+    "node_kind": { "type": "string", "enum": ["note", "claim", "annotation", "edge", "provenance_record", "entity", "passage", "mention", "embedding_ref", "entity_resolution_record"] }
+  }
+}
