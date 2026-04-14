@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/passage.schema.json",
+  "title": "Passage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["passage_id", "anchor", "text", "created_at"],
+  "properties": {
+    "passage_id": { "type": "string" },
+    "anchor": { "$ref": "socioprophet://schemas/knowledge/core/anchor.schema.json" },
+    "text": { "type": "string", "minLength": 1 },
+    "sequence_index": { "type": "integer", "minimum": 0 },
+    "chunk_policy": { "type": "string", "enum": ["sentence", "paragraph", "window", "semantic"], "default": "paragraph" },
+    "token_count": { "type": "integer", "minimum": 0 },
+    "language": { "type": "string" },
+    "content_hash": { "type": "string" },
+    "embedding_ids": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "provenance": { "type": "array", "items": { "$ref": "socioprophet://schemas/knowledge/common/provenance_ref.schema.json" }, "default": [] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}
