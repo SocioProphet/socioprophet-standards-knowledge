@@ -1,0 +1,40 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://socioprophet.org/ns/registri#",
+    "spr": "https://socioprophet.org/ns/registri#",
+    "prov": "http://www.w3.org/ns/prov#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "id": "@id",
+    "type": "@type",
+
+    "entity_id": { "@id": "spr:entity_id" },
+    "entity_type": { "@id": "spr:entity_type" },
+    "artifact_id": { "@id": "spr:artifact_id" },
+    "artifact_type": { "@id": "spr:artifact_type" },
+    "relation_id": { "@id": "spr:relation_id" },
+    "relation_type": { "@id": "spr:relation_type" },
+    "checkpoint_id": { "@id": "spr:checkpoint_id" },
+
+    "display_name": { "@id": "spr:display_name" },
+    "content_hash": { "@id": "spr:content_hash" },
+    "storage_pointer": { "@id": "spr:storage_pointer" },
+    "custody_class": { "@id": "spr:custody_class", "@type": "@vocab" },
+
+    "participants": { "@id": "spr:participant", "@container": "@set" },
+    "slot": { "@id": "spr:slot", "@type": "@vocab" },
+    "role_ref": { "@id": "spr:role_ref" },
+    "cardinality": { "@id": "spr:cardinality", "@type": "@vocab" },
+
+    "artifact_refs": { "@id": "spr:artifact_ref", "@container": "@set" },
+    "support_refs": { "@id": "spr:support_ref", "@container": "@set" },
+    "rebuttal_refs": { "@id": "spr:rebuttal_ref", "@container": "@set" },
+    "projection_refs": { "@id": "spr:projection_ref", "@container": "@set" },
+
+    "asserted_by": { "@id": "spr:asserted_by" },
+    "asserted_at": { "@id": "prov:generatedAtTime", "@type": "xsd:dateTime" },
+    "review_state": { "@id": "spr:review_state", "@type": "@vocab" },
+    "replay_cursor": { "@id": "spr:replay_cursor" }
+  }
+}
