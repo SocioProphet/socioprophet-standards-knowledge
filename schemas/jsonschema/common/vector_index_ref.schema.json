@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/common/vector_index_ref.schema.json",
+  "title": "VectorIndexRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["index_id", "backend", "metric"],
+  "properties": {
+    "index_id": { "type": "string" },
+    "backend": { "type": "string", "enum": ["pgvector", "opensearch_knn", "faiss", "hnswlib", "milvus", "custom"] },
+    "metric": { "type": "string", "enum": ["cosine", "dot_product", "l2"] },
+    "dimensions": { "type": "integer", "minimum": 1 },
+    "collection_name": { "type": "string" },
+    "uri": { "type": "string" }
+  }
+}
