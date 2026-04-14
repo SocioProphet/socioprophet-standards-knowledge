@@ -1,0 +1,14 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix og: <https://socioprophet.github.io/ontogenesis/og#> .
+
+<https://socioprophet.github.io/ontogenesis/og/ontologies/parent>
+    a owl:Ontology ;
+    rdfs:label "Ontogenesis core parent registry" ;
+    dct:description "Canonical core registry for Prophet CLI, Atomic Bindings, Human, and SocioProphet." ;
+    owl:imports
+        <https://socioprophet.github.io/ontogenesis/prophet/ontologies/prophet_cli_ontology> ,
+        <https://socioprophet.github.io/ontogenesis/Lower/ontologies/bindings> ,
+        <https://socioprophet.github.io/ontogenesis/ontologies/human> ,
+        <https://socioprophet.github.io/ontogenesis/ontologies/socioprophet> .
