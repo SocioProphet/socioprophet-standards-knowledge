@@ -1,0 +1,45 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix bind: <https://socioprophet.github.io/ontogenesis/Lower/bindings#> .
+
+bind:PortShape
+    a sh:NodeShape ;
+    sh:targetClass bind:Port ;
+    sh:property [
+        sh:path bind:portNumber ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 65535 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Port numbers must be between 1 and 65535." ;
+    ] .
+
+bind:DeviceNodeShape
+    a sh:NodeShape ;
+    sh:targetClass bind:DeviceNode ;
+    sh:property [
+        sh:path bind:devicePath ;
+        sh:datatype xsd:string ;
+        sh:pattern "^/dev/" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Device nodes must use canonical /dev/* paths." ;
+    ] ;
+    sh:property [
+        sh:path bind:ioClaim ;
+        sh:minCount 1 ;
+        sh:message "Device nodes require an ioClaim before exposure." ;
+    ] .
+
+bind:SocketEndpointShape
+    a sh:NodeShape ;
+    sh:targetClass bind:SocketEndpoint ;
+    sh:property [
+        sh:path bind:socketPath ;
+        sh:datatype xsd:string ;
+        sh:pattern "^(/run/|/var/run/)" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Socket endpoints must live under /run or /var/run." ;
+    ] .
