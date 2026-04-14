@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/entity.schema.json",
+  "title": "Entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["entity_id", "entity_type", "canonical_name", "created_at"],
+  "properties": {
+    "entity_id": { "type": "string" },
+    "entity_type": { "type": "string" },
+    "canonical_name": { "type": "string", "minLength": 1 },
+    "aliases": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "external_ids": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "provenance": { "type": "array", "items": { "$ref": "socioprophet://schemas/knowledge/common/provenance_ref.schema.json" }, "default": [] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["null", "string"], "format": "date-time", "default": null }
+  }
+}
