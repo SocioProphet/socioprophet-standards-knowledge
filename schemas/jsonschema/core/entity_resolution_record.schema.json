@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/core/entity_resolution_record.schema.json",
+  "title": "EntityResolutionRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["record_id", "operation", "candidate_nodes", "created_at"],
+  "properties": {
+    "record_id": { "type": "string" },
+    "operation": { "type": "string", "enum": ["merge", "split", "link", "reject"] },
+    "candidate_nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "socioprophet://schemas/knowledge/core/node_ref.schema.json" }
+    },
+    "decided_node": {
+      "oneOf": [
+        { "$ref": "socioprophet://schemas/knowledge/core/node_ref.schema.json" },
+        { "type": "null" }
+      ],
+      "default": null
+    },
+    "score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "rationale": { "type": "string" },
+    "provenance": { "type": "array", "items": { "$ref": "socioprophet://schemas/knowledge/common/provenance_ref.schema.json" }, "default": [] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

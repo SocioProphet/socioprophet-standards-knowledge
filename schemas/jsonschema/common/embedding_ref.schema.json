@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "socioprophet://schemas/knowledge/common/embedding_ref.schema.json",
+  "title": "EmbeddingRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["embedding_id", "target_node", "vector_index", "embedding_model", "created_at"],
+  "properties": {
+    "embedding_id": { "type": "string" },
+    "target_node": { "$ref": "socioprophet://schemas/knowledge/core/node_ref.schema.json" },
+    "vector_index": { "$ref": "socioprophet://schemas/knowledge/common/vector_index_ref.schema.json" },
+    "embedding_model": { "type": "string" },
+    "dimensions": { "type": "integer", "minimum": 1 },
+    "metric": { "type": "string", "enum": ["cosine", "dot_product", "l2"] },
+    "content_hash": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}
