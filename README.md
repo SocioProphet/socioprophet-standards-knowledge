@@ -60,15 +60,19 @@ See: `docs/standards/030-tritrpc-binding.md`
 Label/ID freeze: `docs/standards/031-schema-context-id-registry.md`
 
 ### 4) Avro Path-A payload contracts
-TriTRPC Path-A uses Avro binary payload bytes. We define a protocol for:
-- `knowledge.store.v0` requests/responses (REQ/RESP methods)
+TriTRPC Path-A uses Avro binary payload bytes. We define protocols for:
+- `knowledge.store.v0` requests/responses (REQ/RESP methods); `v0` remains the initial placeholder store surface
+- `knowledge.store.v1` expansion for `Annotation`, `ProvenanceRecord`, `Entity`, `Passage`, `Mention`, `EmbeddingRef`, and `EntityResolutionRecord`
 - deterministic constraints (no nondeterministic maps; prefer arrays or canonicalized bytes)
 
-See: `schemas/avro/knowledge.store.v0/knowledge.store.v0.avpr`
+See:
+- `schemas/avro/knowledge.store.v0/knowledge.store.v0.avpr`
+- `schemas/avro/knowledge.store.v1/knowledge.store.v1.avpr`
 
 ### 5) JSON-LD semantic overlay
-We provide a JSON-LD context for semantic expansion without changing wire payloads:
-- canonical context: `schemas/jsonld/contexts/knowledge/context.jsonld`
+We provide JSON-LD contexts for semantic expansion without changing wire payloads:
+- canonical `v0` context: `schemas/jsonld/contexts/knowledge/context.jsonld`
+- draft `v1` context: `schemas/jsonld/contexts/knowledge.v1/context.jsonld`
 
 ### 6) Lifecycle events (event-stream contracts)
 We define minimal Avro event schemas (separate from RPC payloads):
@@ -87,7 +91,7 @@ See: `schemas/avro/events.v1/`
   - `schemas/jsonld/` — JSON-LD contexts  
   - `schemas/jsonschema/` — canonical structural schemas
 - `rpc/`  
-  Service surfaces and TriTRPC wire mapping metadata (e.g., `rpc/knowledge.store.v0.yaml`).
+  Service surfaces and TriTRPC wire mapping metadata (e.g., `rpc/knowledge.store.v0.yaml`, `rpc/knowledge.store.v1.yaml`).
 - `fixtures/`  
   Hex fixture vectors + nonces (TriTRPC compliance), including AUX coverage.
 - `tools/`  
@@ -110,9 +114,11 @@ This repo is a compatibility surface. When we change it, we change it carefully.
   - do **not** rename labels
   - add new labels (e.g., `KNOWLEDGE_AVRO_v1`)
   - update the registry `docs/standards/031-schema-context-id-registry.md`
+- If we extend the store surface, we prefer adding a new versioned contract rather than mutating a frozen label in place.
 - If we change payload schema semantics, we update:
   - Avro protocol (`.avpr`)
   - fixture generator (payload bytes)
+  - JSON-LD contexts when semantic coverage changes
   - `make roundtrip` expectations
 
 ## Contributor workflow (house style)
