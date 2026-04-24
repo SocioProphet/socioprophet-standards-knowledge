@@ -1,0 +1,89 @@
+# Minimal worked example for Capability Fabric v0.1
+
+function_identity:
+  id: capability.example.summarize_text
+  namespace: capability.example
+  name: summarize_text
+  version: v0
+  input_type_ref: type://text/plain
+  output_type_ref: type://text/summary
+  semantic_hash: sha256:example-semantic-hash
+  purity_hint: EFFECTFUL
+  determinism_hint: BOUNDED_NONDET
+
+capability_signature:
+  function_id: capability.example.summarize_text
+  preconditions_ref: null
+  postconditions_ref: null
+  effect_context_ref: effect_context.example.summarize_text
+  policy_hook_refs:
+    - policyhook.example.content-safety
+  evidence_requirements_ref: null
+
+effect_context:
+  transport_effect: REQUEST_REPLY
+  state_effect: STATELESS
+  placement_effect: SCHEDULABLE
+  authorization_effect: HOST_MEDIATED
+  observation_effect: PARTIAL_TELEMETRY
+
+interaction_mode: MCP
+
+delivery_semantics:
+  delivery_class: DEDUPED_AT_LEAST_ONCE
+  side_effect_class: IDEMPOTENT_EFFECT
+  streaming_class: NONE
+  cancellation_class: BEST_EFFORT_CANCEL
+
+receipt_semantics:
+  receipt_type: REQUEST_RECEIPT
+  required_fields:
+    - receipt_id
+    - correlation_id
+    - capability_id
+    - realization_id
+    - interaction_mode
+    - timestamp
+    - actor_ref
+    - outcome
+    - payload_digest
+    - signature_ref
+
+execution_controllability_profile:
+  type_control: 3
+  realization_control: 2
+  placement_control: 2
+  state_control: 3
+  policy_control: 2
+  telemetry_control: 2
+  replay_control: 2
+  attestation_control: 1
+  overall_class: C2
+
+proof_strength_profile:
+  strength_class: ATTESTED_OBSERVATIONAL
+  replayability: BOUNDED
+  admissibility_floor: OPERATOR
+  required_corrob_count: 0
+
+realization_metadata:
+  realization_id: realization.example.mcp.summarize_text
+  function_id: capability.example.summarize_text
+  interaction_mode: MCP
+  delivery_semantics_ref: delivery.example.deduped-at-least-once-idempotent
+  receipt_semantics_ref: receipt.example.request-receipt
+  controllability_profile_ref: controllability.example.c2-mcp
+  proof_strength_profile_ref: proofstrength.example.attested-observational
+  runtime_kind: MCP_SERVER
+  security_profile_ref: security.example.mcp-default
+  locality_constraints_ref: null
+  compensation_ref: null
+
+mcp_realization_profile:
+  server_ref: mcp://example-server/summarize
+  host_mediated: true
+  session_scope: PER_CONNECTION
+  auth_scope: PER_TOOL
+  exposure_kinds:
+    - TOOL
+  local_execution_risk: LOW

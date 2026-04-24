@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/jsonschema/capability-fabric/core.v0.schema.json",
+  "title": "Capability Fabric Core v0 (draft)",
+  "type": "object",
+  "description": "Aggregate schema containing draft protocol-independent semantic core objects for the Capability Fabric.",
+  "$defs": {
+    "FunctionIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "namespace",
+        "name",
+        "version",
+        "input_type_ref",
+        "output_type_ref",
+        "semantic_hash",
+        "purity_hint",
+        "determinism_hint"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "namespace": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "input_type_ref": {"type": "string", "minLength": 1},
+        "output_type_ref": {"type": "string", "minLength": 1},
+        "semantic_hash": {"type": "string", "minLength": 1},
+        "purity_hint": {
+          "type": "string",
+          "enum": ["PURE", "EFFECTFUL", "UNKNOWN"]
+        },
+        "determinism_hint": {
+          "type": "string",
+          "enum": ["DETERMINISTIC", "BOUNDED_NONDET", "NONDET", "UNKNOWN"]
+        }
+      }
+    },
+    "CapabilitySignature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["function_id", "effect_context_ref", "policy_hook_refs"],
+      "properties": {
+        "function_id": {"type": "string", "minLength": 1},
+        "preconditions_ref": {"type": ["string", "null"]},
+        "postconditions_ref": {"type": ["string", "null"]},
+        "effect_context_ref": {"type": "string", "minLength": 1},
+        "policy_hook_refs": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "default": []
+        },
+        "evidence_requirements_ref": {"type": ["string", "null"]}
+      }
+    },
+    "EffectContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transport_effect",
+        "state_effect",
+        "placement_effect",
+        "authorization_effect",
+        "observation_effect"
+      ],
+      "properties": {
+        "transport_effect": {
+          "type": "string",
+          "enum": ["NONE", "REQUEST_REPLY", "STREAMING", "SESSIONFUL", "ASYNC_JOB"]
+        },
+        "state_effect": {
+          "type": "string",
+          "enum": ["STATELESS", "EPHEMERAL_STATE", "DURABLE_STATE"]
+        },
+        "placement_effect": {
+          "type": "string",
+          "enum": ["LOCAL_ONLY", "SCHEDULABLE", "AFFINITY_REQUIRED", "REMOTE_ONLY"]
+        },
+        "authorization_effect": {
+          "type": "string",
+          "enum": ["NONE", "HOST_MEDIATED", "TOKEN_BOUND", "TASK_SCOPED", "HUMAN_APPROVAL"]
+        },
+        "observation_effect": {
+          "type": "string",
+          "enum": ["FULL_TELEMETRY", "PARTIAL_TELEMETRY", "TRANSCRIPT_ONLY", "EXTERNAL_OBSERVATION"]
+        }
+      }
+    },
+    "InteractionMode": {
+      "type": "string",
+      "enum": ["LOCAL", "MCP", "A2A", "ACP", "SPHERE_BRIDGE", "EXTERNAL_ADAPTER", "HUMAN"]
+    },
+    "DeliverySemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delivery_class", "side_effect_class", "streaming_class", "cancellation_class"],
+      "properties": {
+        "delivery_class": {
+          "type": "string",
+          "enum": ["AT_MOST_ONCE", "AT_LEAST_ONCE", "DEDUPED_AT_LEAST_ONCE", "TASK_EXACTLY_ONCE_INTENT"]
+        },
+        "side_effect_class": {
+          "type": "string",
+          "enum": ["PURE", "IDEMPOTENT_EFFECT", "NON_IDEMPOTENT_EFFECT", "COMPENSATABLE_EFFECT"]
+        },
+        "streaming_class": {
+          "type": "string",
+          "enum": ["NONE", "PROGRESS_STREAM", "EVENT_STREAM", "RESULT_STREAM"]
+        },
+        "cancellation_class": {
+          "type": "string",
+          "enum": ["NOT_CANCELLABLE", "BEST_EFFORT_CANCEL", "GUARDED_CANCEL", "TRANSACTIONAL_CANCEL"]
+        }
+      }
+    },
+    "ReceiptSemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_type", "required_fields"],
+      "properties": {
+        "receipt_type": {
+          "type": "string",
+          "enum": ["NONE", "REQUEST_RECEIPT", "TASK_RECEIPT", "ARTIFACT_RECEIPT", "PROOF_ARTIFACT"]
+        },
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "receipt_id",
+              "correlation_id",
+              "capability_id",
+              "realization_id",
+              "interaction_mode",
+              "timestamp",
+              "actor_ref",
+              "outcome",
+              "payload_digest",
+              "signature_ref"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "ExecutionControllabilityProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type_control",
+        "realization_control",
+        "placement_control",
+        "state_control",
+        "policy_control",
+        "telemetry_control",
+        "replay_control",
+        "attestation_control",
+        "overall_class"
+      ],
+      "properties": {
+        "type_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "realization_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "placement_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "state_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "policy_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "telemetry_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "replay_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "attestation_control": {"type": "integer", "minimum": 0, "maximum": 3},
+        "overall_class": {"type": "string", "enum": ["C0", "C1", "C2", "C3"]}
+      }
+    },
+    "ProofStrengthProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strength_class", "replayability", "admissibility_floor", "required_corrob_count"],
+      "properties": {
+        "strength_class": {
+          "type": "string",
+          "enum": ["INTRINSIC", "ATTESTED_OBSERVATIONAL", "TRANSCRIPT_OBSERVATIONAL", "HUMAN_ATTESTED", "EXTERNAL_UNVERIFIABLE"]
+        },
+        "replayability": {
+          "type": "string",
+          "enum": ["FULL", "BOUNDED", "TRANSCRIPT_ONLY", "NONE"]
+        },
+        "admissibility_floor": {
+          "type": "string",
+          "enum": ["PUBLIC", "OPERATOR", "AUDITOR"]
+        },
+        "required_corrob_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "RealizationMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "realization_id",
+        "function_id",
+        "interaction_mode",
+        "delivery_semantics_ref",
+        "receipt_semantics_ref",
+        "controllability_profile_ref",
+        "proof_strength_profile_ref",
+        "runtime_kind"
+      ],
+      "properties": {
+        "realization_id": {"type": "string", "minLength": 1},
+        "function_id": {"type": "string", "minLength": 1},
+        "interaction_mode": {"$ref": "#/$defs/InteractionMode"},
+        "delivery_semantics_ref": {"type": "string", "minLength": 1},
+        "receipt_semantics_ref": {"type": "string", "minLength": 1},
+        "controllability_profile_ref": {"type": "string", "minLength": 1},
+        "proof_strength_profile_ref": {"type": "string", "minLength": 1},
+        "runtime_kind": {
+          "type": "string",
+          "enum": [
+            "LOCAL_FUNC",
+            "MCP_SERVER",
+            "A2A_AGENT",
+            "ACP_ENDPOINT",
+            "K8S_WORKER",
+            "RAY_TASK",
+            "RAY_ACTOR",
+            "EXTERNAL_ADAPTER",
+            "HUMAN"
+          ]
+        },
+        "security_profile_ref": {"type": ["string", "null"]},
+        "locality_constraints_ref": {"type": ["string", "null"]},
+        "compensation_ref": {"type": ["string", "null"]}
+      }
+    }
+  }
+}
