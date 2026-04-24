@@ -17,6 +17,18 @@ Derivation rule (normative):
 - Canonical path(s):
   - `schemas/jsonld/contexts/knowledge/context.jsonld`
 
-## 3) Change control
+## 3) Avro Path-A payload schema label
+- Label: `KNOWLEDGE_AVRO_v1`
+- SCHEMA_ID (hex): `c6591a75be654147d508084100ceefaf2b452ffee16215224c98e98d48f9871e`
+- Canonical path(s):
+  - `schemas/avro/knowledge.store.v1/knowledge.store.v1.avpr`
+
+## 4) JSON-LD context label
+- Label: `KNOWLEDGE_JSONLD_v1`
+- CONTEXT_ID (hex): `63707a7c075afb157d0ee1fe951ac58a0890425fdb32683e854700db6d95a2ae`
+- Canonical path(s):
+  - `schemas/jsonld/contexts/knowledge.v1/context.jsonld`
+
+## 5) Change control
 - Labels MUST NOT be renamed.
-- If a breaking change is required, create a new label (e.g., `KNOWLEDGE_AVRO_v1`) and update TriTRPC bindings accordingly.
+- If a breaking change is required, create a new label (e.g., `KNOWLEDGE_AVRO_v2`) and update TriTRPC bindings accordingly.

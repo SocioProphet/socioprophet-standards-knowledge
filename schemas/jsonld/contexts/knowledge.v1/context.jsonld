@@ -1,0 +1,224 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://socioprophet.org/ns/knowledge#",
+    "spk": "https://socioprophet.org/ns/knowledge#",
+    "prov": "http://www.w3.org/ns/prov#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "id": "@id",
+    "type": "@type",
+    "note_id": {
+      "@id": "spk:note_id"
+    },
+    "claim_id": {
+      "@id": "spk:claim_id"
+    },
+    "annotation_id": {
+      "@id": "spk:annotation_id"
+    },
+    "edge_id": {
+      "@id": "spk:edge_id"
+    },
+    "prov_id": {
+      "@id": "spk:prov_id"
+    },
+    "entity_id": {
+      "@id": "spk:entity_id"
+    },
+    "passage_id": {
+      "@id": "spk:passage_id"
+    },
+    "mention_id": {
+      "@id": "spk:mention_id"
+    },
+    "record_id": {
+      "@id": "spk:record_id"
+    },
+    "embedding_id": {
+      "@id": "spk:embedding_id"
+    },
+    "node_id": {
+      "@id": "spk:node_id"
+    },
+    "node_kind": {
+      "@id": "spk:node_kind"
+    },
+    "title": {
+      "@id": "spk:title"
+    },
+    "body": {
+      "@id": "spk:body"
+    },
+    "format": {
+      "@id": "spk:format"
+    },
+    "tags": {
+      "@id": "spk:tag",
+      "@container": "@set"
+    },
+    "aliases": {
+      "@id": "spk:alias",
+      "@container": "@set"
+    },
+    "canonical_name": {
+      "@id": "spk:canonical_name"
+    },
+    "entity_type": {
+      "@id": "spk:entity_type"
+    },
+    "surface_form": {
+      "@id": "spk:surface_form"
+    },
+    "statement": {
+      "@id": "spk:statement"
+    },
+    "text": {
+      "@id": "spk:text"
+    },
+    "created_at": {
+      "@id": "prov:generatedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "spk:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "occurred_at": {
+      "@id": "spk:occurred_at",
+      "@type": "xsd:dateTime"
+    },
+    "artifact": {
+      "@id": "spk:artifact"
+    },
+    "artifact_id": {
+      "@id": "spk:artifact_id"
+    },
+    "content_hash": {
+      "@id": "spk:content_hash"
+    },
+    "uri": {
+      "@id": "spk:uri"
+    },
+    "anchor": {
+      "@id": "spk:anchor"
+    },
+    "selector": {
+      "@id": "spk:selector"
+    },
+    "stable_fragment": {
+      "@id": "spk:stable_fragment"
+    },
+    "subject": {
+      "@id": "spk:subject"
+    },
+    "object": {
+      "@id": "spk:object"
+    },
+    "entity": {
+      "@id": "spk:entity"
+    },
+    "passage": {
+      "@id": "spk:passage"
+    },
+    "target_node": {
+      "@id": "spk:target_node"
+    },
+    "candidate_nodes": {
+      "@id": "spk:candidate_node",
+      "@container": "@set"
+    },
+    "decided_node": {
+      "@id": "spk:decided_node"
+    },
+    "predicate": {
+      "@id": "spk:predicate",
+      "@type": "@vocab"
+    },
+    "assertion": {
+      "@id": "spk:assertion"
+    },
+    "asserted_by": {
+      "@id": "spk:asserted_by"
+    },
+    "asserted_at": {
+      "@id": "spk:asserted_at",
+      "@type": "xsd:dateTime"
+    },
+    "confidence": {
+      "@id": "spk:confidence",
+      "@type": "xsd:double"
+    },
+    "method": {
+      "@id": "spk:method"
+    },
+    "validation": {
+      "@id": "spk:validation"
+    },
+    "status": {
+      "@id": "spk:status",
+      "@type": "@vocab"
+    },
+    "quorum_required": {
+      "@id": "spk:quorum_required",
+      "@type": "xsd:integer"
+    },
+    "validators": {
+      "@id": "spk:validator",
+      "@container": "@set"
+    },
+    "validated_at": {
+      "@id": "spk:validated_at",
+      "@type": "xsd:dateTime"
+    },
+    "sequence_index": {
+      "@id": "spk:sequence_index",
+      "@type": "xsd:integer"
+    },
+    "chunk_policy": {
+      "@id": "spk:chunk_policy"
+    },
+    "token_count": {
+      "@id": "spk:token_count",
+      "@type": "xsd:integer"
+    },
+    "language": {
+      "@id": "spk:language"
+    },
+    "embedding_ids": {
+      "@id": "spk:embedding_id",
+      "@container": "@set"
+    },
+    "vector_index": {
+      "@id": "spk:vector_index"
+    },
+    "index_id": {
+      "@id": "spk:index_id"
+    },
+    "backend": {
+      "@id": "spk:backend"
+    },
+    "metric": {
+      "@id": "spk:metric"
+    },
+    "dimensions": {
+      "@id": "spk:dimensions",
+      "@type": "xsd:integer"
+    },
+    "collection_name": {
+      "@id": "spk:collection_name"
+    },
+    "embedding_model": {
+      "@id": "spk:embedding_model"
+    },
+    "operation": {
+      "@id": "spk:operation"
+    },
+    "score": {
+      "@id": "spk:score",
+      "@type": "xsd:double"
+    },
+    "rationale": {
+      "@id": "spk:rationale"
+    }
+  }
+}

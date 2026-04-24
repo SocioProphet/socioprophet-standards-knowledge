@@ -1,9 +1,18 @@
 suite: knowledge_workloads
-version: v0
+version: v1
 workloads:
-  - id: knowledge.lexical.search.smoke
-    description: 'Placeholder: BM25-style lexical search workload suite (to be specified)'
-  - id: knowledge.vector.knn.smoke
-    description: 'Placeholder: vector kNN retrieval workload suite (to be specified)'
-  - id: knowledge.graph.traversal.smoke
-    description: 'Placeholder: edge traversal workload suite (to be specified)'
+  - id: knowledge.lexical.passage.topk
+    description: "Top-k lexical retrieval over canonical passages using BM25-style ranking."
+    primary_metric: p95_latency_ms
+  - id: knowledge.vector.passage.knn
+    description: "Top-k vector retrieval over passage embeddings using approximate nearest neighbor search."
+    primary_metric: recall_at_10
+  - id: knowledge.hybrid.passage.graph_expand
+    description: "Vector or lexical passage retrieval followed by graph expansion across entities, claims, annotations, and meriotopographic edges."
+    primary_metric: p95_end_to_end_latency_ms
+  - id: knowledge.entity_resolution.batch
+    description: "Offline merge/split/link evaluation over entity candidates with auditable resolution records."
+    primary_metric: pairwise_f1
+  - id: knowledge.candidate_claim.promotion
+    description: "Offline inferred-link promotion workflow from candidate claims into reviewable validation state."
+    primary_metric: reviewed_promotion_rate
