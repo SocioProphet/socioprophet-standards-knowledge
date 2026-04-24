@@ -10,19 +10,24 @@ JSON-LD here is **not** the wire payload format for TriTRPC Path-A. Wire payload
 ## Structure
 
 - `schemas/jsonld/contexts/knowledge/`
-  - `context.jsonld` — canonical JSON-LD context for the Knowledge Context
+  - `context.jsonld` — canonical JSON-LD context for the `v0` Knowledge Context
   - `README.md` — mapping notes and predicate expansion rules
+
+- `schemas/jsonld/contexts/knowledge.v1/`
+  - `context.jsonld` — draft JSON-LD context for the expanded `v1` Knowledge Context
+  - `README.md` — v1 coverage notes for provenance records, entities, passages, mentions, embedding references, vector index references, and entity resolution records
 
 ## Canonical binding and ID freeze
 
-The canonical JSON-LD context is bound to a frozen label:
+The frozen JSON-LD context labels are:
 - `KNOWLEDGE_JSONLD_v0`
+- `KNOWLEDGE_JSONLD_v1`
 
-The derived `CONTEXT_ID` is SHA3-256(label) and is frozen in:
+The derived `CONTEXT_ID` values are SHA3-256(label) and are frozen in:
 - `docs/standards/031-schema-context-id-registry.md`
 
 If a breaking change is required:
-- create a new label (e.g., `KNOWLEDGE_JSONLD_v1`)
+- create a new label (e.g., `KNOWLEDGE_JSONLD_v2`)
 - update the registry, TriTRPC binding, fixtures, and verifiers in the same PR
 
 ## Predicate semantics

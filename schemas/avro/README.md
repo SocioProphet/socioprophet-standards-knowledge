@@ -5,7 +5,7 @@ This directory contains **Avro contracts** for the Knowledge Context.
 Avro is used in two distinct roles:
 
 1) **TriTRPC Path-A RPC payload bytes**  
-   The TriTRPC envelope carries Avro binary payloads for Knowledge Context RPC calls. These payloads are defined by an Avro protocol (`.avpr`).
+   The TriTRPC envelope carries Avro binary payloads for Knowledge Context RPC calls. These payloads are defined by Avro protocols (`.avpr`).
 
 2) **Event stream payloads**  
    Lifecycle events (note changed, claim proposed/validated) are defined as independent Avro record schemas (`.avsc`) intended for topic payloads.
@@ -14,8 +14,13 @@ Avro is used in two distinct roles:
 
 - `schemas/avro/knowledge.store.v0/`  
   **Path-A RPC payload protocol** for `knowledge.store.v0`.
-  - `knowledge.store.v0.avpr` defines types + messages for REQ/RESP.
-  - This is the authoritative payload contract for TriTRPC Path-A.
+  - `knowledge.store.v0.avpr` defines types + messages for the initial placeholder REQ/RESP surface.
+  - This remains the frozen v0 payload contract for TriTRPC Path-A.
+
+- `schemas/avro/knowledge.store.v1/`  
+  **Path-A RPC payload protocol** for `knowledge.store.v1`.
+  - `knowledge.store.v1.avpr` extends the store surface for annotations, provenance records, entities, passages, mentions, embedding references, and entity resolution records.
+  - Fixture and round-trip tooling must cover this protocol before v1 is treated as verified bytes.
 
 - `schemas/avro/events.v1/`  
   **Lifecycle event schemas** for the Knowledge Context event stream.
