@@ -1,0 +1,1570 @@
+{
+  "protocol": "knowledge_store_v1",
+  "namespace": "socioprophet.knowledge.v1",
+  "types": [
+    {
+      "type": "record",
+      "name": "KeyValue",
+      "fields": [
+        {
+          "name": "key",
+          "type": "string"
+        },
+        {
+          "name": "value_jcs",
+          "type": "bytes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ActorRef",
+      "fields": [
+        {
+          "name": "actor_id",
+          "type": "string"
+        },
+        {
+          "name": "actor_type",
+          "type": {
+            "type": "enum",
+            "name": "ActorType",
+            "symbols": [
+              "human",
+              "agent",
+              "service"
+            ]
+          }
+        },
+        {
+          "name": "display_name",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ProvenanceRef",
+      "fields": [
+        {
+          "name": "prov_id",
+          "type": "string"
+        },
+        {
+          "name": "uri",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ArtifactRef",
+      "fields": [
+        {
+          "name": "artifact_id",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "uri",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Selector",
+      "fields": [
+        {
+          "name": "char_start",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null
+        },
+        {
+          "name": "char_end",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null
+        },
+        {
+          "name": "line_start",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null
+        },
+        {
+          "name": "line_end",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null
+        },
+        {
+          "name": "byte_start",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null
+        },
+        {
+          "name": "byte_end",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null
+        },
+        {
+          "name": "xpath",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "odf_path",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "openxml_path",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "AnchorRef",
+      "fields": [
+        {
+          "name": "artifact",
+          "type": "ArtifactRef"
+        },
+        {
+          "name": "selector",
+          "type": [
+            "null",
+            "Selector"
+          ],
+          "default": null
+        },
+        {
+          "name": "stable_fragment",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "NoteSource",
+      "fields": [
+        {
+          "name": "artifact",
+          "type": [
+            "null",
+            "ArtifactRef"
+          ],
+          "default": null
+        },
+        {
+          "name": "anchor",
+          "type": [
+            "null",
+            "AnchorRef"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Note",
+      "fields": [
+        {
+          "name": "note_id",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        },
+        {
+          "name": "format",
+          "type": {
+            "type": "enum",
+            "name": "TextFormat",
+            "symbols": [
+              "markdown",
+              "plaintext",
+              "latex",
+              "html"
+            ]
+          },
+          "default": "markdown"
+        },
+        {
+          "name": "tags",
+          "type": {
+            "type": "array",
+            "items": "string"
+          },
+          "default": []
+        },
+        {
+          "name": "aliases",
+          "type": {
+            "type": "array",
+            "items": "string"
+          },
+          "default": []
+        },
+        {
+          "name": "source",
+          "type": [
+            "null",
+            "NoteSource"
+          ],
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EvidenceRef",
+      "fields": [
+        {
+          "name": "kind",
+          "type": {
+            "type": "enum",
+            "name": "EvidenceKind",
+            "symbols": [
+              "anchor",
+              "dataset",
+              "log",
+              "citation",
+              "bundle"
+            ]
+          }
+        },
+        {
+          "name": "anchor",
+          "type": [
+            "null",
+            "AnchorRef"
+          ],
+          "default": null
+        },
+        {
+          "name": "artifact",
+          "type": [
+            "null",
+            "ArtifactRef"
+          ],
+          "default": null
+        },
+        {
+          "name": "citation_key",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "commentary",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Assertion",
+      "fields": [
+        {
+          "name": "asserted_by",
+          "type": "ActorRef"
+        },
+        {
+          "name": "asserted_at",
+          "type": "string"
+        },
+        {
+          "name": "confidence",
+          "type": "double",
+          "default": 0.5
+        },
+        {
+          "name": "method",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Validation",
+      "fields": [
+        {
+          "name": "status",
+          "type": {
+            "type": "enum",
+            "name": "ValidationStatus",
+            "symbols": [
+              "proposed",
+              "contested",
+              "validated",
+              "rejected"
+            ]
+          },
+          "default": "proposed"
+        },
+        {
+          "name": "quorum_required",
+          "type": "int",
+          "default": 1
+        },
+        {
+          "name": "validators",
+          "type": {
+            "type": "array",
+            "items": "ActorRef"
+          },
+          "default": []
+        },
+        {
+          "name": "validated_at",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "notes",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Claim",
+      "fields": [
+        {
+          "name": "claim_id",
+          "type": "string"
+        },
+        {
+          "name": "statement",
+          "type": "string"
+        },
+        {
+          "name": "claim_type",
+          "type": {
+            "type": "enum",
+            "name": "ClaimType",
+            "symbols": [
+              "fact",
+              "hypothesis",
+              "definition",
+              "plan",
+              "requirement",
+              "risk",
+              "decision"
+            ]
+          },
+          "default": "fact"
+        },
+        {
+          "name": "evidence",
+          "type": {
+            "type": "array",
+            "items": "EvidenceRef"
+          },
+          "default": []
+        },
+        {
+          "name": "assertion",
+          "type": "Assertion"
+        },
+        {
+          "name": "validation",
+          "type": [
+            "null",
+            "Validation"
+          ],
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Annotation",
+      "fields": [
+        {
+          "name": "annotation_id",
+          "type": "string"
+        },
+        {
+          "name": "kind",
+          "type": {
+            "type": "enum",
+            "name": "AnnotationKind",
+            "symbols": [
+              "highlight",
+              "comment",
+              "tag",
+              "link",
+              "mask",
+              "todo",
+              "cite"
+            ]
+          }
+        },
+        {
+          "name": "anchor",
+          "type": "AnchorRef"
+        },
+        {
+          "name": "payload_jcs",
+          "type": "bytes",
+          "default": ""
+        },
+        {
+          "name": "created_by",
+          "type": [
+            "null",
+            "ActorRef"
+          ],
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "NodeRef",
+      "fields": [
+        {
+          "name": "node_type",
+          "type": {
+            "type": "enum",
+            "name": "NodeType",
+            "symbols": [
+              "artifact",
+              "note",
+              "claim",
+              "annotation",
+              "entity",
+              "passage",
+              "mention",
+              "embedding_ref",
+              "provenance_record",
+              "entity_resolution_record",
+              "workspace",
+              "bundle"
+            ]
+          }
+        },
+        {
+          "name": "ref",
+          "type": "string"
+        },
+        {
+          "name": "anchor",
+          "type": [
+            "null",
+            "AnchorRef"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "MeriotopographicEdge",
+      "fields": [
+        {
+          "name": "edge_id",
+          "type": "string"
+        },
+        {
+          "name": "subject",
+          "type": "NodeRef"
+        },
+        {
+          "name": "predicate",
+          "type": "string"
+        },
+        {
+          "name": "object",
+          "type": "NodeRef"
+        },
+        {
+          "name": "qualifiers",
+          "type": {
+            "type": "array",
+            "items": "KeyValue"
+          },
+          "default": []
+        },
+        {
+          "name": "assertion",
+          "type": "Assertion"
+        },
+        {
+          "name": "validation",
+          "type": [
+            "null",
+            "Validation"
+          ],
+          "default": null
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Activity",
+      "fields": [
+        {
+          "name": "activity_type",
+          "type": {
+            "type": "enum",
+            "name": "ActivityType",
+            "symbols": [
+              "create",
+              "update",
+              "extract",
+              "transform",
+              "index",
+              "embed",
+              "validate",
+              "redact",
+              "publish",
+              "sign",
+              "import",
+              "export"
+            ]
+          }
+        },
+        {
+          "name": "component_id",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "run_id",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "parameters_jcs",
+          "type": "bytes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ProvenanceRecord",
+      "fields": [
+        {
+          "name": "prov_id",
+          "type": "string"
+        },
+        {
+          "name": "occurred_at",
+          "type": "string"
+        },
+        {
+          "name": "activity",
+          "type": "Activity"
+        },
+        {
+          "name": "actor",
+          "type": "ActorRef"
+        },
+        {
+          "name": "used_artifacts",
+          "type": {
+            "type": "array",
+            "items": "ArtifactRef"
+          },
+          "default": []
+        },
+        {
+          "name": "used_nodes",
+          "type": {
+            "type": "array",
+            "items": "NodeRef"
+          },
+          "default": []
+        },
+        {
+          "name": "generated_artifacts",
+          "type": {
+            "type": "array",
+            "items": "ArtifactRef"
+          },
+          "default": []
+        },
+        {
+          "name": "generated_nodes",
+          "type": {
+            "type": "array",
+            "items": "NodeRef"
+          },
+          "default": []
+        },
+        {
+          "name": "relations_emitted",
+          "type": {
+            "type": "array",
+            "items": "string"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Entity",
+      "fields": [
+        {
+          "name": "entity_id",
+          "type": "string"
+        },
+        {
+          "name": "entity_type",
+          "type": "string"
+        },
+        {
+          "name": "canonical_name",
+          "type": "string"
+        },
+        {
+          "name": "aliases",
+          "type": {
+            "type": "array",
+            "items": "string"
+          },
+          "default": []
+        },
+        {
+          "name": "external_ids",
+          "type": {
+            "type": "array",
+            "items": "string"
+          },
+          "default": []
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Passage",
+      "fields": [
+        {
+          "name": "passage_id",
+          "type": "string"
+        },
+        {
+          "name": "anchor",
+          "type": "AnchorRef"
+        },
+        {
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "name": "sequence_index",
+          "type": [
+            "null",
+            "int"
+          ],
+          "default": null
+        },
+        {
+          "name": "chunk_policy",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "token_count",
+          "type": [
+            "null",
+            "int"
+          ],
+          "default": null
+        },
+        {
+          "name": "language",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "content_hash",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "embedding_ids",
+          "type": {
+            "type": "array",
+            "items": "string"
+          },
+          "default": []
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Mention",
+      "fields": [
+        {
+          "name": "mention_id",
+          "type": "string"
+        },
+        {
+          "name": "passage",
+          "type": "NodeRef"
+        },
+        {
+          "name": "entity",
+          "type": "NodeRef"
+        },
+        {
+          "name": "surface_form",
+          "type": "string"
+        },
+        {
+          "name": "confidence",
+          "type": "double"
+        },
+        {
+          "name": "selector",
+          "type": [
+            "null",
+            "Selector"
+          ],
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "VectorIndexRef",
+      "fields": [
+        {
+          "name": "index_id",
+          "type": "string"
+        },
+        {
+          "name": "backend",
+          "type": "string"
+        },
+        {
+          "name": "metric",
+          "type": "string"
+        },
+        {
+          "name": "dimensions",
+          "type": [
+            "null",
+            "int"
+          ],
+          "default": null
+        },
+        {
+          "name": "collection_name",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "uri",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EmbeddingRef",
+      "fields": [
+        {
+          "name": "embedding_id",
+          "type": "string"
+        },
+        {
+          "name": "target_node",
+          "type": "NodeRef"
+        },
+        {
+          "name": "vector_index",
+          "type": "VectorIndexRef"
+        },
+        {
+          "name": "embedding_model",
+          "type": "string"
+        },
+        {
+          "name": "dimensions",
+          "type": [
+            "null",
+            "int"
+          ],
+          "default": null
+        },
+        {
+          "name": "metric",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "content_hash",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EntityResolutionRecord",
+      "fields": [
+        {
+          "name": "record_id",
+          "type": "string"
+        },
+        {
+          "name": "operation",
+          "type": {
+            "type": "enum",
+            "name": "ResolutionOperation",
+            "symbols": [
+              "merge",
+              "split",
+              "link",
+              "reject"
+            ]
+          }
+        },
+        {
+          "name": "candidate_nodes",
+          "type": {
+            "type": "array",
+            "items": "NodeRef"
+          }
+        },
+        {
+          "name": "decided_node",
+          "type": [
+            "null",
+            "NodeRef"
+          ],
+          "default": null
+        },
+        {
+          "name": "score",
+          "type": [
+            "null",
+            "double"
+          ],
+          "default": null
+        },
+        {
+          "name": "rationale",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "provenance",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRef"
+          },
+          "default": []
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Ack",
+      "fields": [
+        {
+          "name": "ok",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "message",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "error_code",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "Query",
+      "fields": [
+        {
+          "name": "query_id",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "text",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        {
+          "name": "tags_any",
+          "type": {
+            "type": "array",
+            "items": "string"
+          },
+          "default": []
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "default": 50
+        },
+        {
+          "name": "cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "NoteSet",
+      "fields": [
+        {
+          "name": "notes",
+          "type": {
+            "type": "array",
+            "items": "Note"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "AnnotationSet",
+      "fields": [
+        {
+          "name": "annotations",
+          "type": {
+            "type": "array",
+            "items": "Annotation"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ClaimSet",
+      "fields": [
+        {
+          "name": "claims",
+          "type": {
+            "type": "array",
+            "items": "Claim"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EdgeSet",
+      "fields": [
+        {
+          "name": "edges",
+          "type": {
+            "type": "array",
+            "items": "MeriotopographicEdge"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "ProvenanceRecordSet",
+      "fields": [
+        {
+          "name": "provenance_records",
+          "type": {
+            "type": "array",
+            "items": "ProvenanceRecord"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EntitySet",
+      "fields": [
+        {
+          "name": "entities",
+          "type": {
+            "type": "array",
+            "items": "Entity"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "PassageSet",
+      "fields": [
+        {
+          "name": "passages",
+          "type": {
+            "type": "array",
+            "items": "Passage"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "MentionSet",
+      "fields": [
+        {
+          "name": "mentions",
+          "type": {
+            "type": "array",
+            "items": "Mention"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EmbeddingRefSet",
+      "fields": [
+        {
+          "name": "embedding_refs",
+          "type": {
+            "type": "array",
+            "items": "EmbeddingRef"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    },
+    {
+      "type": "record",
+      "name": "EntityResolutionRecordSet",
+      "fields": [
+        {
+          "name": "entity_resolution_records",
+          "type": {
+            "type": "array",
+            "items": "EntityResolutionRecord"
+          },
+          "default": []
+        },
+        {
+          "name": "next_cursor",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      ]
+    }
+  ],
+  "messages": {
+    "UpsertNote_a_REQ": {
+      "request": [
+        {
+          "name": "note",
+          "type": "Note"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryNotes_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "NoteSet"
+    },
+    "UpsertAnnotation_a_REQ": {
+      "request": [
+        {
+          "name": "annotation",
+          "type": "Annotation"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryAnnotations_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "AnnotationSet"
+    },
+    "UpsertClaim_a_REQ": {
+      "request": [
+        {
+          "name": "claim",
+          "type": "Claim"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryClaims_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "ClaimSet"
+    },
+    "UpsertEdge_a_REQ": {
+      "request": [
+        {
+          "name": "edge",
+          "type": "MeriotopographicEdge"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryEdges_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "EdgeSet"
+    },
+    "UpsertProvenanceRecord_a_REQ": {
+      "request": [
+        {
+          "name": "provenance_record",
+          "type": "ProvenanceRecord"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryProvenanceRecords_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "ProvenanceRecordSet"
+    },
+    "UpsertEntity_a_REQ": {
+      "request": [
+        {
+          "name": "entity",
+          "type": "Entity"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryEntities_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "EntitySet"
+    },
+    "UpsertPassage_a_REQ": {
+      "request": [
+        {
+          "name": "passage",
+          "type": "Passage"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryPassages_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "PassageSet"
+    },
+    "UpsertMention_a_REQ": {
+      "request": [
+        {
+          "name": "mention",
+          "type": "Mention"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryMentions_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "MentionSet"
+    },
+    "UpsertEmbeddingRef_a_REQ": {
+      "request": [
+        {
+          "name": "embedding_ref",
+          "type": "EmbeddingRef"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryEmbeddings_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "EmbeddingRefSet"
+    },
+    "UpsertEntityResolutionRecord_a_REQ": {
+      "request": [
+        {
+          "name": "entity_resolution_record",
+          "type": "EntityResolutionRecord"
+        }
+      ],
+      "response": "Ack"
+    },
+    "QueryEntityResolutionRecords_a_REQ": {
+      "request": [
+        {
+          "name": "query",
+          "type": "Query"
+        }
+      ],
+      "response": "EntityResolutionRecordSet"
+    }
+  }
+}
