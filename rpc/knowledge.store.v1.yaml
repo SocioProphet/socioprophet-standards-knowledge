@@ -82,7 +82,8 @@ methods:
 notes:
   - v0 remains frozen as the initial placeholder contract.
   - v1 is the first full store surface for text nodes, semantic links, provenance, and vector references.
-  - Label freeze and ID derivation updates must be recorded in docs/standards/031-schema-context-id-registry.md before activation.
+  - Label freeze and ID derivation are recorded in docs/standards/031-schema-context-id-registry.md.
+  - Fixture generation and round-trip tooling must be extended before v1 is treated as verified bytes.
 
 tritrpc_wire:
   service: knowledge.store.v1
@@ -90,4 +91,6 @@ tritrpc_wire:
   response_method_suffix: "_a.RESP"
   path: "A"
   schema_label: "KNOWLEDGE_AVRO_v1"
+  schema_id_sha3_256_hex: "c6591a75be654147d508084100ceefaf2b452ffee16215224c98e98d48f9871e"
   context_label: "KNOWLEDGE_JSONLD_v1"
+  context_id_sha3_256_hex: "63707a7c075afb157d0ee1fe951ac58a0890425fdb32683e854700db6d95a2ae"
