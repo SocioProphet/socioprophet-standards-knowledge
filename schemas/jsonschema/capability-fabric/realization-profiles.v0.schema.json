@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/jsonschema/capability-fabric/realization-profiles.v0.schema.json",
+  "title": "Capability Fabric Realization Profiles v0 (draft)",
+  "type": "object",
+  "description": "Aggregate schema containing draft realization profiles for MCP, A2A, ACP, sphere bridges, externalized adapters, and provisional Morloc mappings.",
+  "$defs": {
+    "MCPRealizationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["server_ref", "host_mediated", "session_scope", "auth_scope", "exposure_kinds", "local_execution_risk"],
+      "properties": {
+        "server_ref": {"type": "string", "minLength": 1},
+        "host_mediated": {"type": "boolean", "const": true},
+        "session_scope": {"type": "string", "enum": ["PER_CONNECTION", "PER_SERVER"]},
+        "auth_scope": {"type": "string", "enum": ["NONE", "PER_SERVER", "PER_TOOL"]},
+        "exposure_kinds": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["TOOL", "RESOURCE", "PROMPT"]},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "local_execution_risk": {"type": "string", "enum": ["NONE", "LOW", "MEDIUM", "HIGH"]}
+      }
+    },
+    "A2ARealizationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_card_ref", "task_lifecycle", "update_modes", "input_modes", "output_modes"],
+      "properties": {
+        "agent_card_ref": {"type": "string", "minLength": 1},
+        "task_lifecycle": {"type": "string", "enum": ["IMMEDIATE", "LONG_RUNNING"]},
+        "update_modes": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["NONE", "STREAMING", "PUSH_NOTIFICATIONS"]},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "input_modes": {"type": "array", "items": {"type": "string"}, "default": []},
+        "output_modes": {"type": "array", "items": {"type": "string"}, "default": []},
+        "extension_uris": {"type": "array", "items": {"type": "string", "format": "uri"}, "default": []}
+      }
+    },
+    "ACPCompatibilityProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint_ref", "async_default", "discovery_mode", "migration_target"],
+      "properties": {
+        "endpoint_ref": {"type": "string", "minLength": 1},
+        "async_default": {"type": "boolean", "const": true},
+        "discovery_mode": {"type": "string", "enum": ["ONLINE", "OFFLINE", "PACKAGE_EMBEDDED"]},
+        "migration_target": {"type": "string", "enum": ["A2A"]}
+      }
+    },
+    "SphereBridgeProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_domain", "target_domain", "admissibility_transition", "required_cover_refs", "bridge_policy_ref"],
+      "properties": {
+        "source_domain": {"type": "string", "minLength": 1},
+        "target_domain": {"type": "string", "minLength": 1},
+        "admissibility_transition": {"type": "string", "enum": ["SAME", "DOWNGRADE", "UPGRADE_WITH_CORROB"]},
+        "required_cover_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "default": []},
+        "bridge_policy_ref": {"type": "string", "minLength": 1}
+      }
+    },
+    "ExternalizedCapabilityAdapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter_id", "canonical_capability_id", "native_mode", "transcript_schema_ref", "evidence_emission_contract_ref", "downgrade_rules_ref"],
+      "properties": {
+        "adapter_id": {"type": "string", "minLength": 1},
+        "canonical_capability_id": {"type": "string", "minLength": 1},
+        "native_mode": {"type": "string", "minLength": 1},
+        "transcript_schema_ref": {"type": "string", "minLength": 1},
+        "evidence_emission_contract_ref": {"type": "string", "minLength": 1},
+        "downgrade_rules_ref": {"type": "string", "minLength": 1}
+      }
+    },
+    "MorlocRealizationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "general_type_ref", "realization_set_ref", "nexus_manifest_ref", "pool_requirements_ref", "determinism_grade"],
+      "properties": {
+        "status": {"type": "string", "const": "PROVISIONAL"},
+        "general_type_ref": {"type": "string", "minLength": 1},
+        "realization_set_ref": {"type": "string", "minLength": 1},
+        "nexus_manifest_ref": {"type": "string", "minLength": 1},
+        "pool_requirements_ref": {"type": "string", "minLength": 1},
+        "determinism_grade": {"type": "string", "enum": ["UNKNOWN", "EXPERIMENTAL", "VERIFIED"]}
+      }
+    }
+  }
+}
