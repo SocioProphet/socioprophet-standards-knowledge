@@ -1,0 +1,9 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+<https://socioprophet.github.io/ontogenesis/policy/shapes/master>
+    a owl:Ontology ;
+    rdfs:label "Ontogenesis master SHACL pack" ;
+    dct:description "Single authoritative SHACL entry surface for the current semantic core. Wave 2 imports the canonical Prophet CLI shape set; broader module imports are follow-on work." ;
+    owl:imports <https://socioprophet.github.io/ontogenesis/prophet/shapes/prophet_cli> .
