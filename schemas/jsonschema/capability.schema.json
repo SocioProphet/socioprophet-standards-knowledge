@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Capability v1",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {"const": "caps.io/v1"},
+    "kind": {"const": "Capability"},
+    "metadata": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9_.-]+$"},
+        "version": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "spec": {
+      "type": "object",
+      "required": ["plane", "verbs", "requires", "artifacts", "rollout"],
+      "properties": {
+        "plane": {
+          "enum": [
+            "cloud",
+            "ai",
+            "serve",
+            "msg",
+            "svc",
+            "pkg",
+            "r",
+            "fs",
+            "graph",
+            "gib",
+            "twin",
+            "agents",
+            "viz"
+          ]
+        },
+        "verbs": {"type": "array", "items": {"type": "string"}},
+        "requires": {"type": "object"},
+        "artifacts": {"type": "object"},
+        "rollout": {"type": "object"},
+        "tests": {"type": "object"},
+        "routes": {"type": "array"},
+        "policy": {"type": "object"},
+        "observability": {"type": "object"},
+        "resources": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
