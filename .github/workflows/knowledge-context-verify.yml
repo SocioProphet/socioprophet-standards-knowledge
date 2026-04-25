@@ -4,7 +4,10 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - '**'
+
+permissions:
+  contents: write
 
 jobs:
   verify:
@@ -13,6 +16,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,9 +35,23 @@ jobs:
           make verify
           make roundtrip
 
-      - name: Generate and verify v1 fixtures
+      - name: Generate v1 fixtures
         run: |
           make fixtures-v1
+
+      - name: Commit generated v1 fixtures on branch pushes
+        if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+        run: |
+          if [ -n "$(git status --porcelain -- fixtures/knowledge_store_v1_vectors_hex_pathA.txt fixtures/knowledge_store_v1_vectors_hex_pathA.txt.nonces)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add fixtures/knowledge_store_v1_vectors_hex_pathA.txt fixtures/knowledge_store_v1_vectors_hex_pathA.txt.nonces
+            git commit -m "fixtures(knowledge): add generated v1 TriTRPC vectors"
+            git push
+          fi
+
+      - name: Verify v1 fixtures and Avro roundtrip
+        run: |
           make verify-v1
           make roundtrip-v1
 
