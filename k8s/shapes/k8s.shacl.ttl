@@ -1,0 +1,58 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix k8s: <https://socioprophet.github.io/ontogenesis/k8s#> .
+
+k8s:NodePortRangeShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf k8s:nodePort ;
+    sh:property [
+        sh:path k8s:nodePort ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 30000 ;
+        sh:maxInclusive 32767 ;
+        sh:message "Kubernetes nodePort must be within the default 30000-32767 range unless an explicit cluster policy overrides it." ;
+    ] .
+
+k8s:NodePortServiceShape
+    a sh:NodeShape ;
+    sh:targetClass k8s:Service ;
+    sh:sparql [
+        sh:message "Services of type NodePort must declare at least one nodePort." ;
+        sh:select """
+            PREFIX k8s: <https://socioprophet.github.io/ontogenesis/k8s#>
+            SELECT $this WHERE {
+              $this k8s:serviceType "NodePort" .
+              FILTER NOT EXISTS { $this k8s:nodePort ?nodePort }
+            }
+        """ ;
+    ] .
+
+k8s:ServiceSelectorShape
+    a sh:NodeShape ;
+    sh:targetClass k8s:Service ;
+    sh:sparql [
+        sh:message "ClusterIP, NodePort, and LoadBalancer Services should declare selector labels." ;
+        sh:select """
+            PREFIX k8s: <https://socioprophet.github.io/ontogenesis/k8s#>
+            SELECT $this WHERE {
+              $this k8s:serviceType ?serviceType .
+              FILTER(?serviceType IN ("ClusterIP", "NodePort", "LoadBalancer"))
+              FILTER NOT EXISTS { $this k8s:selectorLabel ?selectorLabel }
+            }
+        """ ;
+    ] .
+
+k8s:DuplicateNodePortShape
+    a sh:NodeShape ;
+    sh:targetClass k8s:Service ;
+    sh:sparql [
+        sh:message "Two Services must not claim the same nodePort in one manifest set." ;
+        sh:select """
+            PREFIX k8s: <https://socioprophet.github.io/ontogenesis/k8s#>
+            SELECT $this WHERE {
+              $this k8s:nodePort ?nodePort .
+              ?other k8s:nodePort ?nodePort .
+              FILTER(str($this) < str(?other))
+            }
+        """ ;
+    ] .
