@@ -1,0 +1,28 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sp: <https://socioprophet.github.io/ontogenesis/socioprophet#> .
+
+sp:ExperimentCoreShape
+    a sh:NodeShape ;
+    sh:targetClass sp:Experiment ;
+    sh:property [
+        sh:path sp:hasRunner ;
+        sh:minCount 1 ;
+        sh:message "Experiments must declare a runner." ;
+    ] ;
+    sh:property [
+        sh:path sp:usesConfig ;
+        sh:minCount 1 ;
+        sh:message "Experiments must declare a config." ;
+    ] .
+
+sp:MetricValueShape
+    a sh:NodeShape ;
+    sh:targetClass sp:Metric ;
+    sh:property [
+        sh:path sp:value ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Metrics must carry a numeric value." ;
+    ] .
