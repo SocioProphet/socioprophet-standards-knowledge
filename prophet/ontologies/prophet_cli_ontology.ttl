@@ -1,0 +1,110 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prop: <https://socioprophet.github.io/ontogenesis/prophet#> .
+
+<https://socioprophet.github.io/ontogenesis/prophet/ontologies/prophet_cli_ontology>
+    a owl:Ontology ;
+    rdfs:label "Prophet CLI ontology" ;
+    dct:description "Canonical ontology path for Prophet CLI planes, commands, and carrier-linked mutating operations." .
+
+prop:CLI a owl:Class ; rdfs:label "CLI" .
+prop:Plane a owl:Class ; rdfs:label "Plane" .
+prop:Command a owl:Class ; rdfs:label "Command" .
+prop:MutatingCommand a owl:Class ; rdfs:subClassOf prop:Command ; rdfs:label "Mutating command" .
+prop:Carrier a owl:Class ; rdfs:label "Carrier" .
+
+prop:hasPlane a owl:ObjectProperty ; rdfs:domain prop:CLI ; rdfs:range prop:Plane ; rdfs:label "has plane" .
+prop:targetsPlane a owl:ObjectProperty ; rdfs:domain prop:Command ; rdfs:range prop:Plane ; rdfs:label "targets plane" .
+prop:servedBy a owl:ObjectProperty ; rdfs:domain prop:Command ; rdfs:label "served by" .
+prop:emitsCarrier a owl:ObjectProperty ; rdfs:domain prop:Command ; rdfs:range prop:Carrier ; rdfs:label "emits carrier" .
+prop:verb a owl:DatatypeProperty ; rdfs:domain prop:Command ; rdfs:range xsd:string ; rdfs:label "verb" .
+prop:apiPath a owl:DatatypeProperty ; rdfs:domain prop:Command ; rdfs:range xsd:string ; rdfs:label "API path" .
+prop:signed a owl:DatatypeProperty ; rdfs:domain prop:Carrier ; rdfs:range xsd:boolean ; rdfs:label "signed" .
+
+prop:Platform a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Platform" .
+prop:SourceOS a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "SourceOS" .
+prop:Genesys a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Genesys" .
+prop:Inception a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Inception" .
+prop:Twin a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Twin" .
+prop:Mesh a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Mesh" .
+prop:Ontology a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Ontology" .
+prop:Viz a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Viz" .
+prop:FHIR a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "FHIR" .
+prop:Tools a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Tools" .
+prop:OS a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "OS" .
+prop:Svc a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Svc" .
+prop:Net a owl:Class ; rdfs:subClassOf prop:Plane ; rdfs:label "Net" .
+
+prop:cli a prop:CLI ;
+    prop:hasPlane prop:Ontology , prop:Viz , prop:FHIR , prop:Tools , prop:OS , prop:Svc , prop:Net .
+
+prop:carrier_ontology_import a prop:Carrier ; prop:signed true .
+prop:carrier_fhir_post_patient a prop:Carrier ; prop:signed true .
+prop:carrier_fhir_post_observation a prop:Carrier ; prop:signed true .
+prop:carrier_charts_add a prop:Carrier ; prop:signed true .
+prop:carrier_charts_bind a prop:Carrier ; prop:signed true .
+prop:carrier_ucum_aliases_set a prop:Carrier ; prop:signed true .
+
+prop:cmd_ontology_import a prop:MutatingCommand ;
+    prop:targetsPlane prop:Ontology ;
+    prop:verb "import" ;
+    prop:apiPath "/api/ontology/import" ;
+    prop:emitsCarrier prop:carrier_ontology_import .
+
+prop:cmd_ontology_validate a prop:Command ;
+    prop:targetsPlane prop:Ontology ;
+    prop:verb "validate" ;
+    prop:apiPath "/api/ontology/shacl/validate" .
+
+prop:cmd_sparql a prop:Command ;
+    prop:targetsPlane prop:Ontology ;
+    prop:verb "sparql" ;
+    prop:apiPath "/api/sparql" .
+
+prop:cmd_fhir_post_patient a prop:MutatingCommand ;
+    prop:targetsPlane prop:FHIR ;
+    prop:verb "post Patient" ;
+    prop:apiPath "/api/fhir/Patient" ;
+    prop:emitsCarrier prop:carrier_fhir_post_patient .
+
+prop:cmd_fhir_post_observation a prop:MutatingCommand ;
+    prop:targetsPlane prop:FHIR ;
+    prop:verb "post Observation" ;
+    prop:apiPath "/api/fhir/Observation" ;
+    prop:emitsCarrier prop:carrier_fhir_post_observation .
+
+prop:cmd_charts_list a prop:Command ;
+    prop:targetsPlane prop:Viz ;
+    prop:verb "charts list" ;
+    prop:apiPath "/api/charts" .
+
+prop:cmd_charts_add a prop:MutatingCommand ;
+    prop:targetsPlane prop:Viz ;
+    prop:verb "charts add" ;
+    prop:apiPath "/api/charts" ;
+    prop:emitsCarrier prop:carrier_charts_add .
+
+prop:cmd_charts_bind a prop:MutatingCommand ;
+    prop:targetsPlane prop:Viz ;
+    prop:verb "charts bind" ;
+    prop:apiPath "/api/charts/bind" ;
+    prop:emitsCarrier prop:carrier_charts_bind .
+
+prop:cmd_charts_thumbnail a prop:Command ;
+    prop:targetsPlane prop:Viz ;
+    prop:verb "charts thumbnail" ;
+    prop:apiPath "/api/charts/thumbnail" .
+
+prop:cmd_ucum_aliases_get a prop:Command ;
+    prop:targetsPlane prop:Tools ;
+    prop:verb "ucum aliases get" ;
+    prop:apiPath "/api/ucum/aliases" .
+
+prop:cmd_ucum_aliases_set a prop:MutatingCommand ;
+    prop:targetsPlane prop:Tools ;
+    prop:verb "ucum aliases set" ;
+    prop:apiPath "/api/ucum/aliases" ;
+    prop:emitsCarrier prop:carrier_ucum_aliases_set .
