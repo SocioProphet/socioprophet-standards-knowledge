@@ -1,0 +1,23 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix human: <https://socioprophet.github.io/ontogenesis/human#> .
+
+human:SensitiveConsentShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf human:hasSensitiveFlag ;
+    sh:property [
+        sh:path human:hasSensitiveFlag ;
+        sh:datatype xsd:boolean ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:sparql [
+        sh:message "Resources flagged sensitive must carry human:consentGiven true before promotion or visualization." ;
+        sh:select """
+            PREFIX human: <https://socioprophet.github.io/ontogenesis/human#>
+            SELECT $this WHERE {
+              $this human:hasSensitiveFlag true .
+              FILTER NOT EXISTS { $this human:consentGiven true }
+            }
+        """ ;
+    ] .
