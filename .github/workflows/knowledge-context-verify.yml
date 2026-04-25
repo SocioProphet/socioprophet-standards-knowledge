@@ -36,6 +36,11 @@ jobs:
           make verify-v1
           make roundtrip-v1
 
-      - name: Ensure generated fixture files are deterministic in-tree changes
+      - name: Ensure generated fixture files are committed and deterministic
         run: |
-          git diff -- fixtures/knowledge_store_v1_vectors_hex_pathA.txt fixtures/knowledge_store_v1_vectors_hex_pathA.txt.nonces
+          if [ -n "$(git status --porcelain -- fixtures/knowledge_store_v1_vectors_hex_pathA.txt fixtures/knowledge_store_v1_vectors_hex_pathA.txt.nonces)" ]; then
+            echo "Generated v1 fixture files are missing or stale. Run make fixtures-v1 and commit the resulting files."
+            git status --porcelain -- fixtures/knowledge_store_v1_vectors_hex_pathA.txt fixtures/knowledge_store_v1_vectors_hex_pathA.txt.nonces
+            git diff -- fixtures/knowledge_store_v1_vectors_hex_pathA.txt fixtures/knowledge_store_v1_vectors_hex_pathA.txt.nonces || true
+            exit 1
+          fi
