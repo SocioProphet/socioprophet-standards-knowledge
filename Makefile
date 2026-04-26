@@ -18,5 +18,6 @@ roundtrip:
 
 .PHONY: verify-shacl
 verify-shacl:
-	./.venv/bin/python tools/verify_shacl_semantic_core.py 2>/dev/null || python3 tools/verify_shacl_semantic_core.py
+	./.venv/bin/python policy/tools/validate_all.py --data fixtures/shacl/semantic_core_conforms.ttl --json 2>/dev/null || python3 policy/tools/validate_all.py --data fixtures/shacl/semantic_core_conforms.ttl --json
+	@if ./.venv/bin/python policy/tools/validate_all.py --data fixtures/shacl/semantic_core_violates.ttl --json >/tmp/semantic_core_violates.out 2>/tmp/semantic_core_violates.err; then cat /tmp/semantic_core_violates.out; cat /tmp/semantic_core_violates.err >&2; echo "ERR: expected violating semantic-core fixture to fail"; exit 2; else cat /tmp/semantic_core_violates.out; cat /tmp/semantic_core_violates.err >&2; echo "OK: violating semantic-core fixture failed as expected"; fi
 
