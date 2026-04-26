@@ -12,3 +12,5 @@ jobs:
         run: python3 -m pip install -U pip && python3 -m pip install -r requirements-dev.txt
       - name: Validate
         run: make verify && make roundtrip
+      - name: Verify semantic-core SHACL fixtures
+        run: make verify-shacl

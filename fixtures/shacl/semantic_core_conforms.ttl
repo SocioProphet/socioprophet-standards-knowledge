@@ -1,0 +1,56 @@
+@prefix ex: <https://example.org/ontogenesis/> .
+@prefix prop: <https://socioprophet.github.io/ontogenesis/prophet#> .
+@prefix bind: <https://socioprophet.github.io/ontogenesis/Lower/bindings#> .
+@prefix human: <https://socioprophet.github.io/ontogenesis/human#> .
+@prefix sp: <https://socioprophet.github.io/ontogenesis/socioprophet#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:carrier_signed
+    a prop:Carrier ;
+    prop:signed true .
+
+ex:mutating_import
+    a prop:MutatingCommand ;
+    prop:emitsCarrier ex:carrier_signed .
+
+ex:https_port
+    a bind:Port ;
+    bind:portNumber 443 .
+
+ex:device_null
+    a bind:DeviceNode ;
+    bind:devicePath "/dev/null" ;
+    bind:ioClaim ex:claim_1 .
+
+ex:socket_main
+    a bind:SocketEndpoint ;
+    bind:socketPath "/run/socio.sock" .
+
+ex:sensitive_record
+    human:hasSensitiveFlag true ;
+    human:consentGiven true .
+
+ex:exp_embedding
+    a sp:Experiment ;
+    sp:hasRunner ex:runner ;
+    sp:usesConfig ex:config ;
+    sp:task "embedding" ;
+    sp:keyMetric "cosine" .
+
+ex:exp_asr
+    a sp:Experiment ;
+    sp:hasRunner ex:runner ;
+    sp:usesConfig ex:config ;
+    sp:task "asr" ;
+    sp:keyMetric "wer" .
+
+ex:exp_vision
+    a sp:Experiment ;
+    sp:hasRunner ex:runner ;
+    sp:usesConfig ex:config ;
+    sp:task "vision" ;
+    sp:keyMetric "accuracy" .
+
+ex:metric_good
+    a sp:Metric ;
+    sp:value "0.99"^^xsd:decimal .
