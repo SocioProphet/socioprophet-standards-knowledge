@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prophet-k3s
+  annotations:
+    socioprophet.io/platform: k3s
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: k3s.example.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prophet-k3s
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - k3s.example.invalid
+      secretName: prophet-k3s-tls
