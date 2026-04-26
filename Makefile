@@ -16,3 +16,7 @@ roundtrip:
 	make hygiene
 	./.venv/bin/python tools/verify_avro_path_a_roundtrip.py 2>/dev/null || python3 tools/verify_avro_path_a_roundtrip.py
 
+.PHONY: verify-shacl
+verify-shacl:
+	./.venv/bin/python tools/verify_shacl_semantic_core.py 2>/dev/null || python3 tools/verify_shacl_semantic_core.py
+
