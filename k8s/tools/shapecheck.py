@@ -26,6 +26,26 @@ def _safe_name(value: str) -> str:
     return re.sub(r"[^A-Za-z0-9_]+", "_", value).strip("_") or "unnamed"
 
 
+def _quote(value: str) -> str:
+    return str(value).replace("\\", "\\\\").replace('"', '\\"')
+
+
+def _label_lines(prop: str, labels: dict) -> list[str]:
+    lines = []
+    for key, value in sorted((labels or {}).items()):
+        lines.append(f"    ; {prop} \"{_quote(key)}={_quote(value)}\"")
+    return lines
+
+
+def _platform(doc: dict) -> str | None:
+    metadata = doc.get("metadata", {}) or {}
+    annotations = metadata.get("annotations", {}) or {}
+    value = annotations.get("socioprophet.io/platform") or annotations.get("prophet.socioprophet.io/platform")
+    if value:
+        return str(value).lower()
+    return None
+
+
 def _service_to_turtle(source: Path, doc: dict, index: int) -> list[str]:
     metadata = doc.get("metadata", {}) or {}
     spec = doc.get("spec", {}) or {}
@@ -34,16 +54,66 @@ def _service_to_turtle(source: Path, doc: dict, index: int) -> list[str]:
     service_type = spec.get("type", "ClusterIP")
     lines = [
         f"{node} a k8s:Service ;",
-        f"    k8s:name \"{name}\" ;",
-        f"    k8s:serviceType \"{service_type}\"",
+        f"    k8s:name \"{_quote(name)}\" ;",
+        f"    k8s:serviceType \"{_quote(service_type)}\"",
     ]
-    selectors = spec.get("selector", {}) or {}
-    for key, value in sorted(selectors.items()):
-        lines.append(f"    ; k8s:selectorLabel \"{key}={value}\"")
-    ports = spec.get("ports", []) or []
-    for port in ports:
+    platform = _platform(doc)
+    if platform:
+        lines.append(f"    ; k8s:platform \"{_quote(platform)}\"")
+    lines.extend(_label_lines("k8s:selectorLabel", spec.get("selector", {}) or {}))
+    for port in spec.get("ports", []) or []:
         if "nodePort" in port:
             lines.append(f"    ; k8s:nodePort {int(port['nodePort'])}")
+    lines[-1] = lines[-1] + " ."
+    lines.append("")
+    return lines
+
+
+def _deployment_to_turtle(source: Path, doc: dict, index: int) -> list[str]:
+    metadata = doc.get("metadata", {}) or {}
+    spec = doc.get("spec", {}) or {}
+    template = spec.get("template", {}) or {}
+    template_metadata = template.get("metadata", {}) or {}
+    template_spec = template.get("spec", {}) or {}
+    selector = spec.get("selector", {}) or {}
+    name = metadata.get("name", f"deployment_{index}")
+    node = f"ex:{_safe_name(source.stem)}_{_safe_name(name)}_{index}"
+    lines = [
+        f"{node} a k8s:Deployment ;",
+        f"    k8s:name \"{_quote(name)}\"",
+    ]
+    platform = _platform(doc)
+    if platform:
+        lines.append(f"    ; k8s:platform \"{_quote(platform)}\"")
+    lines.extend(_label_lines("k8s:matchLabel", selector.get("matchLabels", {}) or {}))
+    lines.extend(_label_lines("k8s:templateLabel", template_metadata.get("labels", {}) or {}))
+    lines.extend(_label_lines("k8s:nodeSelectorLabel", template_spec.get("nodeSelector", {}) or {}))
+    lines[-1] = lines[-1] + " ."
+    lines.append("")
+    return lines
+
+
+def _ingress_to_turtle(source: Path, doc: dict, index: int) -> list[str]:
+    metadata = doc.get("metadata", {}) or {}
+    spec = doc.get("spec", {}) or {}
+    name = metadata.get("name", f"ingress_{index}")
+    node = f"ex:{_safe_name(source.stem)}_{_safe_name(name)}_{index}"
+    lines = [
+        f"{node} a k8s:Ingress ;",
+        f"    k8s:name \"{_quote(name)}\"",
+    ]
+    platform = _platform(doc)
+    if platform:
+        lines.append(f"    ; k8s:platform \"{_quote(platform)}\"")
+    ingress_class = spec.get("ingressClassName")
+    if ingress_class:
+        lines.append(f"    ; k8s:ingressClass \"{_quote(ingress_class)}\"")
+    for rule in spec.get("rules", []) or []:
+        if rule.get("host"):
+            lines.append(f"    ; k8s:ruleHost \"{_quote(rule['host'])}\"")
+    for tls in spec.get("tls", []) or []:
+        for host in tls.get("hosts", []) or []:
+            lines.append(f"    ; k8s:tlsHost \"{_quote(host)}\"")
     lines[-1] = lines[-1] + " ."
     lines.append("")
     return lines
@@ -56,8 +126,13 @@ def _docs_to_turtle(docs) -> str:
         '',
     ]
     for index, (source, doc) in enumerate(docs):
-        if doc.get("kind") == "Service":
+        kind = doc.get("kind")
+        if kind == "Service":
             lines.extend(_service_to_turtle(source, doc, index))
+        elif kind == "Deployment":
+            lines.extend(_deployment_to_turtle(source, doc, index))
+        elif kind == "Ingress":
+            lines.extend(_ingress_to_turtle(source, doc, index))
     return "\n".join(lines)
 
 
