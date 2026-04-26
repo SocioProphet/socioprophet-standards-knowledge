@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prophet-bad-tls
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app.example.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prophet-web
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - tls-only.example.invalid
+      secretName: prophet-web-tls

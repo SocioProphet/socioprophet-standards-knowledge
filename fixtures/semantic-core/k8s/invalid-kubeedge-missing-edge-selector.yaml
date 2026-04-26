@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prophet-edge-missing-selector
+  annotations:
+    socioprophet.io/platform: kubeedge
+spec:
+  selector:
+    matchLabels:
+      app: prophet-edge
+  template:
+    metadata:
+      labels:
+        app: prophet-edge
+    spec:
+      containers:
+        - name: edge
+          image: example.invalid/prophet-edge:latest

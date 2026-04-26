@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prophet-bad-selector
+spec:
+  selector:
+    matchLabels:
+      app: prophet-web
+  template:
+    metadata:
+      labels:
+        app: prophet-worker
+    spec:
+      containers:
+        - name: web
+          image: example.invalid/prophet-web:latest
