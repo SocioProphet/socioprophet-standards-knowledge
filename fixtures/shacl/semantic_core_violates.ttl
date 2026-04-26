@@ -1,0 +1,47 @@
+@prefix ex: <https://example.org/ontogenesis/> .
+@prefix prop: <https://socioprophet.github.io/ontogenesis/prophet#> .
+@prefix bind: <https://socioprophet.github.io/ontogenesis/Lower/bindings#> .
+@prefix human: <https://socioprophet.github.io/ontogenesis/human#> .
+@prefix sp: <https://socioprophet.github.io/ontogenesis/socioprophet#> .
+
+ex:carrier_unsigned
+    a prop:Carrier ;
+    prop:signed false .
+
+ex:mutating_import_bad
+    a prop:MutatingCommand ;
+    prop:emitsCarrier ex:carrier_unsigned .
+
+ex:bad_port
+    a bind:Port ;
+    bind:portNumber 70000 .
+
+ex:bad_device
+    a bind:DeviceNode ;
+    bind:devicePath "/tmp/not-a-device" .
+
+ex:bad_socket
+    a bind:SocketEndpoint ;
+    bind:socketPath "/tmp/socio.sock" .
+
+ex:sensitive_record_bad
+    human:hasSensitiveFlag true .
+
+ex:exp_embedding_bad
+    a sp:Experiment ;
+    sp:task "embedding" ;
+    sp:keyMetric "euclidean" .
+
+ex:exp_asr_bad
+    a sp:Experiment ;
+    sp:task "asr" ;
+    sp:keyMetric "accuracy" .
+
+ex:exp_vision_bad
+    a sp:Experiment ;
+    sp:task "vision" ;
+    sp:keyMetric "wer" .
+
+ex:metric_bad
+    a sp:Metric ;
+    sp:value "not-a-decimal" .
