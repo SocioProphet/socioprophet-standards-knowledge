@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prophet-web
+spec:
+  selector:
+    matchLabels:
+      app: prophet-web
+  template:
+    metadata:
+      labels:
+        app: prophet-web
+    spec:
+      containers:
+        - name: web
+          image: example.invalid/prophet-web:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prophet-web
+spec:
+  type: ClusterIP
+  selector:
+    app: prophet-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prophet-web
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: prophet.example.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prophet-web
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - prophet.example.invalid
+      secretName: prophet-web-tls
