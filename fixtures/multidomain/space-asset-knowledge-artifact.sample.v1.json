@@ -1,0 +1,47 @@
+{
+  "artifact_type": "SpaceAsset",
+  "artifact_id": "knowledge:space-asset:sample-sat-001",
+  "entity": {
+    "entity_id": "space-asset:sample-sat-001",
+    "label": "Sample Earth Observation Satellite 001",
+    "entity_class": "SpaceAsset",
+    "same_as": ["catalog:sample:sat-001"],
+    "geometry_ref": "orbit:sample:sat-001:tle-placeholder",
+    "time_ref": "interval:2026-04-27"
+  },
+  "relations": [
+    {
+      "predicate": "observed_by",
+      "object_ref": "sensor:sample-optical-payload-001",
+      "confidence": 0.9,
+      "evidence_ref": "evidence:sample-space-catalog-001"
+    },
+    {
+      "predicate": "restricted_by",
+      "object_ref": "policy:sensitive-geo:standard-delay",
+      "confidence": 1.0,
+      "evidence_ref": "standard:080"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "claim:sample-sat-001:eo-capable",
+      "statement": "Sample satellite is modeled as an Earth observation asset for standards validation only.",
+      "validation_state": "proposed",
+      "evidence_refs": ["evidence:sample-space-catalog-001"]
+    }
+  ],
+  "provenance": {
+    "source_refs": ["fixture:generated"],
+    "method": "synthetic_fixture",
+    "generated_at": "2026-04-27T18:30:00Z",
+    "runtime_boundary_id": "runtime:space-catalog-ingest:v0",
+    "storage_record_refs": ["record:SpaceAssetRecord:sample-sat-001"]
+  },
+  "governance": {
+    "knowledge_visibility": "public",
+    "masking_policy": "none_for_synthetic_fixture",
+    "license_ref": "sample-only",
+    "sensitive_geo_policy_ref": "policy:sensitive-geo:standard-delay"
+  }
+}
