@@ -2,6 +2,10 @@
 validate:
 	./.venv/bin/python tools/validate.py 2>/dev/null || python3 tools/validate.py
 
+.PHONY: multidomain-geospatial-validate
+multidomain-geospatial-validate:
+	./.venv/bin/python tools/validate_multidomain_geospatial_knowledge.py 2>/dev/null || python3 tools/validate_multidomain_geospatial_knowledge.py
+
 .PHONY: hygiene
 hygiene:
 	for i in 1 2 3 4 5; do find . -name .DS_Store -delete; n=$$(find . -name .DS_Store | wc -l | tr -d " "); echo "DS_Store remaining: $$n"; [ "$$n" = "0" ] && break; sleep 0.2; done
