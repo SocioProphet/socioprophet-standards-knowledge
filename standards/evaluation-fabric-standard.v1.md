@@ -22,7 +22,7 @@ The evaluation fabric exists to prevent hand-wavy claims of learning, mastery, d
 Evaluation is not a final test. Evaluation is a continuous fabric:
 
 ```text
-objective -> task -> evidence -> metric/rubric -> adversarial review -> remediation -> transfer -> certification of state
+objective -> task -> evidence -> metric/rubric -> adversarial review -> remediation -> transfer -> regression check -> certification of state
 ```
 
 The same fabric must support:
@@ -62,8 +62,10 @@ evaluated_subject_ref: person, agent, model, repo, service, release, course, ont
 evaluation_level: diagnostic | formative | summative | adversarial | certification | regression | transfer | continuous
 objectives: list of LearningObjective or CapabilityObjective references
 tasks: list of EvaluationTask references
+prior_required_tasks: tasks from previous accepted epochs that must remain non-regressed
 rubrics: list of Rubric references
 metrics: list of Metric references
+monotonicity_policy: MonotonicProgressPolicy reference
 evidence_bundle_ref: EvidenceBundle reference
 angel_epoch_grade_ref: AngelEpochGrade reference, when applicable
 result: pass | pass_with_findings | remediation_required | fail | blocked | restricted_handling | unknown
@@ -73,7 +75,7 @@ result: pass | pass_with_findings | remediation_required | fail | blocked | rest
 
 ```yaml
 id: stable identifier
-task_type: exam | test | quiz | problem_set | lab | project | code_review | oral_defense | benchmark | simulation | red_team | adversarial_review | model_eval | service_eval | ontology_eval | os_lifecycle_eval | transfer_task | other
+task_type: exam | test | quiz | problem_set | lab | project | code_review | oral_defense | benchmark | simulation | red_team | adversarial_review | model_eval | service_eval | ontology_eval | os_lifecycle_eval | transfer_task | regression_task | other
 prompt_or_spec_ref: source, course material, benchmark, schema, issue, contract, or task specification
 inputs: datasets, artifacts, repos, models, environments, course materials, or release refs
 allowed_resources: open_book | closed_book_simulated | timed | tool_allowed | no_tool | sandboxed | restricted | custom
@@ -102,22 +104,75 @@ criteria:
 ```yaml
 id: stable identifier
 name: metric name
-metric_type: accuracy | precision | recall | f1 | latency | throughput | cost | reliability | safety | security | coverage | reproducibility | calibration | drift | human_mastery | transfer_success | ontology_consistency | other
+metric_type: accuracy | precision | recall | f1 | latency | throughput | cost | reliability | safety | security | coverage | reproducibility | calibration | drift | human_mastery | transfer_success | ontology_consistency | regression_delta | other
 definition: precise definition
 measurement_method: how it is measured
 thresholds: pass, warning, fail, or severity thresholds
 known_limitations: caveats
 ```
 
+## Required object: MonotonicProgressPolicy
+
+Every epoch-bearing subject must define a monotonic progress policy. This policy protects against hidden regression in stochastic systems, agents, models, curricula, and platform capabilities.
+
+```yaml
+id: stable identifier
+subject_ref: evaluated subject
+baseline_epoch_ref: previous accepted epoch
+prior_exam_policy: rerun_all_prior | sampled_prior_suite | risk_weighted_prior_suite | waiver_required
+minimum_grade_retention: same_grade | no_material_regression | custom_threshold
+allowed_delta:
+  numeric_absolute: optional maximum absolute drop
+  numeric_relative: optional maximum relative drop
+  rubric_band_drop: none | one_minor_band | custom
+  stochastic_confidence: confidence interval or repeated-run policy
+stochastic_repeats: number of repeated runs for stochastic models or agents
+aggregation_method: mean | median | worst_case | confidence_bound | custom
+block_on_regression: true
+remediation_required_on_regression: true
+waiver_policy: explicit standards or Sociosphere waiver only
+```
+
+## Required object: EpochRegressionCheck
+
+```yaml
+id: stable identifier
+subject_ref: evaluated subject
+current_epoch_ref: current epoch
+baseline_epoch_ref: prior accepted epoch
+prior_tasks_evaluated: list of prior EvaluationTask refs
+current_results: EvaluationRecord refs
+baseline_results: EvaluationRecord refs
+deltas: metric and rubric deltas
+stochastic_adjustment: repeated-run or confidence-bound notes
+regressions_found: list
+result: no_regression | within_allowed_delta | remediation_required | blocked
+remediation_refs: RemediationRecord refs
+```
+
 ## Required object: EvidenceRequirement
 
 ```yaml
 id: stable identifier
-artifact_type: source_record | assessment_attempt | model_eval | dataset_card | model_card | deployment_manifest | build_manifest | test_log | transcript | ontology_diff | review_report | angel_epoch_grade | other
+artifact_type: source_record | assessment_attempt | model_eval | dataset_card | model_card | deployment_manifest | build_manifest | test_log | transcript | ontology_diff | review_report | angel_epoch_grade | epoch_regression_check | other
 required_for: human | agent | model | os_lifecycle | ontology | curriculum | platform | atlas | mixed
 minimum_fields: required fields or schema refs
 retention_policy: ephemeral | retained | append_only | restricted | public_safe
 ```
+
+## Monotonic epoch rule
+
+For Michael-agent and other epoch-bearing agents, the agent must maintain the same accepted grade in all prior exams, tests, projects, rubrics, and transfer evaluations unless a standards-approved tolerance explicitly allows a small stochastic delta.
+
+Forward progress is blocked when:
+
+1. a prior accepted exam/test/project falls below its accepted grade outside the allowed delta;
+2. a prior transfer task fails in the new epoch;
+3. a stochastic model regresses beyond its confidence-bound tolerance;
+4. an Angel grade identifies regression as material;
+5. the epoch omits required prior-regression checks.
+
+This rule applies to humans where appropriate, to agents by default, and to models/systems whenever regression can create false progress claims.
 
 ## Evaluation lanes
 
@@ -136,7 +191,7 @@ course objective -> assignment/test/exam/lab/project -> rubric -> evidence -> re
 For Michael-agent degree-equivalent education:
 
 ```text
-public courseware corpus -> published test/exam/project -> assessment attempt -> evidence bundle -> Angel epoch grade -> transfer task -> accepted/remediated epoch
+public courseware corpus -> published test/exam/project -> assessment attempt -> evidence bundle -> Angel epoch grade -> prior exam regression check -> transfer task -> accepted/remediated epoch
 ```
 
 ### Agent capability lane
@@ -152,7 +207,7 @@ capability objective -> task battery -> adversarial critique -> transfer evaluat
 For ML systems:
 
 ```text
-dataset -> experiment -> model -> evaluation -> deployment -> observability -> feedback -> retraining/rollback
+dataset -> experiment -> model -> evaluation -> deployment -> observability -> feedback -> retraining/rollback -> regression check
 ```
 
 Ray Serve and KubeRay are the primary serving default for new serving-loop work. Clipper is legacy-reference only.
@@ -162,7 +217,7 @@ Ray Serve and KubeRay are the primary serving default for new serving-loop work.
 For SourceOS/SociOS:
 
 ```text
-build -> boot -> install -> update -> rollback -> device/fleet fingerprint -> compliance evaluation -> evidence -> Angel review
+build -> boot -> install -> update -> rollback -> device/fleet fingerprint -> compliance evaluation -> regression check -> evidence -> Angel review
 ```
 
 ### Ontology/knowledge lane
@@ -178,7 +233,7 @@ source -> extraction -> entity/relationship proposal -> ontology diff -> SHACL/v
 For Prophet Platform and Atlas:
 
 ```text
-learning-loop insight -> platform primitive -> contract -> implementation -> evidence -> transition gate -> release or remediation
+learning-loop insight -> platform primitive -> contract -> implementation -> evidence -> transition gate -> regression check -> release or remediation
 ```
 
 ## Angel of the Lord integration
@@ -186,6 +241,8 @@ learning-loop insight -> platform primitive -> contract -> implementation -> evi
 The Angel of the Lord is the adversarial review authority for high-consequence epochs. Any evaluation track involving agent education, platform transition, public-source case studies, model serving, OS lifecycle, source exposure, or release readiness MUST include an Angel grade or an explicit waiver.
 
 An evaluation cannot be marked complete if the Angel grade has unresolved blocker findings or unresolved material high findings.
+
+Angel grading must inspect whether prior accepted grades and capabilities are preserved. Material hidden regression is a high or blocker finding depending on impact.
 
 ## Machine and human parity
 
@@ -210,7 +267,8 @@ A capability, epoch, course-equivalent module, model deployment, release, ontolo
 5. review gate is identified;
 6. remediation path exists;
 7. transfer or regression is evaluated where relevant;
-8. Angel grading is applied where required.
+8. prior accepted exams, tests, projects, and transfer tasks remain non-regressed within the monotonic progress policy;
+9. Angel grading is applied where required.
 
 ## Non-hand-waving rule
 
@@ -220,4 +278,5 @@ A repo claiming compliance with this standard must include:
 - at least one example evaluation record;
 - evidence bundle references;
 - validation or review gate references;
+- monotonic progress or regression policy where epochs exist;
 - integration with Sociosphere or Delivery Excellence where release or transition is affected.
