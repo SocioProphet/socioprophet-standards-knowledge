@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standards.socioprophet.ai/knowledge/multidomain_geospatial_knowledge_artifact.v1.schema.json",
+  "title": "SocioProphet Multi-Domain Geospatial Knowledge Artifact v1",
+  "type": "object",
+  "required": ["artifact_type", "artifact_id", "entity", "relations", "provenance", "governance"],
+  "properties": {
+    "artifact_type": {
+      "type": "string",
+      "enum": ["GeoEntity", "Place", "Feature", "Asset", "SpaceAsset", "Vessel", "Aircraft", "Sensor", "Observation", "Track", "Event", "DecisionCard", "SensitiveGeoPolicy"]
+    },
+    "artifact_id": {"type": "string", "minLength": 3},
+    "entity": {
+      "type": "object",
+      "required": ["entity_id", "label", "entity_class"],
+      "properties": {
+        "entity_id": {"type": "string"},
+        "label": {"type": "string"},
+        "entity_class": {"type": "string"},
+        "same_as": {"type": "array", "items": {"type": "string"}},
+        "geometry_ref": {"type": "string"},
+        "time_ref": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["predicate", "object_ref"],
+        "properties": {
+          "predicate": {"type": "string"},
+          "object_ref": {"type": "string"},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "evidence_ref": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "statement", "validation_state"],
+        "properties": {
+          "claim_id": {"type": "string"},
+          "statement": {"type": "string"},
+          "validation_state": {"type": "string", "enum": ["proposed", "validated", "contested", "redacted", "deprecated"]},
+          "evidence_refs": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source_refs", "method", "generated_at"],
+      "properties": {
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+        "method": {"type": "string"},
+        "generated_at": {"type": "string"},
+        "runtime_boundary_id": {"type": "string"},
+        "storage_record_refs": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "governance": {
+      "type": "object",
+      "required": ["knowledge_visibility", "masking_policy", "license_ref"],
+      "properties": {
+        "knowledge_visibility": {"type": "string", "enum": ["public", "internal", "restricted", "redacted"]},
+        "masking_policy": {"type": "string"},
+        "license_ref": {"type": "string"},
+        "sensitive_geo_policy_ref": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
