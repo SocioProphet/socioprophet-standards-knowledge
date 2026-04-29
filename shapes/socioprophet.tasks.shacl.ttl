@@ -1,0 +1,45 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sp: <https://socioprophet.github.io/ontogenesis/socioprophet#> .
+
+sp:EmbeddingTaskShape
+    a sh:NodeShape ;
+    sh:targetClass sp:Experiment ;
+    sh:sparql [
+        sh:message "Embedding experiments must use keyMetric cosine or dot." ;
+        sh:select """
+            PREFIX sp: <https://socioprophet.github.io/ontogenesis/socioprophet#>
+            SELECT $this WHERE {
+              $this sp:task "embedding" ; sp:keyMetric ?metric .
+              FILTER(?metric NOT IN ("cosine", "dot"))
+            }
+        """ ;
+    ] .
+
+sp:ASRTaskShape
+    a sh:NodeShape ;
+    sh:targetClass sp:Experiment ;
+    sh:sparql [
+        sh:message "ASR experiments must use keyMetric wer." ;
+        sh:select """
+            PREFIX sp: <https://socioprophet.github.io/ontogenesis/socioprophet#>
+            SELECT $this WHERE {
+              $this sp:task "asr" ; sp:keyMetric ?metric .
+              FILTER(?metric != "wer")
+            }
+        """ ;
+    ] .
+
+sp:VisionTaskShape
+    a sh:NodeShape ;
+    sh:targetClass sp:Experiment ;
+    sh:sparql [
+        sh:message "Vision experiments must use accuracy, f1, or map as keyMetric." ;
+        sh:select """
+            PREFIX sp: <https://socioprophet.github.io/ontogenesis/socioprophet#>
+            SELECT $this WHERE {
+              $this sp:task "vision" ; sp:keyMetric ?metric .
+              FILTER(?metric NOT IN ("accuracy", "f1", "map"))
+            }
+        """ ;
+    ] .

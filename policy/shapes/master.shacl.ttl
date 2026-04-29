@@ -1,0 +1,9 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+<https://socioprophet.github.io/ontogenesis/policy/shapes/master>
+    a owl:Ontology ;
+    rdfs:label "Ontogenesis master SHACL pack" ;
+    dct:description "Single authoritative SHACL entry surface for the current semantic core. The master pack now imports the widened semantic_core policy pack rather than the Prophet-only starter pack." ;
+    owl:imports <https://socioprophet.github.io/ontogenesis/policy/shapes/semantic_core> .

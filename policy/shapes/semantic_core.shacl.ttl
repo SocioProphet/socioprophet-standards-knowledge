@@ -1,0 +1,12 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://socioprophet.github.io/ontogenesis/policy/shapes/semantic_core>
+    a owl:Ontology ;
+    rdfs:label "Ontogenesis semantic core SHACL pack" ;
+    owl:imports
+        <https://socioprophet.github.io/ontogenesis/prophet/shapes/prophet_cli> ,
+        <https://socioprophet.github.io/ontogenesis/Lower/shapes/bindings> ,
+        <https://socioprophet.github.io/ontogenesis/shapes/human> ,
+        <https://socioprophet.github.io/ontogenesis/shapes/socioprophet.core> ,
+        <https://socioprophet.github.io/ontogenesis/shapes/socioprophet.tasks> .

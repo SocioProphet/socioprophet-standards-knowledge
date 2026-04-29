@@ -1,0 +1,19 @@
+{
+  "apiVersion": "bindings.socioprophet.io/v0.1",
+  "kind": "AgentBindingDescriptor",
+  "metadata": {
+    "name": "ci-smoke"
+  },
+  "bindings": [
+    {
+      "type": "port",
+      "name": "http",
+      "portNumber": 8080
+    },
+    {
+      "type": "socket",
+      "name": "runtime",
+      "socketPath": "/run/prophet/runtime.sock"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prophet-edge
+  annotations:
+    socioprophet.io/platform: kubeedge
+spec:
+  selector:
+    matchLabels:
+      app: prophet-edge
+  template:
+    metadata:
+      labels:
+        app: prophet-edge
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/edge: "true"
+      containers:
+        - name: edge
+          image: example.invalid/prophet-edge:latest
