@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import hashlib
-import re
+import os
 from pathlib import Path
 from typing import Tuple
 
@@ -10,13 +10,29 @@ import yaml
 from nacl.bindings import crypto_aead_xchacha20poly1305_ietf_encrypt
 
 ROOT = Path(__file__).resolve().parents[1]
-REG  = ROOT / "docs/standards/031-schema-context-id-registry.md"
-RPC  = ROOT / "rpc/knowledge.store.v0.yaml"
-import os
-FIX  = Path(os.environ.get("KC_FIXTURE_OVERRIDE", str(ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt")))
-NON  = ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt.nonces"
+DEFAULT_RPC = ROOT / "rpc" / "knowledge.store.v0.yaml"
+DEFAULT_FIX = ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt"
+DEFAULT_NON = ROOT / "fixtures" / "knowledge_vectors_hex_pathA.txt.nonces"
 
 KEY = bytes(32)
+
+
+def _repo_path(value: str | os.PathLike[str]) -> Path:
+    p = Path(value)
+    return p if p.is_absolute() else ROOT / p
+
+
+def rpc_path() -> Path:
+    return _repo_path(os.environ.get("KC_RPC_CONFIG", str(DEFAULT_RPC)))
+
+
+def fixture_path() -> Path:
+    return _repo_path(os.environ.get("KC_FIXTURE_OVERRIDE", os.environ.get("KC_FIXTURE_OUT", str(DEFAULT_FIX))))
+
+
+def nonce_path() -> Path:
+    return _repo_path(os.environ.get("KC_NONCE_OVERRIDE", os.environ.get("KC_NONCE_OUT", str(DEFAULT_NON))))
+
 
 def unpack_byte(b: int):
     if b <= 242:
@@ -29,6 +45,7 @@ def unpack_byte(b: int):
     if 243 <= b <= 246:
         return None
     raise ValueError("invalid TritPack243 byte")
+
 
 def tleb3_decode_len(buf: bytes, offset: int) -> Tuple[int, int]:
     i = offset
@@ -56,19 +73,18 @@ def tleb3_decode_len(buf: bytes, offset: int) -> Tuple[int, int]:
             val = 0
             used_trits = 0
             for j in range(0, len(trits) // 3):
-                C, P1, P0 = trits[3 * j : 3 * j + 3]
-                digit = P1 * 3 + P0
-                val += digit * (9**j)
-                if C == 0:
+                c, p1, p0 = trits[3 * j: 3 * j + 3]
+                digit = p1 * 3 + p0
+                val += digit * (9 ** j)
+                if c == 0:
                     used_trits = (j + 1) * 3
                     break
             if used_trits:
-                # compute how many bytes were used by re-encoding canonical prefix
                 out = bytearray()
                 x = 0
                 while x + 5 <= used_trits:
                     v = 0
-                    for t in trits[x : x + 5]:
+                    for t in trits[x:x + 5]:
                         v = v * 3 + t
                     out.append(v)
                     x += 5
@@ -81,6 +97,7 @@ def tleb3_decode_len(buf: bytes, offset: int) -> Tuple[int, int]:
                     out.append(v)
                 return val, offset + len(out)
 
+
 def get_fields_and_laststart(frame: bytes):
     off = 0
     fields = []
@@ -88,57 +105,43 @@ def get_fields_and_laststart(frame: bytes):
     while off < len(frame):
         n, val_off = tleb3_decode_len(frame, off)
         last_start = off
-        fields.append(frame[val_off : val_off + n])
+        fields.append(frame[val_off: val_off + n])
         off = val_off + n
     return fields, last_start
 
-def parse_labels(md: str):
-    schema_label = None
-    context_label = None
-    mode = None
-    for ln in md.splitlines():
-        s = ln.strip()
-        if s.startswith("##") and "Avro Path-A payload schema label" in s:
-            mode = "schema"
-            continue
-        if s.startswith("##") and "JSON-LD context label" in s:
-            mode = "context"
-            continue
-        if mode in ("schema", "context") and "Label:" in s and "`" in s:
-            parts = s.split("`")
-            if len(parts) >= 3:
-                val = parts[1].strip()
-                if mode == "schema" and not schema_label:
-                    schema_label = val
-                if mode == "context" and not context_label:
-                    context_label = val
-        if schema_label and context_label:
-            break
+
+def _labels_from_rpc(cfg: dict) -> Tuple[str, str]:
+    wire = cfg.get("tritrpc_wire", {}) or {}
+    schema_label = wire.get("schema_label")
+    context_label = wire.get("context_label")
     if not schema_label or not context_label:
-        raise SystemExit("Could not parse labels from docs/standards/031-schema-context-id-registry.md")
+        raise SystemExit("RPC config must define tritrpc_wire.schema_label and tritrpc_wire.context_label")
     return schema_label, context_label
 
+
 def main():
-    schema_label, context_label = parse_labels(REG.read_text(encoding="utf-8"))
-    schema_id  = hashlib.sha3_256(schema_label.encode("utf-8")).digest()
+    cfg = yaml.safe_load(rpc_path().read_text(encoding="utf-8"))
+    schema_label, context_label = _labels_from_rpc(cfg)
+    schema_id = hashlib.sha3_256(schema_label.encode("utf-8")).digest()
     context_id = hashlib.sha3_256(context_label.encode("utf-8")).digest()
 
-    if not FIX.exists() or not NON.exists():
+    fix = fixture_path()
+    non = nonce_path()
+    if not fix.exists() or not non.exists():
         raise SystemExit("Missing fixtures. Run tools/generate_knowledge_tritrpc_fixtures.py first.")
 
     nonces = {}
-    for ln in NON.read_text(encoding="utf-8").splitlines():
+    for ln in non.read_text(encoding="utf-8").splitlines():
         ln = ln.strip()
         if not ln or ln.startswith("#"):
             continue
         name, hx = ln.split(" ", 1)
         nonces[name] = bytes.fromhex(hx.strip())
 
-    cfg = yaml.safe_load(RPC.read_text(encoding="utf-8"))
     wire = cfg.get("tritrpc_wire", {}) or {}
     service_expected = wire.get("service", "knowledge.store.v0")
 
-    for ln in FIX.read_text(encoding="utf-8").splitlines():
+    for ln in fix.read_text(encoding="utf-8").splitlines():
         ln = ln.strip()
         if not ln or ln.startswith("#"):
             continue
@@ -146,9 +149,7 @@ def main():
         name_base = name[:-4] if name.endswith(".AUX") else name
         frame = bytes.fromhex(hx.strip())
 
-        nonce = nonces.get(name)
-        if nonce is None:
-            nonce = nonces.get(name_base)
+        nonce = nonces.get(name) or nonces.get(name_base)
         if nonce is None:
             raise SystemExit(f"[FAIL] Missing nonce for {name}")
 
@@ -165,9 +166,6 @@ def main():
         if calc != tag:
             raise SystemExit(f"[FAIL] AEAD tag mismatch for {name}")
 
-        # Field order: 0 magic,1 ver,2 mode,3 flags,4 schema,5 context,6 service,7 method,...
-        if len(fields) < 8:
-            raise SystemExit(f"[FAIL] Too few decoded fields for {name}: {len(fields)}")
         if fields[4] != schema_id:
             raise SystemExit(f"[FAIL] SCHEMA_ID mismatch for {name}")
         if fields[5] != context_id:
@@ -180,7 +178,8 @@ def main():
         if f"{svc}.{mth}" != name_base:
             raise SystemExit(f"[FAIL] Name mismatch for {name}: decoded {svc}.{mth}")
 
-    print("[OK] Knowledge Context TriTRPC fixtures verified (AEAD + IDs + SERVICE/METHOD).")
+    print(f"[OK] Knowledge Context TriTRPC fixtures verified for {service_expected} (AEAD + IDs + SERVICE/METHOD).")
+
 
 if __name__ == "__main__":
     main()
