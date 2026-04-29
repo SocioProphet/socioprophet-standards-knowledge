@@ -26,6 +26,17 @@ Run from the repo root:
 - `make roundtrip`  
   Avro Path-A semantic round-trip: encoded bytes decode back to deterministic sample objects.
 
+### Versioned v1 gates
+
+The default gates remain v0-compatible. The expanded v1 store surface uses explicit targets so v1 can be promoted without silently changing the frozen v0 fixture path:
+
+- `make fixtures-v1`  
+  Generates v1 TriTRPC fixture vectors and nonces using `rpc/knowledge.store.v1.yaml` and `schemas/avro/knowledge.store.v1/knowledge.store.v1.avpr`.
+- `make verify-v1`  
+  Verifies v1 fixture AEAD/AAD boundaries, schema/context IDs, SERVICE/METHOD decode, and AUX coverage.
+- `make roundtrip-v1`  
+  Verifies v1 Avro Path-A request/response payload decoding over the expanded store surface.
+
 ## What we standardize here
 
 ### 1) Canonical artifacts (knowledge atoms)
@@ -129,5 +140,8 @@ This repo is a compatibility surface. When we change it, we change it carefully.
 - Always run:
   - `make hygiene && make verify && make roundtrip`
   before pushing a PR.
+- For v1-specific validation, also run:
+  - `make fixtures-v1 && make verify-v1 && make roundtrip-v1`
+  before promoting v1 fixture files or verification status.
 
 _Last updated: update via PR when this README changes_
