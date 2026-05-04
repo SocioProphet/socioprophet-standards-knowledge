@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.example/capability-fabric/agent-sandbox-lifecycle.v0.schema.json",
+  "title": "Capability Fabric Agent Sandbox Lifecycle v0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "AgentSandboxSpec": { "$ref": "#/$defs/AgentSandboxSpec" },
+    "AgentGenesisManifest": { "$ref": "#/$defs/AgentGenesisManifest" },
+    "AgentFailureBundle": { "$ref": "#/$defs/AgentFailureBundle" },
+    "AgentSandboxReceipt": { "$ref": "#/$defs/AgentSandboxReceipt" }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:.+"
+    },
+    "AgentSandboxSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "sandbox_id",
+        "inception_ref",
+        "target_ref",
+        "capability_ref",
+        "actor_ref",
+        "trust_class",
+        "execution_budget_ref",
+        "failure_policy_ref",
+        "memory_policy_ref",
+        "receipt_policy_ref"
+      ],
+      "properties": {
+        "schema_version": { "type": "string", "const": "agent-sandbox-lifecycle.v0" },
+        "sandbox_id": { "type": "string", "minLength": 1 },
+        "inception_ref": { "$ref": "#/$defs/ref" },
+        "target_ref": { "$ref": "#/$defs/ref" },
+        "capability_ref": { "$ref": "#/$defs/ref" },
+        "actor_ref": { "$ref": "#/$defs/ref" },
+        "trust_class": { "type": "string", "enum": ["OWNER", "MEMBER", "COLLABORATOR", "TRUSTED_BOT", "UNTRUSTED", "UNKNOWN"] },
+        "execution_budget_ref": { "$ref": "#/$defs/ref" },
+        "failure_policy_ref": { "$ref": "#/$defs/ref" },
+        "memory_policy_ref": { "$ref": "#/$defs/ref" },
+        "receipt_policy_ref": { "$ref": "#/$defs/ref" },
+        "duplicate_suppression": { "type": "object", "additionalProperties": true },
+        "protected_path_decision": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "AgentGenesisManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "sandbox_id",
+        "spec_ref",
+        "control_plane_ref",
+        "workspace_ref",
+        "tool_policy_ref",
+        "egress_policy_ref",
+        "credential_policy_ref",
+        "materialized_at",
+        "manifest_digest"
+      ],
+      "properties": {
+        "schema_version": { "type": "string", "const": "agent-sandbox-lifecycle.v0" },
+        "sandbox_id": { "type": "string", "minLength": 1 },
+        "spec_ref": { "$ref": "#/$defs/ref" },
+        "control_plane_ref": { "$ref": "#/$defs/ref" },
+        "workspace_ref": { "$ref": "#/$defs/ref" },
+        "tool_policy_ref": { "$ref": "#/$defs/ref" },
+        "egress_policy_ref": { "$ref": "#/$defs/ref" },
+        "credential_policy_ref": { "$ref": "#/$defs/ref" },
+        "materialized_at": { "type": "string", "format": "date-time" },
+        "manifest_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "AgentFailureBundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "sandbox_id",
+        "failure_kind",
+        "failure_class",
+        "allow_partial_push",
+        "allow_push_after_infra_failure",
+        "evidence_refs",
+        "sealed_at"
+      ],
+      "properties": {
+        "schema_version": { "type": "string", "const": "agent-sandbox-lifecycle.v0" },
+        "sandbox_id": { "type": "string", "minLength": 1 },
+        "failure_kind": { "type": "string", "minLength": 1 },
+        "failure_class": { "type": "string", "enum": ["INFRASTRUCTURE", "CONTROL_PLANE", "VALIDATION", "POLICY", "USER_INPUT", "REPOSITORY", "UNKNOWN"] },
+        "retry_after_seconds": { "type": ["integer", "null"], "minimum": 0 },
+        "allow_partial_push": { "type": "boolean", "const": false },
+        "allow_push_after_infra_failure": { "type": "boolean", "const": false },
+        "evidence_refs": { "type": "array", "items": { "$ref": "#/$defs/ref" } },
+        "sealed_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "AgentSandboxReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "receipt_id",
+        "sandbox_id",
+        "phase",
+        "outcome",
+        "payload_digest",
+        "signature_or_attestation_ref",
+        "created_at"
+      ],
+      "properties": {
+        "schema_version": { "type": "string", "const": "agent-sandbox-lifecycle.v0" },
+        "receipt_id": { "type": "string", "minLength": 1 },
+        "sandbox_id": { "type": "string", "minLength": 1 },
+        "phase": { "type": "string", "enum": ["INCEPTION", "GENESIS", "ANALYZE", "VALIDATE", "WRITE", "SHUTDOWN"] },
+        "outcome": { "type": "string", "enum": ["ADMITTED", "DENIED", "MATERIALIZED", "SUCCEEDED", "FAILED", "BLOCKED", "SKIPPED"] },
+        "payload_digest": { "$ref": "#/$defs/digest" },
+        "signature_or_attestation_ref": { "$ref": "#/$defs/ref" },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
