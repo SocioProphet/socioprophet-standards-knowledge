@@ -121,7 +121,10 @@ k8s:RequiredTolerationShape
             PREFIX k8s: <https://socioprophet.github.io/ontogenesis/k8s#>
             SELECT $this WHERE {
               $this k8s:requiredToleration ?required .
-              FILTER NOT EXISTS { $this k8s:toleration ?required }
+              FILTER NOT EXISTS {
+                $this k8s:toleration ?toleration .
+                FILTER(CONTAINS(LCASE(STR(?toleration)), LCASE(STR(?required))))
+              }
             }
         """ ;
     ] .
