@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/knowledge/reasoning-failure-case.v0.1.schema.json",
+  "title": "ReasoningFailureCase",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "version",
+    "caseId",
+    "failureModeRefs",
+    "taskClass",
+    "domain",
+    "severity",
+    "invariant",
+    "expectedOutcome",
+    "observedOutput",
+    "verifier",
+    "evidenceReceiptRefs",
+    "mitigationRefs",
+    "residualRisk",
+    "riskAction",
+    "privacyBoundary"
+  ],
+  "properties": {
+    "kind": { "const": "ReasoningFailureCase" },
+    "version": { "const": "0.1" },
+    "caseId": { "type": "string", "minLength": 1 },
+    "failureModeRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^https://socioprophet\\.github\\.io/ontogenesis/platform/reasoning-failure#"
+      },
+      "uniqueItems": true
+    },
+    "taskClass": {
+      "type": "string",
+      "enum": [
+        "exactness",
+        "relation",
+        "code",
+        "causal",
+        "temporal",
+        "multimodal",
+        "embodied",
+        "social",
+        "scientific",
+        "multi-agent",
+        "general"
+      ]
+    },
+    "domain": { "type": "string", "minLength": 1 },
+    "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+    "invariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["invariantId", "description", "mustSurvivePerturbation"],
+      "properties": {
+        "invariantId": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "mustSurvivePerturbation": { "type": "boolean" }
+      }
+    },
+    "expectedOutcome": { "type": "string", "minLength": 1 },
+    "observedOutput": { "type": "string", "minLength": 1 },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verifierId", "verifierFamily", "llmJudgeOnly"],
+      "properties": {
+        "verifierId": { "type": "string", "minLength": 1 },
+        "verifierFamily": {
+          "type": "string",
+          "enum": ["deterministic", "symbolic", "schema", "policy", "tool-backed", "human-review", "llm-judge-advisory"]
+        },
+        "llmJudgeOnly": { "type": "boolean" }
+      }
+    },
+    "evidenceReceiptRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "mitigationRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^https://socioprophet\\.github\\.io/ontogenesis/platform/reasoning-failure#"
+      },
+      "uniqueItems": true
+    },
+    "residualRisk": { "type": "string", "minLength": 1 },
+    "riskAction": {
+      "type": "string",
+      "enum": [
+        "record-only",
+        "warn",
+        "require-tool-verification",
+        "require-independent-verifier",
+        "require-human-review",
+        "quarantine",
+        "block",
+        "rollback",
+        "revoke-authority"
+      ]
+    },
+    "privacyBoundary": {
+      "type": "string",
+      "enum": ["synthetic-only", "redacted-evidence-refs", "customer-boundary-local", "regulated-boundary-local"]
+    }
+  }
+}
