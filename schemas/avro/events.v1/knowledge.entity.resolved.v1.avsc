@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "KnowledgeEntityResolvedV1",
+  "namespace": "socioprophet.knowledge.events.v1",
+  "fields": [
+    { "name": "event_id", "type": "string", "doc": "ULID recommended" },
+    { "name": "occurred_at", "type": "string", "doc": "RFC3339 timestamp" },
+    { "name": "workspace_id", "type": ["null","string"], "default": null },
+    { "name": "record_id", "type": "string" },
+    { "name": "operation", "type": { "type": "enum", "name": "EntityResolutionOperation", "symbols": ["merge","split","link","reject"] } },
+    { "name": "candidate_entity_ids", "type": { "type": "array", "items": "string" }, "default": [] },
+    { "name": "decided_entity_id", "type": ["null","string"], "default": null },
+    { "name": "score", "type": ["null","double"], "default": null },
+    { "name": "provenance_id", "type": ["null","string"], "default": null }
+  ]
+}
