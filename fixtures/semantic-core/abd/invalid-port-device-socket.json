@@ -1,0 +1,24 @@
+{
+  "apiVersion": "bindings.socioprophet.io/v0.1",
+  "kind": "AgentBindingDescriptor",
+  "metadata": {
+    "name": "ci-negative"
+  },
+  "bindings": [
+    {
+      "type": "port",
+      "name": "bad-http",
+      "portNumber": 70000
+    },
+    {
+      "type": "device",
+      "name": "bad-device",
+      "devicePath": "/tmp/not-a-device"
+    },
+    {
+      "type": "socket",
+      "name": "bad-runtime",
+      "socketPath": "/tmp/runtime.sock"
+    }
+  ]
+}

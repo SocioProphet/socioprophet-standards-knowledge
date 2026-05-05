@@ -47,6 +47,7 @@ verify-shacl:
 .PHONY: verify-abd
 verify-abd:
 	python3 Lower/tools/validate_abd.py --abd fixtures/semantic-core/abd/valid-port-socket.json --json
+	@if python3 Lower/tools/validate_abd.py --abd fixtures/semantic-core/abd/invalid-port-device-socket.json --json; then echo "ERR: expected invalid ABD fixture to fail"; exit 2; else echo "OK: invalid ABD fixture failed as expected"; fi
 
 .PHONY: verify-k8s
 verify-k8s:
@@ -54,4 +55,5 @@ verify-k8s:
 	@if python3 k8s/tools/shapecheck.py --manifest fixtures/semantic-core/k8s/invalid-deployment-selector-mismatch.yaml --json; then echo "ERR: expected invalid deployment selector fixture to fail"; exit 2; else echo "OK: invalid deployment selector fixture failed as expected"; fi
 	@if python3 k8s/tools/shapecheck.py --manifest fixtures/semantic-core/k8s/invalid-ingress-tls-host-mismatch.yaml --json; then echo "ERR: expected invalid ingress TLS fixture to fail"; exit 2; else echo "OK: invalid ingress TLS fixture failed as expected"; fi
 	@if python3 k8s/tools/shapecheck.py --manifest fixtures/semantic-core/k8s/invalid-kubeedge-missing-edge-selector.yaml --json; then echo "ERR: expected invalid KubeEdge fixture to fail"; exit 2; else echo "OK: invalid KubeEdge fixture failed as expected"; fi
+	@if python3 k8s/tools/shapecheck.py --manifest fixtures/semantic-core/k8s/invalid-k3s-missing-ingress-class.yaml --json; then echo "ERR: expected invalid K3s ingress fixture to fail"; exit 2; else echo "OK: invalid K3s ingress fixture failed as expected"; fi
 
