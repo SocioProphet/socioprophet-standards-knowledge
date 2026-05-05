@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standards.socioprophet.org/kmaas/kpi-pack.v0.schema.json",
+  "title": "KMaaS KPI Pack v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pack_id", "mode", "domain_anchor", "kpis"],
+  "properties": {
+    "pack_id": {"type": "string", "pattern": "^kmaas:kpi-pack:"},
+    "mode": {"type": "string", "enum": ["domain", "custom", "hybrid"]},
+    "domain_anchor": {"type": "string"},
+    "client_delta_ref": {"type": "string"},
+    "version": {"type": "string"},
+    "kpis": {"type": "array", "items": {"$ref": "#/$defs/kpi"}, "minItems": 1}
+  },
+  "$defs": {
+    "kpi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kpi_id", "kpi_type", "definition", "unit", "cadence", "owner", "metric_recipe"],
+      "properties": {
+        "kpi_id": {"type": "string", "pattern": "^kpi:"},
+        "kpi_type": {"type": "string", "enum": ["outcome", "enabler", "trust"]},
+        "definition": {"type": "string"},
+        "unit": {"type": "string"},
+        "cadence": {"type": "string"},
+        "segments": {"type": "array", "items": {"type": "string"}},
+        "baseline": {"type": ["string", "number", "object"]},
+        "target": {"type": ["string", "number", "object"]},
+        "owner": {"type": "string"},
+        "attribution_class": {"type": "string", "enum": ["direct", "assisted", "influenced", "unknown"]},
+        "telemetry_bindings": {"type": "array", "items": {"type": "string"}},
+        "policy_refs": {"type": "array", "items": {"type": "string"}},
+        "metric_recipe": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["recipe_id", "inputs", "aggregation"],
+          "properties": {
+            "recipe_id": {"type": "string", "pattern": "^recipe:"},
+            "inputs": {"type": "array", "items": {"type": "string"}},
+            "aggregation": {"type": "string"},
+            "quality_gates": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    }
+  }
+}
