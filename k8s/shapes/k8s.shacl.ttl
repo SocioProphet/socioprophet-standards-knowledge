@@ -112,6 +112,20 @@ k8s:K3sIngressClassShape
         """ ;
     ] .
 
+k8s:RequiredTolerationShape
+    a sh:NodeShape ;
+    sh:targetClass k8s:Deployment ;
+    sh:sparql [
+        sh:message "Deployments that declare a required toleration must include a matching pod toleration." ;
+        sh:select """
+            PREFIX k8s: <https://socioprophet.github.io/ontogenesis/k8s#>
+            SELECT $this WHERE {
+              $this k8s:requiredToleration ?required .
+              FILTER NOT EXISTS { $this k8s:toleration ?required }
+            }
+        """ ;
+    ] .
+
 k8s:KubeEdgeDeploymentShape
     a sh:NodeShape ;
     sh:targetClass k8s:Deployment ;
@@ -122,6 +136,20 @@ k8s:KubeEdgeDeploymentShape
             SELECT $this WHERE {
               $this k8s:platform "kubeedge" .
               FILTER NOT EXISTS { $this k8s:nodeSelectorLabel ?nodeSelectorLabel . FILTER(CONTAINS(LCASE(STR(?nodeSelectorLabel)), "edge")) }
+            }
+        """ ;
+    ] .
+
+k8s:KubeEdgeTolerationShape
+    a sh:NodeShape ;
+    sh:targetClass k8s:Deployment ;
+    sh:sparql [
+        sh:message "KubeEdge deployments should include an edge-related pod toleration when scheduling onto edge nodes." ;
+        sh:select """
+            PREFIX k8s: <https://socioprophet.github.io/ontogenesis/k8s#>
+            SELECT $this WHERE {
+              $this k8s:platform "kubeedge" .
+              FILTER NOT EXISTS { $this k8s:toleration ?toleration . FILTER(CONTAINS(LCASE(STR(?toleration)), "edge")) }
             }
         """ ;
     ] .
