@@ -46,6 +46,21 @@ def _platform(doc: dict) -> str | None:
     return None
 
 
+def _required_tolerations(doc: dict) -> list[str]:
+    annotations = ((doc.get("metadata") or {}).get("annotations") or {})
+    raw = annotations.get("socioprophet.io/required-tolerations") or annotations.get("prophet.socioprophet.io/required-tolerations") or ""
+    return [part.strip() for part in str(raw).split(",") if part.strip()]
+
+
+def _toleration_value(item: dict) -> str:
+    fields = []
+    for key in ("key", "operator", "value", "effect"):
+        value = item.get(key)
+        if value not in (None, ""):
+            fields.append(f"{key}={value}")
+    return ";".join(fields)
+
+
 def _service_to_turtle(source: Path, doc: dict, index: int) -> list[str]:
     metadata = doc.get("metadata", {}) or {}
     spec = doc.get("spec", {}) or {}
@@ -88,6 +103,11 @@ def _deployment_to_turtle(source: Path, doc: dict, index: int) -> list[str]:
     lines.extend(_label_lines("k8s:matchLabel", selector.get("matchLabels", {}) or {}))
     lines.extend(_label_lines("k8s:templateLabel", template_metadata.get("labels", {}) or {}))
     lines.extend(_label_lines("k8s:nodeSelectorLabel", template_spec.get("nodeSelector", {}) or {}))
+    for required in _required_tolerations(doc):
+        lines.append(f"    ; k8s:requiredToleration \"{_quote(required)}\"")
+    for toleration in template_spec.get("tolerations", []) or []:
+        if isinstance(toleration, dict):
+            lines.append(f"    ; k8s:toleration \"{_quote(_toleration_value(toleration))}\"")
     lines[-1] = lines[-1] + " ."
     lines.append("")
     return lines

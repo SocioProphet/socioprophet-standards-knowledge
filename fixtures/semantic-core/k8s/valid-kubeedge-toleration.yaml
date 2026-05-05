@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prophet-edge
+  name: prophet-edge-tolerated
   annotations:
     socioprophet.io/platform: kubeedge
     socioprophet.io/required-tolerations: node-role.kubernetes.io/edge
 spec:
   selector:
     matchLabels:
-      app: prophet-edge
+      app: prophet-edge-tolerated
   template:
     metadata:
       labels:
-        app: prophet-edge
+        app: prophet-edge-tolerated
     spec:
       nodeSelector:
         node-role.kubernetes.io/edge: "true"
