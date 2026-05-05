@@ -14,3 +14,7 @@ jobs:
         run: make verify && make roundtrip
       - name: Verify semantic-core SHACL fixtures
         run: make verify-shacl
+      - name: Verify ABD contract fixture
+        run: make verify-abd
+      - name: Verify K8s shapecheck fixtures
+        run: make verify-k8s
