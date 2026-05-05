@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standards.socioprophet.org/kmaas/metric-contract.v0.schema.json",
+  "title": "KMaaS Metric Contract v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_id", "version", "metrics"],
+  "properties": {
+    "contract_id": {"type": "string", "pattern": "^kmaas:metric-contract:"},
+    "version": {"type": "string"},
+    "description": {"type": "string"},
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/metric"}
+    }
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric_id", "metric_type", "measure", "unit", "phase_targets", "evidence_artifacts", "protocol"],
+      "properties": {
+        "metric_id": {"type": "string", "pattern": "^[A-Z]+\\.[A-Z]+\\.[A-Z0-9_]+$"},
+        "metric_type": {"type": "string", "enum": ["outcome", "capacity", "friction", "composite", "trust"]},
+        "measure": {"type": "string"},
+        "unit": {"type": "string"},
+        "phase_targets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["phase_1", "phase_2", "phase_3"],
+          "properties": {
+            "phase_1": {"type": ["string", "number"]},
+            "phase_2": {"type": ["string", "number"]},
+            "phase_3": {"type": ["string", "number"]}
+          }
+        },
+        "evidence_artifacts": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "protocol": {"type": "string"},
+        "sample_size_floor": {"type": "integer", "minimum": 1},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}
