@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/knowledge/client-runtime-diagnostic-record.v0.1.schema.json",
+  "title": "ClientRuntimeDiagnosticRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "version",
+    "sourceClass",
+    "event",
+    "element",
+    "redaction",
+    "severity"
+  ],
+  "properties": {
+    "kind": {
+      "const": "ClientRuntimeDiagnosticRecord"
+    },
+    "version": {
+      "const": "0.1"
+    },
+    "sourceClass": {
+      "type": "string",
+      "enum": [
+        "browser_console_dump",
+        "client_runtime_object_dump",
+        "source_card_image_failure",
+        "favicon_or_decorative_image_failure",
+        "telemetry_payload_review"
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "nativeObjectLogged"],
+      "properties": {
+        "type": { "type": "string", "minLength": 1 },
+        "nativeObjectLogged": { "type": "boolean" },
+        "bubbles": { "type": "boolean" },
+        "cancelable": { "type": "boolean" }
+      }
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag"],
+      "properties": {
+        "tag": { "type": "string", "minLength": 1 },
+        "isConnected": { "type": "boolean" },
+        "decoding": { "type": "string" },
+        "requestHostClass": { "type": "string" },
+        "targetOriginClass": { "type": "string" }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "removedClasses"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_required", "required", "applied", "rejected"]
+        },
+        "removedClasses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "cookies",
+              "auth_session",
+              "identity",
+              "private_routes",
+              "telemetry",
+              "build_metadata",
+              "framework_random_suffixes"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "redactionProvenanceRef": { "type": "string" }
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["informational", "low", "medium", "high"]
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

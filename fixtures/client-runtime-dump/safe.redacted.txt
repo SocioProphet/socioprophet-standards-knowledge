@@ -1,0 +1,5 @@
+error { target: img, isTrusted: true, type: "error" }
+cookie: "[REDACTED_COOKIE_BLOB]"
+HTMLDocument https://[REDACTED_PRIVATE_ROUTE]
+__reactContainer$[REDACTED_SUFFIX]: Object { alternate: Object, stateNode: Object }
+stateNode: Object { containerInfo: HTMLDocument https://[REDACTED_PRIVATE_ROUTE] }

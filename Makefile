@@ -2,6 +2,10 @@
 validate:
 	./.venv/bin/python tools/validate.py 2>/dev/null || python3 tools/validate.py
 
+.PHONY: client-runtime-dump-forensics-validate
+client-runtime-dump-forensics-validate:
+	./.venv/bin/python tools/validate_client_runtime_dump_forensics.py 2>/dev/null || python3 tools/validate_client_runtime_dump_forensics.py
+
 .PHONY: multidomain-geospatial-validate
 multidomain-geospatial-validate:
 	./.venv/bin/python tools/validate_multidomain_geospatial_knowledge.py 2>/dev/null || python3 tools/validate_multidomain_geospatial_knowledge.py

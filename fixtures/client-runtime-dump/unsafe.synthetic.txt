@@ -1,0 +1,5 @@
+error { target: img, isTrusted: true, type: "error" }
+cookie: "[SYNTHETIC_COOKIE_MATERIAL]; [SYNTHETIC_CLIENT_AUTH_INFO]; [SYNTHETIC_PUID]"
+HTMLDocument https://example.invalid/private-route/[SYNTHETIC_CONVERSATION_ID]
+__reactContainer$SYNTHETIC: Object { alternate: Object, stateNode: Object }
+stateNode: Object { containerInfo: HTMLDocument https://example.invalid/private-route/[SYNTHETIC_CONVERSATION_ID] }
