@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GRLPlus Model v0.1",
+  "type": "object",
+  "required": ["schema_version", "model_id", "actors", "elements", "edges", "decomposition_groups", "arguments", "argument_links", "trace_links", "evidence"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "grlplus/0.1"},
+    "model_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string"},
+    "description": {"type": "string"},
+    "domain_profile": {"type": "string", "enum": ["strategy", "cyber", "safety"]},
+    "actors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "kind": {"type": "string", "enum": ["team", "person", "system", "external_party"]},
+          "capabilities": {"type": "array", "items": {"type": "string"}},
+          "authority": {"type": "array", "items": {"type": "string"}},
+          "metadata": {"type": "object", "additionalProperties": true}
+        },
+        "additionalProperties": true
+      }
+    },
+    "elements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "name"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "type": {"type": "string", "enum": ["goal", "softgoal", "task", "resource", "belief"]},
+          "name": {"type": "string", "minLength": 1},
+          "owner_actor_id": {"type": "string"},
+          "description": {"type": "string"},
+          "criticality": {"type": "number", "minimum": 0, "maximum": 1},
+          "tags": {"type": "array", "items": {"type": "string"}},
+          "estimates": {"type": "object", "additionalProperties": true}
+        },
+        "additionalProperties": true
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "source_id", "target_id"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "type": {"type": "string", "enum": ["contribution", "dependency"]},
+          "source_id": {"type": "string", "minLength": 1},
+          "target_id": {"type": "string", "minLength": 1},
+          "polarity": {"type": "string", "enum": ["positive", "negative"]},
+          "dependency_kind": {"type": "string"},
+          "strength": {"$ref": "#/$defs/range"},
+          "evidence_refs": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "decomposition_groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "parent_id", "operator", "children"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "parent_id": {"type": "string", "minLength": 1},
+          "operator": {"type": "string", "enum": ["and", "ior", "xor"]},
+          "children": {"type": "array", "items": {"type": "string"}},
+          "evidence_refs": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "arguments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "explanation"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "scheme": {"type": "string"},
+          "status": {"type": "string", "enum": ["accepted", "rejected", "disabled"]},
+          "explanation": {"type": "string", "minLength": 1},
+          "evidence_refs": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "argument_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "source_argument_id", "target_argument_id"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "type": {"type": "string", "enum": ["attack", "support"]},
+          "source_argument_id": {"type": "string", "minLength": 1},
+          "target_argument_id": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": true
+      }
+    },
+    "trace_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "argument_id", "target_kind", "target_id", "stance"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "argument_id": {"type": "string", "minLength": 1},
+          "target_kind": {"type": "string", "enum": ["element", "edge", "decomposition_group"]},
+          "target_id": {"type": "string", "minLength": 1},
+          "stance": {"type": "string", "enum": ["support", "oppose", "context"]}
+        },
+        "additionalProperties": true
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "title"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "kind": {"type": "string"},
+          "title": {"type": "string", "minLength": 1},
+          "locator": {"type": "string"},
+          "hash": {"type": "string"},
+          "metadata": {"type": "object", "additionalProperties": true}
+        },
+        "additionalProperties": true
+      }
+    },
+    "threshold_overrides": {"type": "object", "additionalProperties": true}
+  },
+  "$defs": {
+    "range": {
+      "type": "object",
+      "required": ["low", "high", "unit"],
+      "properties": {
+        "low": {"type": "number"},
+        "high": {"type": "number"},
+        "unit": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
