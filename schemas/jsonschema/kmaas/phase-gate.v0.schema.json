@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standards.socioprophet.org/kmaas/phase-gate.v0.schema.json",
+  "title": "KMaaS Phase Gate v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gate_id", "phase", "anchor_domain", "required_state", "channel_scope", "acceptance_signal", "evidence_refs", "decision"],
+  "properties": {
+    "gate_id": {"type": "string", "pattern": "^kmaas:phase-gate:"},
+    "phase": {"type": "string", "enum": ["phase_1", "phase_2", "phase_3"]},
+    "anchor_domain": {"type": "string"},
+    "required_state": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "channel_scope": {"type": "array", "items": {"type": "string", "enum": ["text", "audio", "video", "ocr_augmentation"]}, "minItems": 1},
+    "acceptance_signal": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "metric_contract_ref": {"type": "string"},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "exception_refs": {"type": "array", "items": {"type": "string"}},
+    "decision": {"type": "string", "enum": ["passed", "blocked", "conditional", "not_evaluated"]},
+    "decided_at": {"type": "string", "format": "date-time"},
+    "decided_by": {"type": "string"}
+  }
+}
