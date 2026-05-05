@@ -1,0 +1,35 @@
+{
+  "kind": "ClientRuntimeDiagnosticRecord",
+  "version": "0.1",
+  "sourceClass": "source_card_image_failure",
+  "event": {
+    "type": "error",
+    "nativeObjectLogged": false,
+    "bubbles": false,
+    "cancelable": false
+  },
+  "element": {
+    "tag": "IMG",
+    "isConnected": false,
+    "decoding": "async",
+    "requestHostClass": "third_party_favicon_endpoint",
+    "targetOriginClass": "origin_only"
+  },
+  "redaction": {
+    "status": "applied",
+    "removedClasses": [
+      "cookies",
+      "auth_session",
+      "identity",
+      "private_routes",
+      "telemetry",
+      "framework_random_suffixes"
+    ],
+    "redactionProvenanceRef": "provenance:client-runtime-dump-redaction.synthetic.v0"
+  },
+  "severity": "low",
+  "evidenceRefs": [
+    "fixtures/client-runtime-dump/safe.redacted.txt"
+  ],
+  "notes": "Synthetic bounded record. No real browser diagnostic values are present."
+}
