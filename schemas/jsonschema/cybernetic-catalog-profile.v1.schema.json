@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schemas/knowledge/cybernetic-catalog-profile.v1.schema.json",
+  "title": "CyberneticCatalogRecord",
+  "type": "object",
+  "required": ["id", "kind", "labels", "provenance"],
+  "properties": {
+    "id": {"type": "string"},
+    "kind": {
+      "type": "string",
+      "enum": [
+        "ModelFamily",
+        "Equation",
+        "Variable",
+        "UnitBinding",
+        "Regime",
+        "Assumption",
+        "EvidenceAnchor",
+        "Contradiction",
+        "BenchmarkTask",
+        "SimulationRun",
+        "Operator",
+        "CrossDomainMapping"
+      ]
+    },
+    "labels": {
+      "type": "object",
+      "required": ["primary"],
+      "properties": {
+        "primary": {"type": "string"},
+        "aliases": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "domainTags": {"type": "array", "items": {"type": "string"}},
+    "expression": {"type": "string"},
+    "symbol": {"type": "string"},
+    "quantityKind": {"type": "string"},
+    "unit": {"type": "string"},
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["predicate", "target"],
+        "properties": {
+          "predicate": {"type": "string"},
+          "target": {"type": "string"},
+          "mappingStrength": {
+            "type": "string",
+            "enum": ["exact_equivalence", "reduction", "approximation", "analogy", "metaphor"]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "evidence": {"type": "array", "items": {"type": "string"}},
+    "regimes": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "validation": {"type": "object", "additionalProperties": true},
+    "latticeProjections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["lane", "projectionId"],
+        "properties": {
+          "lane": {"type": "string"},
+          "projectionId": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": {"type": "string"},
+        "derivedFrom": {"type": "array", "items": {"type": "string"}},
+        "contentHash": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
