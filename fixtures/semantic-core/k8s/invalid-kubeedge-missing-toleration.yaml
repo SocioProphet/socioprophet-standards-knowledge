@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prophet-edge-no-toleration
+  annotations:
+    socioprophet.io/platform: kubeedge
+    socioprophet.io/required-tolerations: node-role.kubernetes.io/edge
+spec:
+  selector:
+    matchLabels:
+      app: prophet-edge-no-toleration
+  template:
+    metadata:
+      labels:
+        app: prophet-edge-no-toleration
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/edge: "true"
+      containers:
+        - name: edge
+          image: example.invalid/prophet-edge:latest
