@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standards.socioprophet.org/kmaas/proof-pack.v0.schema.json",
+  "title": "KMaaS Proof Pack v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["proof_pack_id", "run_artifact", "policy_artifact", "replay_artifact", "placement_receipt", "audit_artifact"],
+  "properties": {
+    "proof_pack_id": {"type": "string", "pattern": "^kmaas:proof-pack:"},
+    "run_artifact": {"$ref": "#/$defs/artifact_ref"},
+    "policy_artifact": {"$ref": "#/$defs/artifact_ref"},
+    "promotion_artifact": {"$ref": "#/$defs/artifact_ref"},
+    "replay_artifact": {"$ref": "#/$defs/artifact_ref"},
+    "placement_receipt": {"$ref": "#/$defs/artifact_ref"},
+    "audit_artifact": {"$ref": "#/$defs/artifact_ref"},
+    "phase_gate_ref": {"type": "string"},
+    "metric_run_refs": {"type": "array", "items": {"type": "string"}},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_type", "digest"],
+      "properties": {
+        "artifact_id": {"type": "string"},
+        "artifact_type": {"type": "string"},
+        "uri": {"type": "string"},
+        "digest": {"type": "string"},
+        "schema_ref": {"type": "string"}
+      }
+    }
+  }
+}
