@@ -1,0 +1,32 @@
+{
+  "@context": {
+    "ccat": "https://socioprophet.dev/contexts/cybernetic-catalog#",
+    "prov": "http://www.w3.org/ns/prov#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "kind": "@type",
+    "labels": "schema:name",
+    "primary": "schema:name",
+    "aliases": "schema:alternateName",
+    "domainTags": "ccat:domainTag",
+    "expression": "ccat:expression",
+    "symbol": "ccat:symbol",
+    "quantityKind": "ccat:quantityKind",
+    "unit": "ccat:unit",
+    "relations": "ccat:relation",
+    "predicate": "ccat:predicate",
+    "target": {"@id": "ccat:target", "@type": "@id"},
+    "mappingStrength": "ccat:mappingStrength",
+    "evidence": {"@id": "ccat:evidence", "@type": "@id"},
+    "regimes": {"@id": "ccat:regime", "@type": "@id"},
+    "assumptions": {"@id": "ccat:assumption", "@type": "@id"},
+    "validation": "ccat:validation",
+    "latticeProjections": "ccat:latticeProjection",
+    "lane": "ccat:lane",
+    "projectionId": "ccat:projectionId",
+    "provenance": "prov:wasDerivedFrom",
+    "source": "prov:wasDerivedFrom",
+    "derivedFrom": {"@id": "prov:wasDerivedFrom", "@type": "@id"},
+    "contentHash": "ccat:contentHash"
+  }
+}
