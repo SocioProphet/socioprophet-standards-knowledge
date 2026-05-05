@@ -1,0 +1,27 @@
+{
+  "gate_id": "kmaas:phase-gate:phase1-text-baseline:example",
+  "phase": "phase_1",
+  "anchor_domain": "example_hr",
+  "required_state": [
+    "domain backbone selected",
+    "first system of record manifest captured",
+    "text-native corpus indexed",
+    "baseline evaluation harness available"
+  ],
+  "channel_scope": ["text"],
+  "acceptance_signal": [
+    "labeled queries exist",
+    "retrieval logs exist",
+    "timing traces exist",
+    "proof pack emitted"
+  ],
+  "metric_contract_ref": "kmaas:metric-contract:core-v0",
+  "evidence_refs": [
+    "kmaas:proof-pack:phase1-text-baseline:example",
+    "eval:kmaas:text-baseline:example"
+  ],
+  "exception_refs": [],
+  "decision": "not_evaluated",
+  "decided_at": "2026-05-05T00:00:00Z",
+  "decided_by": "system:example"
+}
