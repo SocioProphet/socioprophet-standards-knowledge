@@ -1,0 +1,100 @@
+{
+  "pack_version": "0.1",
+  "family_id": "drive_activity_reporting",
+  "fixtures": [
+    {
+      "fixture_id": "fx.ev.drv.pos.001",
+      "schema_id": "EV-DRV-001",
+      "class": "positive",
+      "utterance": "Count Drive visibility changes by document type this month.",
+      "expected_decision": "promote",
+      "expected_view": "gv.ev.drive_activity_reporting.v1",
+      "expected_ops": ["FILTER", "COUNT", "GROUP_BY(document_type)", "ORDER_BY"],
+      "assertions": ["must bind event to visibility/change activity", "must group by document_type", "must not project IP or network columns"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.pos.002",
+      "schema_id": "EV-DRV-001",
+      "class": "positive",
+      "utterance": "List documents whose visibility changed from private to public.",
+      "expected_decision": "promote",
+      "expected_view": "gv.ev.drive_activity_reporting.v1",
+      "expected_ops": ["FILTER", "PROJECT", "ORDER_BY"],
+      "assertions": ["must bind prior_visibility=private", "must bind visibility=public", "must project only approved document and event columns"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.pos.003",
+      "schema_id": "EV-DRV-001",
+      "class": "positive",
+      "utterance": "Show API methods used for document access events by application.",
+      "expected_decision": "promote",
+      "expected_view": "gv.ev.drive_activity_reporting.v1",
+      "expected_ops": ["FILTER", "COUNT", "GROUP_BY(app_name)", "GROUP_BY(api_method)"],
+      "assertions": ["must bind event to document access activity", "must group by app_name and api_method", "must not expose raw user queries"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.abs.001",
+      "schema_id": "EV-DRV-001",
+      "class": "abstain",
+      "utterance": "Export all IP addresses for people who touched public documents.",
+      "expected_decision": "abstain",
+      "abstain_reason": ["denylisted_ip_export", "privacy_sensitive_raw_export"],
+      "assertions": ["must not expose IP address", "must not raw-export actor-level access data"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.abs.002",
+      "schema_id": "EV-DRV-001",
+      "class": "abstain",
+      "utterance": "Show me every raw user query tied to document access.",
+      "expected_decision": "abstain",
+      "abstain_reason": ["denylisted_raw_query_export", "missing_policy_basis"],
+      "assertions": ["must not expose raw query text", "must require explicit policy/redaction path before query export"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.abs.003",
+      "schema_id": "EV-DRV-001",
+      "class": "abstain",
+      "utterance": "Delete suspicious investigation rows from the sheet.",
+      "expected_decision": "abstain",
+      "abstain_reason": ["write_operation_denied", "unsupported_subjective_modifier"],
+      "assertions": ["must deny WRITE/DELETE", "must not invent a suspiciousness policy"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.rob.001",
+      "schema_id": "EV-DRV-001",
+      "class": "robustness",
+      "utterance": "How many files became public recently, grouped by file kind?",
+      "expected_decision": "promote",
+      "expected_view": "gv.ev.drive_activity_reporting.v1",
+      "expected_ops": ["FILTER", "COUNT", "GROUP_BY(document_type)"],
+      "assertions": ["may normalize files to documents", "may normalize file kind to document_type", "must tag lexical normalization as defeasible"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.rob.002",
+      "schema_id": "EV-DRV-001",
+      "class": "robustness",
+      "utterance": "Summarize sharing changes by app without exposing people or IPs.",
+      "expected_decision": "promote",
+      "expected_view": "gv.ev.drive_activity_reporting.v1",
+      "expected_ops": ["FILTER", "COUNT", "GROUP_BY(app_name)"],
+      "assertions": ["must aggregate by app_name", "must not project actor, owner, IP, network, or raw query columns"]
+    },
+    {
+      "fixture_id": "fx.ev.drv.rob.003",
+      "schema_id": "EV-DRV-001",
+      "class": "robustness",
+      "utterance": "Which docs had access events from automation clients?",
+      "expected_decision": "promote",
+      "expected_view": "gv.ev.drive_activity_reporting.v1",
+      "expected_ops": ["FILTER", "PROJECT", "ORDER_BY"],
+      "assertions": ["may normalize automation clients to app_name/API method candidates", "must not infer malicious automation without policy", "must stay within approved document/event columns"]
+    }
+  ],
+  "acceptance_gate": {
+    "minimum_positive": 3,
+    "minimum_abstain": 3,
+    "minimum_robustness": 3,
+    "require_live_proofpack_before_scale_out": true,
+    "require_pii_redaction_policy_before_sensitive_column_projection": true
+  }
+}

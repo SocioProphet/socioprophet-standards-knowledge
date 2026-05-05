@@ -1,0 +1,49 @@
+{
+  "pack_version": "0.1",
+  "family_id": "drive_activity_reporting",
+  "generated_for": "Masonmark Drive Activity Reporting pilot review",
+  "logical_contracts": [
+    {
+      "schema_id": "EV-DRV-001",
+      "logical_view": "gv.ev.drive_activity_reporting.v1",
+      "purpose": "bounded Drive activity and investigation reporting over non-mutating, non-PII-first columns",
+      "approved_columns": [
+        {"name": "event_date", "type": "date", "role_id": "mm.time.ev.event_date"},
+        {"name": "document_id", "type": "string", "role_id": "mm.role.ev.document"},
+        {"name": "title", "type": "string", "role_id": "mm.role.ev.document_title"},
+        {"name": "document_type", "type": "string", "role_id": "mm.role.ev.document_type"},
+        {"name": "event", "type": "string", "role_id": "mm.role.ev.activity_event"},
+        {"name": "description", "type": "string", "role_id": "mm.role.ev.description"},
+        {"name": "actor", "type": "string", "role_id": "mm.role.ev.actor"},
+        {"name": "owner", "type": "string", "role_id": "mm.role.ev.owner"},
+        {"name": "prior_visibility", "type": "string", "role_id": "mm.role.ev.prior_visibility"},
+        {"name": "visibility", "type": "string", "role_id": "mm.role.ev.visibility"},
+        {"name": "app_name", "type": "string", "role_id": "mm.role.ev.app"},
+        {"name": "api_method", "type": "string", "role_id": "mm.role.ev.api_method"}
+      ],
+      "allowlisted_ops": ["FILTER", "COUNT", "GROUP_BY", "ORDER_BY", "PROJECT"],
+      "denylisted_ops": ["WRITE", "DELETE", "UPDATE", "INSERT", "RAW_EXPORT", "CROSS_TENANT_JOIN", "IP_EXPORT", "NETWORK_EXPORT", "RAW_QUERY_EXPORT"]
+    }
+  ],
+  "id_blocks": {
+    "event_types": [
+      "mm.evt.ev.drive_activity_reporting.v1"
+    ],
+    "roles": [
+      "mm.role.ev.document",
+      "mm.role.ev.document_title",
+      "mm.role.ev.document_type",
+      "mm.role.ev.activity_event",
+      "mm.role.ev.description",
+      "mm.role.ev.actor",
+      "mm.role.ev.owner",
+      "mm.role.ev.prior_visibility",
+      "mm.role.ev.visibility",
+      "mm.role.ev.app",
+      "mm.role.ev.api_method"
+    ],
+    "time": [
+      "mm.time.ev.event_date"
+    ]
+  }
+}
