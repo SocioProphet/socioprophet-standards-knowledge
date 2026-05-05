@@ -35,6 +35,10 @@ jobs:
           make verify
           make roundtrip
 
+      - name: Run SHACL policy validation gates
+        run: |
+          make verify-shacl
+
       - name: Generate v1 fixtures
         run: |
           make fixtures-v1
