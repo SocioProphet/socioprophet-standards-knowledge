@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "KnowledgeEmbeddingAttachedV1",
+  "namespace": "socioprophet.knowledge.events.v1",
+  "fields": [
+    { "name": "event_id", "type": "string", "doc": "ULID recommended" },
+    { "name": "occurred_at", "type": "string", "doc": "RFC3339 timestamp" },
+    { "name": "workspace_id", "type": ["null","string"], "default": null },
+    { "name": "embedding_id", "type": "string" },
+    { "name": "target_node_id", "type": "string" },
+    { "name": "target_node_type", "type": "string" },
+    { "name": "embedding_model", "type": "string" },
+    { "name": "vector_index_id", "type": ["null","string"], "default": null },
+    { "name": "content_hash", "type": ["null","string"], "default": null },
+    { "name": "provenance_id", "type": ["null","string"], "default": null }
+  ]
+}
