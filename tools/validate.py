@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 from pathlib import Path
+import subprocess
 import sys
 
 def fail(msg: str) -> "None":
@@ -16,6 +17,12 @@ def _safe_load_yaml(path: Path) -> "object":
     except Exception:
         fail("missing dependency PyYAML (install with: python3 -m pip install pyyaml)")
     return yaml.safe_load(_read_text(path))
+
+def _run_validator(root: Path, rel: str) -> None:
+    script = root / rel
+    if not script.exists():
+        fail(f"missing validator: {rel}")
+    subprocess.run([sys.executable, str(script)], cwd=root, check=True)
 
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
@@ -37,7 +44,9 @@ def main() -> int:
     if ds:
         fail(f"found .DS_Store files: {len(ds)} — remove and add to .gitignore")
 
-    print("OK: validate passed (license non-placeholder, workloads parse where present, no .DS_Store)")
+    _run_validator(root, "tools/validate_client_runtime_dump_forensics.py")
+
+    print("OK: validate passed (license non-placeholder, workloads parse where present, no .DS_Store, client runtime dump forensics valid)")
     return 0
 
 if __name__ == "__main__":
