@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/knowledge/reasoning-perturbation-suite.v0.1.schema.json",
+  "title": "ReasoningPerturbationSuite",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "version",
+    "suiteId",
+    "targetCaseId",
+    "verifierFamily",
+    "perturbations",
+    "evaluatorBiasControls"
+  ],
+  "properties": {
+    "kind": { "const": "ReasoningPerturbationSuite" },
+    "version": { "const": "0.1" },
+    "suiteId": { "type": "string", "minLength": 1 },
+    "targetCaseId": { "type": "string", "minLength": 1 },
+    "verifierFamily": {
+      "type": "string",
+      "enum": ["deterministic", "symbolic", "schema", "policy", "tool-backed", "human-review", "llm-judge-advisory"]
+    },
+    "perturbations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "perturbationId",
+          "family",
+          "description",
+          "invariantPreserving",
+          "expectedInvariantBehavior"
+        ],
+        "properties": {
+          "perturbationId": { "type": "string", "minLength": 1 },
+          "family": {
+            "type": "string",
+            "enum": [
+              "order-randomization",
+              "identifier-rename",
+              "relation-reversal",
+              "number-swap",
+              "impossible-condition",
+              "distractor-injection",
+              "paraphrase-framing",
+              "few-shot-position",
+              "code-mutation",
+              "modality-disagreement",
+              "multi-agent-role-order"
+            ]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "invariantPreserving": { "type": "boolean" },
+          "expectedInvariantBehavior": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "evaluatorBiasControls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "llmJudgeAllowed",
+        "orderRandomization",
+        "verbosityBiasCheck",
+        "contaminationNoteRequired"
+      ],
+      "properties": {
+        "llmJudgeAllowed": { "type": "boolean" },
+        "orderRandomization": { "type": "boolean" },
+        "verbosityBiasCheck": { "type": "boolean" },
+        "contaminationNoteRequired": { "type": "boolean" }
+      }
+    }
+  }
+}
