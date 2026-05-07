@@ -51,6 +51,9 @@ These documents use RFC-style language:
 - `046-field-alias-matrix.md`  
   Non-breaking alias matrix mapping lane-specific field names into shared semantic slots for `DecisionArtifact`, `ProofPack`, `TemporalProfile`, and `TrustProfile`.
 
+- `081-operation-plane-memory-knowledge.md`  
+  Draft standard for Operation Plane memory ingestion as `WorkspaceOperation`, evidence-linked memory metadata, lifecycle/admission/correction/deletion flow, and policy-governed agent visibility.
+
 ## How docs relate to enforceable compliance
 
 This repo treats standards as **executable**:
