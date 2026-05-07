@@ -215,11 +215,11 @@ memory_id: mem_market_signal_q3_2024
 lifecycle_state: expired
 retention:
   class: bounded
-  expires_at: 2025-12-31T23:59:59Z
+  expires_at: 2026-04-30T23:59:59Z
   decay_model: linear
 freshness:
   observed_at: 2024-07-04T09:00:00Z
-  last_refreshed_at: 2025-01-12T18:10:00Z
+  last_refreshed_at: 2026-05-01T18:10:00Z
   freshness_state: expired
 ```
 
