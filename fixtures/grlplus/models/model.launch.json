@@ -1,0 +1,132 @@
+{
+  "schema_version": "grlplus/0.1",
+  "model_id": "model.launch",
+  "title": "Launch decision model",
+  "description": "Small canonical GRLPlus launch fixture",
+  "domain_profile": "strategy",
+  "actors": [
+    {
+      "id": "actor.marketing",
+      "name": "Marketing",
+      "kind": "team",
+      "capabilities": ["launch_campaign"]
+    },
+    {
+      "id": "actor.legal",
+      "name": "Legal",
+      "kind": "team",
+      "capabilities": ["approve_contract"]
+    }
+  ],
+  "elements": [
+    {
+      "id": "goal.increase_sales",
+      "type": "goal",
+      "name": "Increase sales",
+      "owner_actor_id": "actor.marketing",
+      "criticality": 1.0
+    },
+    {
+      "id": "softgoal.customer_satisfaction",
+      "type": "softgoal",
+      "name": "Customer satisfaction",
+      "owner_actor_id": "actor.marketing",
+      "criticality": 0.8
+    },
+    {
+      "id": "task.launch_campaign",
+      "type": "task",
+      "name": "Launch campaign",
+      "owner_actor_id": "actor.marketing",
+      "criticality": 0.9
+    },
+    {
+      "id": "resource.legal_approval",
+      "type": "resource",
+      "name": "Legal approval",
+      "owner_actor_id": "actor.legal",
+      "criticality": 0.7
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge.c1",
+      "type": "contribution",
+      "source_id": "task.launch_campaign",
+      "target_id": "goal.increase_sales",
+      "polarity": "positive",
+      "strength": {"low": 0.4, "high": 0.8, "unit": "score_0_1"}
+    },
+    {
+      "id": "edge.c2",
+      "type": "contribution",
+      "source_id": "task.launch_campaign",
+      "target_id": "softgoal.customer_satisfaction",
+      "polarity": "negative",
+      "strength": {"low": 0.1, "high": 0.4, "unit": "score_0_1"}
+    },
+    {
+      "id": "edge.d1",
+      "type": "dependency",
+      "source_id": "task.launch_campaign",
+      "target_id": "resource.legal_approval",
+      "dependency_kind": "needs"
+    }
+  ],
+  "decomposition_groups": [
+    {
+      "id": "decomp.g1",
+      "parent_id": "goal.increase_sales",
+      "operator": "and",
+      "children": ["task.launch_campaign"]
+    }
+  ],
+  "arguments": [
+    {
+      "id": "arg.a1",
+      "scheme": "causal_claim",
+      "status": "accepted",
+      "explanation": "Prior launches showed measurable lift from campaign activity.",
+      "evidence_refs": ["ev.postmortem_2025q4"]
+    },
+    {
+      "id": "arg.a2",
+      "scheme": "risk_claim",
+      "status": "accepted",
+      "explanation": "Campaign friction may reduce satisfaction if the offer is too aggressive.",
+      "evidence_refs": ["ev.customer_feedback_2025q4"]
+    }
+  ],
+  "argument_links": [],
+  "trace_links": [
+    {
+      "id": "trace.1",
+      "argument_id": "arg.a1",
+      "target_kind": "edge",
+      "target_id": "edge.c1",
+      "stance": "support"
+    },
+    {
+      "id": "trace.2",
+      "argument_id": "arg.a2",
+      "target_kind": "edge",
+      "target_id": "edge.c2",
+      "stance": "support"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev.postmortem_2025q4",
+      "kind": "document",
+      "title": "Q4 2025 launch postmortem",
+      "locator": "file://evidence/postmortem-q4-2025.pdf"
+    },
+    {
+      "id": "ev.customer_feedback_2025q4",
+      "kind": "dataset",
+      "title": "Customer feedback Q4 2025",
+      "locator": "file://evidence/customer-feedback-q4-2025.csv"
+    }
+  ],
+  "threshold_overrides": {}
+}
