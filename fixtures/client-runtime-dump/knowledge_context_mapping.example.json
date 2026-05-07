@@ -1,0 +1,83 @@
+{
+  "kind": "KnowledgeContextArtifactSet",
+  "version": "0.1",
+  "id": "kc-artifact-set:client-runtime-dump.synthetic.v0",
+  "sourceStandard": "docs/standards/052-client-runtime-object-dump-forensics.md",
+  "artifacts": [
+    {
+      "kind": "Note",
+      "id": "note:client-runtime-dump.synthetic.summary.v0",
+      "title": "Synthetic client runtime dump redaction summary",
+      "body": "A synthetic browser runtime diagnostic was quarantined, redacted, and reduced to a bounded diagnostic record before indexing.",
+      "provenanceRef": "provenance:client-runtime-dump.synthetic.redaction.v0"
+    },
+    {
+      "kind": "Claim",
+      "id": "claim:client-runtime-dump.native-event.v0",
+      "assertion": "The diagnostic source is a native browser event expansion, not a normal application JSON payload.",
+      "validationState": "synthetic_example",
+      "evidenceRefs": [
+        "fixtures/client-runtime-dump/safe.redacted.txt",
+        "fixtures/client-runtime-dump/client_runtime_diagnostic_record.example.json"
+      ],
+      "provenanceRef": "provenance:client-runtime-dump.synthetic.redaction.v0"
+    },
+    {
+      "kind": "Annotation",
+      "id": "annotation:client-runtime-dump.redacted-cookie-span.v0",
+      "targetRef": "fixtures/client-runtime-dump/safe.redacted.txt",
+      "selector": {
+        "type": "TextQuoteSelector",
+        "exact": "[REDACTED_COOKIE_BLOB]"
+      },
+      "body": "Cookie-bearing material was redacted before indexing."
+    },
+    {
+      "kind": "MeriotopographicEdge",
+      "id": "edge:diagnostic-record-derives-from-safe-dump.v0",
+      "subjectRef": "fixtures/client-runtime-dump/client_runtime_diagnostic_record.example.json",
+      "predicate": "derives_from",
+      "objectRef": "fixtures/client-runtime-dump/safe.redacted.txt",
+      "governanceRefs": [
+        "edge:safe-dump-redacted-by-transform.v0"
+      ]
+    },
+    {
+      "kind": "MeriotopographicEdge",
+      "id": "edge:safe-dump-redacted-by-transform.v0",
+      "subjectRef": "fixtures/client-runtime-dump/safe.redacted.txt",
+      "predicate": "redacted_by",
+      "objectRef": "provenance:client-runtime-dump.synthetic.redaction.v0"
+    },
+    {
+      "kind": "MeriotopographicEdge",
+      "id": "edge:annotation-anchors-to-redacted-cookie.v0",
+      "subjectRef": "annotation:client-runtime-dump.redacted-cookie-span.v0",
+      "predicate": "anchors_to",
+      "objectRef": "fixtures/client-runtime-dump/safe.redacted.txt"
+    },
+    {
+      "kind": "ProvenanceRecord",
+      "id": "provenance:client-runtime-dump.synthetic.redaction.v0",
+      "activity": "synthetic_redaction_transform",
+      "inputs": [
+        "fixtures/client-runtime-dump/unsafe.synthetic.txt"
+      ],
+      "outputs": [
+        "fixtures/client-runtime-dump/safe.redacted.txt",
+        "fixtures/client-runtime-dump/client_runtime_diagnostic_record.example.json"
+      ],
+      "removedClasses": [
+        "cookies",
+        "auth_session",
+        "identity",
+        "private_routes",
+        "telemetry",
+        "framework_random_suffixes"
+      ],
+      "policyRefs": [
+        "docs/standards/052-client-runtime-object-dump-forensics.md"
+      ]
+    }
+  ]
+}

@@ -12,8 +12,9 @@ SCHEMA = ROOT / "schemas" / "jsonschema" / "client-runtime-diagnostic-record.sch
 UNSAFE = ROOT / "fixtures" / "client-runtime-dump" / "unsafe.synthetic.txt"
 SAFE = ROOT / "fixtures" / "client-runtime-dump" / "safe.redacted.txt"
 EXAMPLE = ROOT / "fixtures" / "client-runtime-dump" / "client_runtime_diagnostic_record.example.json"
+MAPPING = ROOT / "fixtures" / "client-runtime-dump" / "knowledge_context_mapping.example.json"
 
-REQUIRED_FILES = [STANDARD, SCHEMA, UNSAFE, SAFE, EXAMPLE]
+REQUIRED_FILES = [STANDARD, SCHEMA, UNSAFE, SAFE, EXAMPLE, MAPPING]
 
 REQUIRED_STANDARD_TOKENS = [
     "Client Runtime Object Dump Forensics and Redaction v0.1",
@@ -47,6 +48,16 @@ REQUIRED_SAFE_TOKENS = [
     "REDACTED_SUFFIX",
     "containerInfo",
 ]
+
+REQUIRED_MAPPING_KINDS = {
+    "Note",
+    "Claim",
+    "Annotation",
+    "MeriotopographicEdge",
+    "ProvenanceRecord",
+}
+
+REQUIRED_MAPPING_PREDICATES = {"derives_from", "redacted_by", "anchors_to"}
 
 FORBIDDEN_FIXTURE_REGEXES = [
     re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"),
@@ -101,6 +112,36 @@ def require_example_matches_schema_shape(schema: dict, example: dict) -> None:
         raise ValueError("example.severity must be informational, low, medium, or high")
 
 
+def require_mapping_shape(mapping: dict) -> None:
+    if mapping.get("kind") != "KnowledgeContextArtifactSet":
+        raise ValueError("mapping.kind must be KnowledgeContextArtifactSet")
+    artifacts = mapping.get("artifacts")
+    if not isinstance(artifacts, list) or not artifacts:
+        raise ValueError("mapping.artifacts must be a non-empty list")
+
+    kinds = {artifact.get("kind") for artifact in artifacts if isinstance(artifact, dict)}
+    missing_kinds = sorted(REQUIRED_MAPPING_KINDS - kinds)
+    if missing_kinds:
+        raise ValueError(f"mapping missing artifact kinds: {missing_kinds}")
+
+    predicates = {
+        artifact.get("predicate")
+        for artifact in artifacts
+        if isinstance(artifact, dict) and artifact.get("kind") == "MeriotopographicEdge"
+    }
+    missing_predicates = sorted(REQUIRED_MAPPING_PREDICATES - predicates)
+    if missing_predicates:
+        raise ValueError(f"mapping missing required predicates: {missing_predicates}")
+
+    provenance_ids = {
+        artifact.get("id")
+        for artifact in artifacts
+        if isinstance(artifact, dict) and artifact.get("kind") == "ProvenanceRecord"
+    }
+    if "provenance:client-runtime-dump.synthetic.redaction.v0" not in provenance_ids:
+        raise ValueError("mapping missing synthetic redaction provenance record")
+
+
 def main() -> int:
     try:
         for path in REQUIRED_FILES:
@@ -111,6 +152,7 @@ def main() -> int:
         schema_text = SCHEMA.read_text(encoding="utf-8")
         unsafe_text = UNSAFE.read_text(encoding="utf-8")
         safe_text = SAFE.read_text(encoding="utf-8")
+        mapping_text = MAPPING.read_text(encoding="utf-8")
 
         require_tokens("standard", standard_text, REQUIRED_STANDARD_TOKENS)
         require_tokens("schema", schema_text, REQUIRED_SCHEMA_TOKENS)
@@ -118,16 +160,20 @@ def main() -> int:
         require_tokens("safe fixture", safe_text, REQUIRED_SAFE_TOKENS)
         reject_forbidden_fixture_text("unsafe fixture", unsafe_text)
         reject_forbidden_fixture_text("safe fixture", safe_text)
+        reject_forbidden_fixture_text("mapping fixture", mapping_text)
 
         schema = json.loads(schema_text)
         example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
         require_example_matches_schema_shape(schema, example)
+
+        mapping = json.loads(mapping_text)
+        require_mapping_shape(mapping)
     except FileNotFoundError as exc:
         return fail(f"missing required file: {exc.args[0]}")
     except Exception as exc:  # noqa: BLE001 - validator should surface direct error text
         return fail(str(exc))
 
-    print("OK: validated client runtime dump forensics schema, fixtures, and synthetic-only guards")
+    print("OK: validated client runtime dump forensics schema, fixtures, knowledge mapping, and synthetic-only guards")
     return 0
 
 
