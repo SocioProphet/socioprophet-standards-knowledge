@@ -26,6 +26,12 @@ These schemas serve three purposes:
   Relationship artifacts:
   - MeriotopographicEdge
 
+- `schemas/jsonschema/knowledge-context-artifact-set.schema.json`  
+  Artifact-set envelope for bundling Notes, Claims, Annotations, MeriotopographicEdges, and ProvenanceRecords as one Knowledge Context evidence package.
+
+- `schemas/jsonschema/client-runtime-diagnostic-record.schema.json`  
+  Bounded client runtime diagnostic record used by the client runtime object dump forensics standard.
+
 ## Relationship to normative semantics
 
 JSON Schema defines structure, not meaning.
