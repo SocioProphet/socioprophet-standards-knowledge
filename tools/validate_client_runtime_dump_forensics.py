@@ -9,12 +9,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STANDARD = ROOT / "docs" / "standards" / "052-client-runtime-object-dump-forensics.md"
 SCHEMA = ROOT / "schemas" / "jsonschema" / "client-runtime-diagnostic-record.schema.json"
+ARTIFACT_SET_SCHEMA = ROOT / "schemas" / "jsonschema" / "knowledge-context-artifact-set.schema.json"
 UNSAFE = ROOT / "fixtures" / "client-runtime-dump" / "unsafe.synthetic.txt"
 SAFE = ROOT / "fixtures" / "client-runtime-dump" / "safe.redacted.txt"
 EXAMPLE = ROOT / "fixtures" / "client-runtime-dump" / "client_runtime_diagnostic_record.example.json"
 MAPPING = ROOT / "fixtures" / "client-runtime-dump" / "knowledge_context_mapping.example.json"
 
-REQUIRED_FILES = [STANDARD, SCHEMA, UNSAFE, SAFE, EXAMPLE, MAPPING]
+REQUIRED_FILES = [STANDARD, SCHEMA, ARTIFACT_SET_SCHEMA, UNSAFE, SAFE, EXAMPLE, MAPPING]
 
 REQUIRED_STANDARD_TOKENS = [
     "Client Runtime Object Dump Forensics and Redaction v0.1",
@@ -32,6 +33,18 @@ REQUIRED_SCHEMA_TOKENS = [
     "removedClasses",
     "framework_random_suffixes",
     "severity",
+]
+
+REQUIRED_ARTIFACT_SET_SCHEMA_TOKENS = [
+    "KnowledgeContextArtifactSet",
+    "Note",
+    "Claim",
+    "Annotation",
+    "MeriotopographicEdge",
+    "ProvenanceRecord",
+    "derives_from",
+    "redacted_by",
+    "anchors_to",
 ]
 
 REQUIRED_UNSAFE_TOKENS = [
@@ -61,7 +74,7 @@ REQUIRED_MAPPING_PREDICATES = {"derives_from", "redacted_by", "anchors_to"}
 
 FORBIDDEN_FIXTURE_REGEXES = [
     re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"),
-    re.compile(r"https://[^\\s]+/(?:private|conversation|tenant|workspace|account)/[^\\s\\]\)]+"),
+    re.compile(r"https://[^\\s]+/(?:private|conversation|tenant|workspace|account)/[^\\s\\]\\)]+"),
 ]
 
 
@@ -112,9 +125,23 @@ def require_example_matches_schema_shape(schema: dict, example: dict) -> None:
         raise ValueError("example.severity must be informational, low, medium, or high")
 
 
-def require_mapping_shape(mapping: dict) -> None:
+def require_mapping_matches_artifact_set_schema_shape(schema: dict, mapping: dict) -> None:
+    required = schema.get("required", [])
+    missing = [key for key in required if key not in mapping]
+    if missing:
+        raise ValueError(f"mapping missing artifact-set schema-required keys: {missing}")
+
     if mapping.get("kind") != "KnowledgeContextArtifactSet":
         raise ValueError("mapping.kind must be KnowledgeContextArtifactSet")
+    if mapping.get("version") != "0.1":
+        raise ValueError("mapping.version must be 0.1")
+    if not mapping.get("id"):
+        raise ValueError("mapping.id must be present")
+    if not mapping.get("sourceStandard"):
+        raise ValueError("mapping.sourceStandard must be present")
+
+
+def require_mapping_shape(mapping: dict) -> None:
     artifacts = mapping.get("artifacts")
     if not isinstance(artifacts, list) or not artifacts:
         raise ValueError("mapping.artifacts must be a non-empty list")
@@ -150,12 +177,14 @@ def main() -> int:
 
         standard_text = STANDARD.read_text(encoding="utf-8")
         schema_text = SCHEMA.read_text(encoding="utf-8")
+        artifact_set_schema_text = ARTIFACT_SET_SCHEMA.read_text(encoding="utf-8")
         unsafe_text = UNSAFE.read_text(encoding="utf-8")
         safe_text = SAFE.read_text(encoding="utf-8")
         mapping_text = MAPPING.read_text(encoding="utf-8")
 
         require_tokens("standard", standard_text, REQUIRED_STANDARD_TOKENS)
         require_tokens("schema", schema_text, REQUIRED_SCHEMA_TOKENS)
+        require_tokens("artifact-set schema", artifact_set_schema_text, REQUIRED_ARTIFACT_SET_SCHEMA_TOKENS)
         require_tokens("unsafe fixture", unsafe_text, REQUIRED_UNSAFE_TOKENS)
         require_tokens("safe fixture", safe_text, REQUIRED_SAFE_TOKENS)
         reject_forbidden_fixture_text("unsafe fixture", unsafe_text)
@@ -166,14 +195,16 @@ def main() -> int:
         example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
         require_example_matches_schema_shape(schema, example)
 
+        artifact_set_schema = json.loads(artifact_set_schema_text)
         mapping = json.loads(mapping_text)
+        require_mapping_matches_artifact_set_schema_shape(artifact_set_schema, mapping)
         require_mapping_shape(mapping)
     except FileNotFoundError as exc:
         return fail(f"missing required file: {exc.args[0]}")
     except Exception as exc:  # noqa: BLE001 - validator should surface direct error text
         return fail(str(exc))
 
-    print("OK: validated client runtime dump forensics schema, fixtures, knowledge mapping, and synthetic-only guards")
+    print("OK: validated client runtime dump forensics schemas, fixtures, knowledge mapping, and synthetic-only guards")
     return 0
 
 
