@@ -9,6 +9,16 @@ This repo is not “docs-only.” We treat standards as executable: schemas defi
 - **Platform governance / context index:** `SocioProphet/socioprophet-standards-storage`
 - **Canonical transport / envelope / AEAD / framing:** `SocioProphet/tritrpc` (TriTRPC; we may say triRPC/trirpc/triunerpc interchangeably)
 
+## Complies with Standards
+
+This repository implements and consumes the SocioProphet storage and contract standards:
+
+- `SocioProphet/socioprophet-standards-storage/docs/standards/020-data-formats.md` — Avro, JSON-LD, Arrow, and Parquet format discipline.
+- `SocioProphet/socioprophet-standards-storage/docs/standards/030-service-interfaces-tritrpc.md` — typed RPC service binding discipline.
+- `SocioProphet/socioprophet-standards-storage/docs/standards/070-graph-rdf-hypergraph.md` — graph, RDF, property graph, and hypergraph mapping posture.
+- `SocioProphet/socioprophet-standards-storage/docs/standards/080-knowledge-context.md` — platform pointer to this detailed Knowledge Context package.
+- `SocioProphet/ontogenesis/Platform/knowledge-context.ttl` — semantic governance module for Knowledge Context v1 artifacts.
+
 ## Quickstart (single paste)
 
 Run from the repo root:
