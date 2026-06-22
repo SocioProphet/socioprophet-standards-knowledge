@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GRLPlus Lint Report v0.1",
+  "type": "object",
+  "required": ["schema_version", "model_id", "summary", "findings"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "grlplus-lint/0.1"},
+    "model_id": {"type": "string", "minLength": 1},
+    "summary": {
+      "type": "object",
+      "required": ["findings_total", "critical", "error", "warning", "info"],
+      "properties": {
+        "findings_total": {"type": "integer", "minimum": 0},
+        "critical": {"type": "integer", "minimum": 0},
+        "error": {"type": "integer", "minimum": 0},
+        "warning": {"type": "integer", "minimum": 0},
+        "info": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": true
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "severity", "message", "object_refs", "rationale", "remediation"],
+        "properties": {
+          "code": {"type": "string", "minLength": 1},
+          "severity": {"type": "string", "enum": ["info", "warning", "error", "critical"]},
+          "message": {"type": "string", "minLength": 1},
+          "object_refs": {"type": "array", "items": {"type": "string"}},
+          "rationale": {"type": "string"},
+          "remediation": {"type": "string"},
+          "metrics": {"type": "object", "additionalProperties": true}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GRLPlus Metrics Report v0.1",
+  "type": "object",
+  "required": ["schema_version", "model_id", "summary", "metrics"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "model_id": {"type": "string", "minLength": 1},
+    "summary": {"type": "object", "additionalProperties": true},
+    "active_domain_profile": {"type": "string", "enum": ["strategy", "cyber", "safety"]},
+    "threshold_pack": {"type": "object", "additionalProperties": true},
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "hub_ratio": {"type": ["number", "null"]},
+        "cross_actor_dependency_ratio": {"type": "number"},
+        "dependency_cycle_count": {"type": "integer", "minimum": 0},
+        "dependency_load_by_actor": {"type": "object", "additionalProperties": true},
+        "softgoal_conflict_index": {"type": "object", "additionalProperties": true},
+        "argument_coverage": {"type": "object", "additionalProperties": true},
+        "element_confidence": {"type": "object", "additionalProperties": true},
+        "satisfaction_scaffold": {"type": "object", "additionalProperties": true},
+        "satisfaction_interval_scaffold": {"type": "object", "additionalProperties": true},
+        "semantic_diff": {"type": "object", "additionalProperties": true},
+        "critical_path": {"type": "object", "additionalProperties": true},
+        "semantic_action_report": {"type": "object", "additionalProperties": true},
+        "semantic_worklist": {"type": "object", "additionalProperties": true}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
