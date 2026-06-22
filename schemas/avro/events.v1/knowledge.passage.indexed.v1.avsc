@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "KnowledgePassageIndexedV1",
+  "namespace": "socioprophet.knowledge.events.v1",
+  "fields": [
+    { "name": "event_id", "type": "string", "doc": "ULID recommended" },
+    { "name": "occurred_at", "type": "string", "doc": "RFC3339 timestamp" },
+    { "name": "workspace_id", "type": ["null","string"], "default": null },
+    { "name": "artifact_id", "type": ["null","string"], "default": null },
+    { "name": "passage_id", "type": "string" },
+    { "name": "chunk_policy", "type": ["null","string"], "default": null },
+    { "name": "content_hash", "type": ["null","string"], "default": null },
+    { "name": "actor_id", "type": ["null","string"], "default": null },
+    { "name": "actor_type", "type": ["null", { "type": "enum", "name": "PassageIndexedActorType", "symbols": ["human","agent","service"] } ], "default": null },
+    { "name": "provenance_id", "type": ["null","string"], "default": null }
+  ]
+}
